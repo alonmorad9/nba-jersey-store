@@ -1,18 +1,30 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const cookieParser = require('cookie-parser');
+const express = require('express'); // Import the express module to create a web server
+const app = express(); // Create an instance of an Express application
+const path = require('path'); // Import the path module to handle file paths
+const cookieParser = require('cookie-parser'); // Import the cookie-parser middleware to parse cookies in requests
 
-// Middlewares
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../client')));
+// Middleware
+app.use(express.json()); // Parse JSON bodies in requests
+app.use(cookieParser()); // Parse cookies in requests
+app.use(express.static(path.join(__dirname, '../client'))); // Serve static files from the 'client' directory
 
 // Routes
-app.use(require('./register-server'));
+app.use(require('./register-server')); // Import and use the registration route defined in 'register-server.js'
 
 // Start
-const PORT = 3000;
+const PORT = 3000; // Define the port on which the server will listen
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`); // Log a message indicating that the server is running
 });
+
+/* register.html מציג טופס למשתמש.
+
+נשלחת בקשת POST ל־/register.
+
+הקוד ב־register-server.js בודק אם המשתמש כבר קיים בקובץ users.json.
+
+אם לא – מוסיף אותו בעזרת persist_module.js.
+
+כל המידע נשמר בדיסק (data/users.json).
+
+התגובה חוזרת לדפדפן ומוצגת ב־<p id="result">. */
