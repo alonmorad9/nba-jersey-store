@@ -128,8 +128,15 @@
       resultEl.style.color = res.ok ? 'green' : 'darkred';
 
       if (res.ok) {
-        form.reset();
-      }
+  const resultEl = document.getElementById('result');
+  resultEl.innerText = 'Registration successful!';
+  resultEl.style.color = 'green';
+
+  setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 1000); // עיכוב של שנייה
+}
+
     });
   </script>
 </body>
