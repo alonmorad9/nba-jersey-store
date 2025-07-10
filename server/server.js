@@ -13,6 +13,7 @@ app.use(require('./register-server')); // Import and use the registration route 
 app.use(require('./login-server')); // Import and use the login route defined in 'login-server.js'
 app.use(require('./store-server')); // Import and use the store route defined in 'store-server.js'
 app.use(require('./logout-server')); // Import and use the logout route defined in 'logout-server.js'
+app.use(require('./cart-server')); // Import and use the cart route defined in 'cart-server.js'
 
 
 // Start
