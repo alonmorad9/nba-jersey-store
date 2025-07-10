@@ -1,63 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
-
-  <!-- basic styles for the form -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Form</title>
   <style>
     body {
-      font-family: sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-    input, button {
-      display: block;
-      margin: 10px 0;
+
+    .register-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       width: 100%;
-      padding: 8px;
+      max-width: 400px;
     }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .register-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .register-button:hover {
+      background-color: #0056b3;
+    }
+
     #result {
       margin-top: 15px;
+      text-align: center;
       color: darkred;
+    }
+
+    .switch-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>Register</h1>
+  <div class="register-container">
+    <h1>Register</h1>
 
-  <!-- The form submits data to the server and handles user registration. -->
-  <form id="registerForm">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Register</button>
-  </form>
+    <form id="registerForm">
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Username" required>
+      </div>
 
-  <!-- This paragraph will display the result of the registration attempt. -->
-  <p id="result"></p>
+      <div class="form-group">
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+
+      <button type="submit" class="register-button">Register</button>
+      <p id="result"></p>
+    </form>
+
+    <p class="switch-link">
+      Already have an account?
+      <a href="login.html">Login here</a>
+    </p>
+  </div>
 
   <script>
-    const form = document.getElementById('registerForm'); // Get the form element by its ID
-    form.addEventListener('submit', async (e) => { // Add an event listener for the form submission
-      e.preventDefault(); // Prevent the default form submission behavior - this allows us to handle it
-      const data = { // Collect the form data
-        username: form.username.value.trim(), // Trim whitespace from the username to prevent duplicates
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        username: form.username.value.trim(),
         password: form.password.value
       };
 
-      // Send the registration data to the server
       const res = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
 
-      // Handle the server response
       const text = await res.text();
-      document.getElementById('result').innerText = text;
+      const resultEl = document.getElementById('result');
+      resultEl.innerText = text;
+      resultEl.style.color = res.ok ? 'green' : 'darkred';
 
       if (res.ok) {
-        form.reset(); // Reset the form fields if registration was successful
+        form.reset();
       }
     });
   </script>

@@ -1,38 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
   <style>
     body {
-      font-family: sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-    input, button {
-      display: block;
-      margin: 10px 0;
+
+    .login-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       width: 100%;
-      padding: 8px;
+      max-width: 400px;
     }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 8px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      margin: 0;
+    }
+
+    .remember-me label {
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .login-button:hover {
+      background-color: #0056b3;
+    }
+
     #result {
       margin-top: 15px;
+      text-align: center;
       color: darkred;
     }
   </style>
 </head>
 <body>
-  <h1>Login</h1>
-  <form id="loginForm">
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <label style="display: flex; align-items: center; gap: 8px;">
-      <input type="checkbox" name="remember" />
-      Remember Me
-    </label>
-    <button type="submit">Login</button>
-  </form>
-  <p id="result"></p>
+  <div class="login-container">
+    <h1>Login</h1>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Username" required>
+      </div>
+
+      <div class="form-group">
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Remember Me</label>
+      </div>
+
+      <button type="submit" class="login-button">Login</button>
+
+      <p id="result"></p>
+    </form>
+  </div>
 
   <script>
     const form = document.getElementById('loginForm');
@@ -52,9 +127,15 @@
       });
 
       const text = await res.text();
-      document.getElementById('result').innerText = text;
+      const resultEl = document.getElementById('result');
+      resultEl.innerText = text;
 
-      if (res.ok) form.reset();
+      // צבע שונה לפי הצלחה או כישלון
+      resultEl.style.color = res.ok ? 'green' : 'darkred';
+
+      if (res.ok) {
+        form.reset();
+      }
     });
   </script>
 </body>
