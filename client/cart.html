@@ -35,8 +35,15 @@
   </style>
 </head>
 <body>
+    <body>
   <div class="form-container">
-    <h1>Your Cart</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>Your Cart</h1>
+      <button onclick="goToStore()" style="padding: 8px 16px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer;">
+        🏬 Back to Store
+      </button>
+    </div>
+
     <div id="cartContainer"></div>
   </div>
 
@@ -52,6 +59,11 @@
       const products = await res.json();
       renderGroupedCart(products);
     }
+
+    function goToStore() {
+  window.location.href = 'store.html';
+}
+
 
     function renderGroupedCart(products) {
       const container = document.getElementById('cartContainer');
