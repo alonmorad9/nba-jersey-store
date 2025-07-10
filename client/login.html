@@ -134,7 +134,11 @@
       resultEl.style.color = res.ok ? 'green' : 'darkred';
 
       if (res.ok) {
-        form.reset();
+        document.getElementById('result').style.color = 'green';
+  document.getElementById('result').innerText = 'Login successful!';
+  setTimeout(() => {
+    window.location.href = 'store.html';
+  }, 1000);
       }
     });
   </script>

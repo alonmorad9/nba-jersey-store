@@ -30,6 +30,7 @@
 </head>
 <body>
   <div class="form-container">
+    <button onclick="logout()" style="float: right; margin-bottom: 20px;">Logout</button>
     <h1>NBA Jerseys Store</h1>
     <p id="welcome" style="text-align: center; color: #333; font-weight: bold;"></p>
 
@@ -91,6 +92,7 @@ if (username) {
       });
 
       if (res.status === 401) {
+        alert('You must be logged in to add items to your cart.');
         window.location.href = 'login.html';
       } else {
         const msg = await res.text();
@@ -101,6 +103,16 @@ if (username) {
     document.getElementById('searchInput').addEventListener('input', loadProducts);
 
     loadProducts(); // initial load
+
+    function logout() {
+  fetch('/logout', { method: 'POST' })
+    .then(() => {
+      // מוחקים את ה-cookie גם בצד הלקוח
+      document.cookie = "username=; Max-Age=0; path=/";
+      window.location.href = 'login.html'; // חוזר למסך התחברות
+    });
+}
+
   </script>
 </body>
 </html>
