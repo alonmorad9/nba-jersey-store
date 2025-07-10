@@ -10,6 +10,8 @@ app.use(express.static(path.join(__dirname, '../client'))); // Serve static file
 
 // Routes
 app.use(require('./register-server')); // Import and use the registration route defined in 'register-server.js'
+app.use(require('./login-server')); // Import and use the login route defined in 'login-server.js'
+
 
 // Start
 const PORT = 3000; // Define the port on which the server will listen

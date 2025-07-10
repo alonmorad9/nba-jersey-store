@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+    }
+    input, button {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+      padding: 8px;
+    }
+    #result {
+      margin-top: 15px;
+      color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <label style="display: flex; align-items: center; gap: 8px;">
+      <input type="checkbox" name="remember" />
+      Remember Me
+    </label>
+    <button type="submit">Login</button>
+  </form>
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        username: form.username.value.trim(),
+        password: form.password.value,
+        remember: form.remember.checked
+      };
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const text = await res.text();
+      document.getElementById('result').innerText = text;
+
+      if (res.ok) form.reset();
+    });
+  </script>
+</body>
+</html>
