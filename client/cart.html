@@ -50,6 +50,10 @@
       }
 
       const products = await res.json();
+      renderGroupedCart(products);
+    }
+
+    function renderGroupedCart(products) {
       const container = document.getElementById('cartContainer');
       container.innerHTML = '';
 
@@ -58,13 +62,24 @@
         return;
       }
 
-      products.forEach(p => {
+      // קיבוץ לפי ID וספירת כמות
+      const grouped = {};
+      for (const p of products) {
+        if (!grouped[p.id]) {
+          grouped[p.id] = { ...p, quantity: 1 };
+        } else {
+          grouped[p.id].quantity++;
+        }
+      }
+
+      Object.values(grouped).forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
           <h3>${p.name}</h3>
           <p>${p.description}</p>
-          <button class="remove-btn" onclick="removeFromCart('${p.id}')">Remove</button>
+          <p><strong>Quantity:</strong> ${p.quantity}</p>
+          <button class="remove-btn" onclick="removeFromCart('${p.id}')">Remove one</button>
         `;
         container.appendChild(div);
       });
