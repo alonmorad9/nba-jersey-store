@@ -11,22 +11,22 @@ router.get('/products', async (req, res) => {
 // POST /add-to-cart – מוסיף מוצר לעגלה לפי משתמש מזוהה
 router.post('/add-to-cart', async (req, res) => {
   const username = req.cookies.username;
+  if (!username) return res.status(401).send('You must be logged in');
 
-  if (!username) {
-    return res.status(401).send('You must be logged in');
-  }
+  const { productId, quantity } = req.body;
+  const qty = parseInt(quantity) || 1;
 
-  const { productId } = req.body;
   const carts = await persist.readJSON('carts.json');
+  if (!carts[username]) carts[username] = [];
 
-  if (!carts[username]) {
-    carts[username] = [];
+  // מוסיף את המוצר `qty` פעמים לעגלה
+  for (let i = 0; i < qty; i++) {
+    carts[username].push(productId);
   }
 
-  carts[username].push(productId);
   await persist.writeJSON('carts.json', carts);
-
-  res.send('Product added to cart!');
+  res.send(`${qty} item(s) added to cart`);
 });
+
 
 module.exports = router;

@@ -85,29 +85,37 @@ if (username) {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
-          <h3>${p.name}</h3>
-          <p>${p.description}</p>
-          <button onclick="addToCart('${p.id}')">Add to Cart</button>
-        `;
+  <h3>${p.name}</h3>
+  <p>${p.description}</p>
+  <label>
+    Quantity:
+    <input type="number" id="qty-${p.id}" value="1" min="1" style="width: 60px; margin-left: 5px;">
+  </label>
+  <button onclick="addToCart('${p.id}')">Add to Cart</button>
+`;
+
         container.appendChild(div);
       });
     }
 
     async function addToCart(productId) {
-      const res = await fetch('/add-to-cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId })
-      });
+  const qtyInput = document.getElementById(`qty-${productId}`);
+  const quantity = parseInt(qtyInput.value) || 1;
 
-      if (res.status === 401) {
-        alert('You must be logged in to add items to your cart.');
-        window.location.href = 'login.html';
-      } else {
-        const msg = await res.text();
-        alert(msg);
-      }
-    }
+  const res = await fetch('/add-to-cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productId, quantity })
+  });
+
+  if (res.status === 401) {
+    alert("You must be logged in to add items to your cart.");
+    window.location.href = 'login.html';
+  } else {
+    alert(await res.text());
+  }
+}
+
 
     document.getElementById('searchInput').addEventListener('input', loadProducts);
 
