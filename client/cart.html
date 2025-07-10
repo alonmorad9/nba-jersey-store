@@ -66,36 +66,49 @@
 
 
     function renderGroupedCart(products) {
-      const container = document.getElementById('cartContainer');
-      container.innerHTML = '';
+  const container = document.getElementById('cartContainer');
+  container.innerHTML = '';
 
-      if (products.length === 0) {
-        container.innerHTML = '<p>Your cart is empty.</p>';
-        return;
-      }
+  if (products.length === 0) {
+    container.innerHTML = '<p>Your cart is empty.</p>';
+    return;
+  }
 
-      // קיבוץ לפי ID וספירת כמות
-      const grouped = {};
-      for (const p of products) {
-        if (!grouped[p.id]) {
-          grouped[p.id] = { ...p, quantity: 1 };
-        } else {
-          grouped[p.id].quantity++;
-        }
-      }
-
-      Object.values(grouped).forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <h3>${p.name}</h3>
-          <p>${p.description}</p>
-          <p><strong>Quantity:</strong> ${p.quantity}</p>
-          <button class="remove-btn" onclick="removeFromCart('${p.id}')">Remove one</button>
-        `;
-        container.appendChild(div);
-      });
+  const grouped = {};
+  for (const p of products) {
+    if (!grouped[p.id]) {
+      grouped[p.id] = { ...p, quantity: 1 };
+    } else {
+      grouped[p.id].quantity++;
     }
+  }
+
+  let total = 0;
+
+  Object.values(grouped).forEach(p => {
+    const itemTotal = p.price * p.quantity;
+    total += itemTotal;
+
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <h3>${p.name}</h3>
+      <p>${p.description}</p>
+      <p><strong>Price:</strong> $${p.price.toFixed(2)}</p>
+      <p><strong>Quantity:</strong> ${p.quantity}</p>
+      <p><strong>Total:</strong> $${itemTotal.toFixed(2)}</p>
+      <button class="remove-btn" onclick="removeFromCart('${p.id}')">Remove one</button>
+      <button class="remove-all-btn" onclick="removeAllFromCart('${p.id}')">Remove all</button>
+    `;
+    container.appendChild(div);
+  });
+
+  const summary = document.createElement('div');
+  summary.style = "margin-top: 20px; font-weight: bold; text-align: right;";
+  summary.innerText = `Cart Total: $${total.toFixed(2)}`;
+  container.appendChild(summary);
+}
+
 
     async function removeFromCart(productId) {
       const res = await fetch('/remove-from-cart', {

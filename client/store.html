@@ -87,12 +87,16 @@ if (username) {
         div.innerHTML = `
   <h3>${p.name}</h3>
   <p>${p.description}</p>
+  <p><strong>Price:</strong> $${p.price.toFixed(2)}</p>
   <label>
     Quantity:
     <input type="number" id="qty-${p.id}" value="1" min="1" style="width: 60px; margin-left: 5px;">
   </label>
   <button onclick="addToCart('${p.id}')">Add to Cart</button>
 `;
+
+
+
 
         container.appendChild(div);
       });
