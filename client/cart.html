@@ -109,6 +109,21 @@
   container.appendChild(summary);
 }
 
+async function removeAllFromCart(productId) {
+  const res = await fetch('/remove-all-from-cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productId })
+  });
+
+  if (res.ok) {
+    loadCart();
+  } else {
+    alert(await res.text());
+  }
+}
+
+
 
     async function removeFromCart(productId) {
       const res = await fetch('/remove-from-cart', {

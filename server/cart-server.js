@@ -41,17 +41,19 @@ router.post('/remove-all-from-cart', async (req, res) => {
   const username = req.cookies.username;
   if (!username) return res.status(401).send('Not logged in');
 
-  const { productId } = req.body;
+  const productId = String(req.body.productId);
   const carts = await persist.readJSON('carts.json');
 
   if (!Array.isArray(carts[username])) {
     return res.status(400).send('Cart not found');
   }
 
+  // הסרת כל המופעים של המוצר
   carts[username] = carts[username].filter(id => id !== productId);
   await persist.writeJSON('carts.json', carts);
 
   res.send('All items removed');
 });
+
 
 module.exports = router;
