@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Store</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .product {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .product h3 {
+      margin: 0;
+    }
+
+    .product p {
+      margin: 5px 0;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>NBA Jerseys Store</h1>
+    <p id="welcome" style="text-align: center; color: #333; font-weight: bold;"></p>
+
+
+    <input
+      type="text"
+      id="searchInput"
+      class="search-bar"
+      placeholder="Search by name or description..."
+    />
+
+    <div id="products"></div>
+  </div>
+
+  <script>
+    async function loadProducts() {
+      const res = await fetch('/products');
+      const products = await res.json();
+      renderProducts(products);
+    }
+
+    // הצגת שם המשתמש מתוך ה־cookie אם קיים
+const username = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('username='))
+  ?.split('=')[1];
+
+if (username) {
+  document.getElementById('welcome').innerText = `Welcome, ${username}!`;
+}
+
+    function renderProducts(products) {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p =>
+        p.name.toLowerCase().startsWith(search) ||
+        p.description.toLowerCase().startsWith(search)
+      );
+
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function addToCart(productId) {
+      const res = await fetch('/add-to-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId })
+      });
+
+      if (res.status === 401) {
+        window.location.href = 'login.html';
+      } else {
+        const msg = await res.text();
+        alert(msg);
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('input', loadProducts);
+
+    loadProducts(); // initial load
+  </script>
+</body>
+</html>
