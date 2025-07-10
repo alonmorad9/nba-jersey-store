@@ -30,6 +30,11 @@
 </head>
 <body>
   <div class="form-container">
+    <div style="text-align: right; margin-bottom: 10px;">
+  <button onclick="goToCart()" style="padding: 8px 16px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer;">
+    🛒 Cart
+  </button>
+</div>
     <button onclick="logout()" style="float: right; margin-bottom: 20px;">Logout</button>
     <h1>NBA Jerseys Store</h1>
     <p id="welcome" style="text-align: center; color: #333; font-weight: bold;"></p>
@@ -51,6 +56,10 @@
       const products = await res.json();
       renderProducts(products);
     }
+
+    function goToCart() {
+  window.location.href = 'cart.html';
+}
 
     // הצגת שם המשתמש מתוך ה־cookie אם קיים
 const username = document.cookie
