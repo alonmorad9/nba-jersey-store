@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .pay-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Checkout</h1>
+    <form id="checkoutForm">
+      <div id="itemsContainer"></div>
+      <button type="submit" class="pay-btn">Proceed to Payment</button>
+    </form>
+  </div>
+
+  <script>
+    let selectedItems = [];
+
+    async function loadCheckout() {
+      const res = await fetch('/cart');
+      if (res.status === 401) {
+        alert("You must be logged in.");
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const items = await res.json();
+      const container = document.getElementById('itemsContainer');
+      container.innerHTML = '';
+
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <label>
+            <input type="checkbox" name="item" value="${item.id}">
+            <strong>${item.name}</strong> - $${item.price.toFixed(2)}
+            <p>${item.description}</p>
+          </label>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const selected = Array.from(document.querySelectorAll('input[name="item"]:checked'))
+                            .map(input => input.value);
+
+      if (selected.length === 0) {
+        alert("Please select items to proceed.");
+        return;
+      }
+
+      // שומרים את המוצרים המקומית בזיכרון הדפדפן (sessionStorage)
+      sessionStorage.setItem('checkoutItems', JSON.stringify(selected));
+      window.location.href = 'pay.html';
+    });
+
+    loadCheckout();
+  </script>
+</body>
+</html>

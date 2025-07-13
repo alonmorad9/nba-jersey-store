@@ -45,6 +45,12 @@
     </div>
 
     <div id="cartContainer"></div>
+    <div style="text-align: center; margin-top: 20px;">
+  <button onclick="goToCheckout()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    Proceed to Checkout
+  </button>
+</div>
+
   </div>
 
   <script>
@@ -63,6 +69,11 @@
     function goToStore() {
   window.location.href = 'store.html';
 }
+
+function goToCheckout() {
+  window.location.href = 'checkout.html';
+}
+
 
 
     function renderGroupedCart(products) {
