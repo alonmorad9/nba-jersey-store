@@ -11,7 +11,6 @@
       margin-bottom: 10px;
       border-radius: 5px;
     }
-
     .pay-btn {
       background-color: #28a745;
       color: white;
@@ -20,15 +19,12 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     .pay-btn:hover {
       background-color: #218838;
     }
-
     .form-group {
       margin-bottom: 15px;
     }
-
     input {
       width: 100%;
       padding: 8px;
@@ -44,22 +40,19 @@
     <form id="payForm">
       <div class="form-group">
         <label>Full Name:</label>
-        <input type="text" id="fullName" required>
+        <input type="text" required>
       </div>
-
       <div class="form-group">
         <label>Card Number:</label>
-        <input type="text" id="cardNumber" placeholder="1234123412341234" required>
+        <input type="text" required pattern="\\d{16}" title="16 digit card number">
       </div>
-
       <div class="form-group">
         <label>Expiry Date:</label>
-        <input type="month" id="expiryDate" required>
+        <input type="month" required>
       </div>
-
       <div class="form-group">
         <label>CVV:</label>
-        <input type="text" id="cvv" placeholder="3-digit CVV" required>
+        <input type="text" required pattern="\\d{3}" title="3 digit CVV">
       </div>
 
       <button type="submit" class="pay-btn">Pay</button>
@@ -79,6 +72,7 @@
 
       checkoutItems = JSON.parse(raw);
 
+      // שליפת פרטים מלאים מהשרת
       const res = await fetch('/cart');
       const cartItems = await res.json();
 
@@ -97,20 +91,7 @@
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const cardRaw = document.getElementById('cardNumber').value;
-      const card = cardRaw.replace(/\D/g, '');
-      const cvv = document.getElementById('cvv').value.trim();
-
-      if (card.length !== 16) {
-        alert("Card number must be exactly 16 digits.");
-        return;
-      }
-
-      if (!/^\d{3}$/.test(cvv)) {
-        alert("CVV must be exactly 3 digits.");
-        return;
-      }
-
+      // תשלום מדומה
       const res = await fetch('/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

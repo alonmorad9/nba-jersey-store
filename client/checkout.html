@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Checkout</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -36,7 +36,7 @@
   </div>
 
   <script>
-    let selectedItems = [];
+    let grouped = {}; // נשמר כדי שנוכל לגשת אליו גם בהמשך
 
     async function loadCheckout() {
       const res = await fetch('/cart');
@@ -50,43 +50,53 @@
       const container = document.getElementById('itemsContainer');
       container.innerHTML = '';
 
-      // ✨ קיבוץ לפי product ID עם כמות
-      const grouped = {};
-      for (const item of items) {
-        if (!grouped[item.id]) {
-          grouped[item.id] = { ...item, quantity: 1 };
+      // קיבוץ פריטים עם אותה ID + כמות
+      grouped = {};
+      for (const p of items) {
+        if (!grouped[p.id]) {
+          grouped[p.id] = { ...p, quantity: 1 };
         } else {
-          grouped[item.id].quantity++;
+          grouped[p.id].quantity++;
         }
       }
 
-      // ✨ יצירת תיבה אחת לכל מוצר ייחודי עם הצגת הכמות
-      Object.values(grouped).forEach(item => {
+      Object.values(grouped).forEach(p => {
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
+          <strong>${p.name}</strong> - $${p.price.toFixed(2)}<br>
+          ${p.description}<br>
+          <strong>In cart:</strong> ${p.quantity}<br>
           <label>
-            <input type="checkbox" name="item" value="${item.id}">
-            <strong>${item.name}</strong> - $${item.price.toFixed(2)}<br>
-            ${item.description}<br>
-            <strong>Quantity:</strong> ${item.quantity}
+            Quantity to buy:
+            <input type="number" name="qty-${p.id}" min="0" max="${p.quantity}" value="0" style="width: 60px;">
           </label>
         `;
         container.appendChild(div);
       });
     }
 
-    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+    document.getElementById('checkoutForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const selected = Array.from(document.querySelectorAll('input[name="item"]:checked'))
-                            .map(input => input.value);
+
+      const selected = [];
+
+      Object.values(grouped).forEach(p => {
+        const input = document.querySelector(`input[name="qty-${p.id}"]`);
+        const qty = parseInt(input.value, 10);
+
+        if (!isNaN(qty) && qty > 0) {
+          for (let i = 0; i < qty; i++) {
+            selected.push(p.id);
+          }
+        }
+      });
 
       if (selected.length === 0) {
-        alert("Please select items to proceed.");
+        alert("Please choose at least one product.");
         return;
       }
 
-      // שמירה זמנית של הפריטים שנבחרו לתשלום
       sessionStorage.setItem('checkoutItems', JSON.stringify(selected));
       window.location.href = 'pay.html';
     });
