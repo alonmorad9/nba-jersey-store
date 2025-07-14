@@ -27,12 +27,25 @@
   </style>
 </head>
 <body>
+    
   <div class="form-container">
+
+    <div style="text-align: left; margin: 10px;">
+    <button onclick="goToCart()" style="padding: 8px 16px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer;">
+      🛒 Back to Cart
+    </button>
+  </div>
+  <div style="text-align: left; margin: 10px;">
+    <button onclick="goToStore()" style="padding: 8px 16px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer;">
+       🏬 Back to Store
+    </button>
+  </div>
     <h1>Checkout</h1>
     <form id="checkoutForm">
       <div id="itemsContainer"></div>
       <button type="submit" class="pay-btn">Proceed to Payment</button>
     </form>
+    
   </div>
 
   <script>
@@ -102,6 +115,16 @@
     });
 
     loadCheckout();
+
+        function goToCart() {
+    window.location.href = 'cart.html';
+  }
+
+  function goToStore() {
+    window.location.href = 'store.html';
+  }
+
+
   </script>
 </body>
 </html>
