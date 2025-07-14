@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
   <title>My Items</title>
   <style>
     body {
@@ -67,11 +68,22 @@
   <div id="items-container"></div>
   <button onclick="window.location.href='store.html'">← Back to Store</button>
 
+  <script src="navbar.js"></script>
+
+
   <script>
     window.onload = async () => {
       try {
         const res = await fetch('/my-items');
-        if (!res.ok) throw new Error('Failed to load your purchases');
+
+if (res.status === 401) {
+  alert('עליך להתחבר תחילה'); // הודעה זהה ל-checkout
+  window.location.href = 'login.html';
+  return;
+}
+
+if (!res.ok) throw new Error('Failed to load your purchases');
+
 
         const items = await res.json();
         const container = document.getElementById('items-container');

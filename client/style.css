@@ -1,3 +1,4 @@
+/* -------- בסיס לעמודי טפסים -------- */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
@@ -90,4 +91,50 @@ input[type="password"] {
 
 .switch-link a:hover {
   text-decoration: underline;
+}
+
+/* -------- תפריט ניווט עליון -------- */
+.nav-bar {
+  background-color: #222;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.nav-bar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-bar a:hover {
+  text-decoration: underline;
+}
+
+.nav-bar button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.nav-bar button:hover {
+  background-color: #666;
+}
+
+/* -------- רווח לגוף שמתחת לתפריט -------- */
+body.with-nav {
+  padding-top: 60px; /* שומר מקום לתפריט קבוע */
 }
