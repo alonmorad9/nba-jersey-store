@@ -44,15 +44,15 @@
       </div>
       <div class="form-group">
         <label>Card Number:</label>
-        <input type="text" required pattern="\\d{16}" title="16 digit card number">
+        <input type="text" id="cardNumber" required title="16 digit card number" maxlength="19">
       </div>
       <div class="form-group">
-        <label>Expiry Date:</label>
-        <input type="month" required>
+        <label>Expiry Date (MM/YY):</label>
+        <input type="text" id="expiryDate" required pattern="(0[1-9]|1[0-2])\/([0-9]{2})" title="MM/YY format" placeholder="MM/YY" maxlength="5">
       </div>
       <div class="form-group">
         <label>CVV:</label>
-        <input type="text" required pattern="\\d{3}" title="3 digit CVV">
+        <input type="text" id="cvv" required pattern="[0-9]{3}" title="3 digit CVV" maxlength="3">
       </div>
 
       <button type="submit" class="pay-btn">Pay</button>
@@ -76,13 +76,35 @@
       const res = await fetch('/cart');
       const cartItems = await res.json();
 
-      const filtered = cartItems.filter(p => checkoutItems.includes(p.id));
+      // יצירת מפה של מוצרים לפי ID
+      const productMap = {};
+      cartItems.forEach(item => {
+        productMap[item.id] = item;
+      });
+
+      // קיבוץ מוצרים לפי ID וספירת כמות
+      const groupedItems = {};
+      checkoutItems.forEach(itemId => {
+        if (!groupedItems[itemId]) {
+          groupedItems[itemId] = {
+            ...productMap[itemId],
+            quantity: 1
+          };
+        } else {
+          groupedItems[itemId].quantity++;
+        }
+      });
+
       const container = document.getElementById('itemsSummary');
       let total = 0;
 
-      container.innerHTML = filtered.map(p => {
-        total += p.price;
-        return `<div class="item"><strong>${p.name}</strong> - $${p.price.toFixed(2)}</div>`;
+      container.innerHTML = Object.values(groupedItems).map(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        return `<div class="item">
+          <strong>${item.name}</strong> - $${item.price.toFixed(2)} x ${item.quantity}
+          <br><strong>Subtotal:</strong> $${itemTotal.toFixed(2)}
+        </div>`;
       }).join('');
 
       container.innerHTML += `<p><strong>Total to pay:</strong> $${total.toFixed(2)}</p>`;
@@ -90,6 +112,27 @@
 
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // בדיקת מספר כרטיס (הסרת רווחים ובדיקה שיש 16 ספרות)
+      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+        alert('Please enter a valid 16-digit card number');
+        return;
+      }
+
+      // בדיקת תאריך תפוגה
+      const expiryDate = document.getElementById('expiryDate').value;
+      if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)) {
+        alert('Please enter a valid expiry date in MM/YY format');
+        return;
+      }
+
+      // בדיקת CVV
+      const cvv = document.getElementById('cvv').value;
+      if (cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
+        alert('Please enter a valid 3-digit CVV');
+        return;
+      }
 
       // תשלום מדומה
       const res = await fetch('/checkout', {
@@ -104,6 +147,27 @@
       } else {
         alert(await res.text());
       }
+    });
+
+    // פונקציה לעיצוב CVV - רק ספרות
+    document.getElementById('cvv').addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    // פונקציה לעיצוב מספר כרטיס אשראי
+    document.getElementById('cardNumber').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+      let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+      e.target.value = formattedValue;
+    });
+
+    // פונקציה לעיצוב תאריך תפוגה
+    document.getElementById('expiryDate').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      e.target.value = value;
     });
 
     loadItems();
