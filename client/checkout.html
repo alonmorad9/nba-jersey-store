@@ -55,6 +55,12 @@
       const container = document.getElementById('itemsContainer');
       container.innerHTML = '';
 
+      if (!items || items.length === 0) {
+  container.innerHTML = '<p style="text-align:center; font-size:16px;">Your cart is empty. You have no items to checkout.</p>';
+  return;
+}
+
+
       // קיבוץ פריטים עם אותה ID + כמות
       grouped = {};
       for (const p of items) {
