@@ -3,11 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <title>My Items</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background-color: #222;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #items-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .item-box {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 10px;
+      padding: 15px;
+      width: 250px;
+    }
+
+    .item-box h3 {
+      margin-top: 0;
+    }
+
+    .item-box p {
+      margin: 5px 0;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto 40px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #222;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+  </style>
 </head>
 <body>
   <h1>Items You Purchased</h1>
   <div id="items-container"></div>
-  <button onclick="window.location.href='store.html'">Back to Store</button>
+  <button onclick="window.location.href='store.html'">← Back to Store</button>
 
   <script>
     window.onload = async () => {
@@ -19,19 +77,19 @@
         const container = document.getElementById('items-container');
 
         if (items.length === 0) {
-          container.innerText = 'You haven’t purchased anything yet.';
+          container.innerHTML = '<p>You haven’t purchased anything yet.</p>';
           return;
         }
 
         items.forEach(item => {
           const div = document.createElement('div');
+          div.className = 'item-box';
           div.innerHTML = `
             <h3>${item.name}</h3>
             <p>${item.description}</p>
-            <p>Price: $${item.price.toFixed(2)}</p>
-            <p>Quantity: ${item.quantity}</p>
-            <p>Purchased at: ${new Date(item.purchasedAt).toLocaleString()}</p>
-            <hr>
+            <p><strong>Price:</strong> $${item.price.toFixed(2)}</p>
+            <p><strong>Quantity:</strong> ${item.quantity}</p>
+            <p><strong>Purchased at:</strong> ${new Date(item.purchasedAt).toLocaleString()}</p>
           `;
           container.appendChild(div);
         });
