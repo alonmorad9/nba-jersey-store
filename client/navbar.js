@@ -10,8 +10,14 @@ nav.innerHTML = `
 `;
 document.body.prepend(nav);
 
-// פונקציית logout
+// פונקציית logout – גרסה מעודכנת שתואמת לשרת
 async function logout() {
-  await fetch('/logout');
-  window.location.href = 'login.html';
+  const res = await fetch('/logout', {
+    method: 'POST'
+  });
+  if (res.ok) {
+    window.location.href = 'login.html';
+  } else {
+    alert('Logout failed.');
+  }
 }

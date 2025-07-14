@@ -86,7 +86,7 @@
         const res = await fetch('/my-items');
 
         if (res.status === 401) {
-          alert('עליך להתחבר תחילה');
+          alert('You must be logged in.');
           window.location.href = 'login.html';
           return;
         }
