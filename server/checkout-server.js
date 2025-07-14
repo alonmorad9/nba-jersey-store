@@ -14,13 +14,29 @@ router.post('/checkout', async (req, res) => {
 
   const carts = await persist.readJSON('carts.json');
   const purchases = await persist.readJSON('purchases.json');
+  const products = await persist.readJSON('products.json');
+  const now = new Date().toISOString();
 
-  // סינון עגלה – הסרה של כל המוצרים שנבחרו לתשלום
+  // הסרה מהעגלה
   carts[username] = (carts[username] || []).filter(id => !items.includes(id));
 
-  // הוספה לרשימת רכישות
+  // יצירת אובייקטי רכישה מפורטים לפי products.json
+  const detailedPurchases = items
+    .map(id => {
+      const product = products[id];
+      if (!product) return null;
+      return {
+        ...product,
+        productId: id,
+        quantity: 1,
+        purchasedAt: now
+      };
+    })
+    .filter(Boolean);
+
+  // הוספה לרשימת הרכישות
   if (!purchases[username]) purchases[username] = [];
-  purchases[username].push(...items);
+  purchases[username].push(...detailedPurchases);
 
   await persist.writeJSON('carts.json', carts);
   await persist.writeJSON('purchases.json', purchases);
@@ -29,3 +45,4 @@ router.post('/checkout', async (req, res) => {
 });
 
 module.exports = router;
+כן

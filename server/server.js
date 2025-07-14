@@ -15,6 +15,7 @@ app.use(require('./store-server')); // Import and use the store route defined in
 app.use(require('./logout-server')); // Import and use the logout route defined in 'logout-server.js'
 app.use(require('./cart-server')); // Import and use the cart route defined in 'cart-server.js'
 app.use(require('./checkout-server')); // Import and use the checkout route defined in 'checkout-server.js'
+app.use(require('./myitems-server')); // Import and use the my items route defined in 'myitems-server.js'
 
 
 // Start
