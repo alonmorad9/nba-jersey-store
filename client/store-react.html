@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Store (React)</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- טעינת React ו־ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body class="with-nav">
+  <div id="root"></div>
+
+  <script src="navbar.js"></script>
+
+  <!-- רכיב React -->
+  <script type="text/babel">
+
+    function Store() {
+      const [products, setProducts] = React.useState([]);
+      const [search, setSearch] = React.useState('');
+
+      React.useEffect(() => {
+        fetch('/products')
+          .then(res => res.json())
+          .then(setProducts);
+      }, []);
+
+      const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.description.toLowerCase().includes(search.toLowerCase())
+      );
+
+      return (
+        <div className="form-container">
+          <h1>NBA Jerseys Store (React)</h1>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="search-bar"
+          />
+          {filtered.map(p => (
+            <div key={p.id} className="item-box">
+              <h3>{p.name}</h3>
+              <p>{p.description}</p>
+              <p><strong>Price:</strong> ${p.price.toFixed(2)}</p>
+              <button onClick={() => addToCart(p.id)}>Add to Cart</button>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    function addToCart(productId) {
+      fetch('/add-to-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, quantity: 1 })
+      }).then(res => {
+        if (res.status === 401) {
+          alert("You must be logged in to add items.");
+          window.location.href = 'login.html';
+        } else {
+          alert("Added to cart!");
+        }
+      });
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Store />);
+  </script>
+</body>
+</html>
