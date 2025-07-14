@@ -37,12 +37,8 @@
 <body>
     <body>
   <div class="form-container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h1>Your Cart</h1>
-      <button onclick="goToStore()" style="padding: 8px 16px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer;">
-        🏬 Back to Store
-      </button>
-    </div>
+    <h1 style="text-align: center;">Your Cart</h1>
+
 
     <div id="cartContainer"></div>
     <div style="text-align: center; margin-top: 20px;">
@@ -67,10 +63,6 @@
       const products = await res.json();
       renderGroupedCart(products);
     }
-
-    function goToStore() {
-  window.location.href = 'store.html';
-}
 
 function goToCheckout() {
   window.location.href = 'checkout.html';
