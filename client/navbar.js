@@ -27,11 +27,13 @@ const welcomeSpan = document.getElementById('welcome-user');
 const currentPage = window.location.pathname;
 
 if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
-  welcomeSpan.textContent = `Welcome, ${username}!`;
+  const formattedName = username === 'admin' ? 'Admin 👑' : username;
+  welcomeSpan.textContent = `Welcome, ${formattedName}!`;
 } else {
   logoutBtn.style.display = 'none';
   welcomeSpan.style.display = 'none';
 }
+
 
 // פעולה ללחיצה על logout
 logoutBtn.onclick = async () => {
