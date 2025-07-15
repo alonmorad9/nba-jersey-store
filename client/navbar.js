@@ -1,41 +1,41 @@
-// נכניס את התפריט לראש הדף
 const nav = document.createElement('div');
 nav.className = 'nav-bar';
 
-const currentPage = window.location.pathname;
-
-let html = `
-  <a href="store.html">🏬 Store</a>
-  <a href="cart.html">🛒 Cart</a>
-  <a href="checkout.html">✅ Checkout</a>
-  <a href="myitems.html">📦 My Items</a>
+nav.innerHTML = `
+  <div class="nav-left">
+    <a href="store.html">🏬 Store</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="checkout.html">✅ Checkout</a>
+    <a href="myitems.html">📦 My Items</a>
+  </div>
+  <div class="nav-right">
+    <span id="welcome-user"></span>
+    <button id="logout-btn">Logout</button>
+  </div>
 `;
 
-if (!currentPage.includes('login') && !currentPage.includes('register')) {
-  html += `<button onclick="logout()">Logout</button>`;
-}
+document.body.prepend(nav);
 
-nav.innerHTML = html;
-
-// הצגת Welcome עם שם משתמש
+// הטמעת שם משתמש וכפתור logout רק אם יש משתמש מחובר
 const username = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
   ?.split('=')[1];
 
-if (username) {
-  const welcome = document.createElement('span');
-  welcome.style.marginLeft = 'auto';
-  welcome.style.color = 'white';
-  welcome.textContent = `Welcome, ${username}`;
-  nav.appendChild(welcome);
+const logoutBtn = document.getElementById('logout-btn');
+const welcomeSpan = document.getElementById('welcome-user');
+const currentPage = window.location.pathname;
+
+if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
+  welcomeSpan.textContent = `Welcome, ${username}!`;
+} else {
+  logoutBtn.style.display = 'none';
+  welcomeSpan.style.display = 'none';
 }
 
-document.body.prepend(nav);
-
-// פונקציית logout
-async function logout() {
+// פעולה ללחיצה על logout
+logoutBtn.onclick = async () => {
   await fetch('/logout', { method: 'POST' });
   document.cookie = "username=; Max-Age=0; path=/";
   window.location.href = 'login.html';
-}
+};
