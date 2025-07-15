@@ -25,6 +25,22 @@ h1 {
   color: #333;
 }
 
+.switch-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.switch-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.switch-link a:hover {
+  text-decoration: underline;
+}
+
+
 .form-group {
   margin-bottom: 20px;
 }
