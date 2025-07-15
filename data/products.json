@@ -16,5 +16,12 @@
     "name": "Warriors Jersey",
     "description": "Blue and gold",
     "price": 102.99
+  },
+  "5": {
+    "id": "5",
+    "name": "test",
+    "description": "test",
+    "price": 95.99,
+    "image": ""
   }
 }
