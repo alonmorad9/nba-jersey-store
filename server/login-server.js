@@ -25,6 +25,8 @@ router.post('/login', async (req, res) => {
   const now = new Date().toISOString();
   log[now] = { username, type: 'login' };
   await persist.writeJSON('activity_log.json', log);
+  await persist.appendActivity({ username, type: 'login' });
+
 
   res.send('Login successful');
 });

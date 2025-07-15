@@ -26,6 +26,8 @@ router.post('/add-to-cart', async (req, res) => {
 
   await persist.writeJSON('carts.json', carts);
   res.send(`${qty} item(s) added to cart`);
+
+    await persist.appendActivity({ username, type: 'add-to-cart' });
 });
 
 

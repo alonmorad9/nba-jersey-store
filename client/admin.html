@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.with-nav {
+      padding-top: 60px;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    .form-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="with-nav">
+  <div class="form-container">
+    <h1>🛠 Admin Activity Log</h1>
+    <input type="text" id="prefixInput" placeholder="Filter by username prefix..." />
+
+    <table>
+      <thead>
+        <tr>
+          <th>Datetime</th>
+          <th>Username</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody id="activityTableBody">
+        <!-- rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="navbar.js"></script>
+
+  <script>
+    const prefixInput = document.getElementById('prefixInput');
+    const tableBody = document.getElementById('activityTableBody');
+
+    async function loadActivity() {
+      const prefix = prefixInput.value.trim();
+      const res = await fetch('/admin-activity?prefix=' + encodeURIComponent(prefix));
+      const data = await res.json();
+
+      tableBody.innerHTML = '';
+      data.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${new Date(entry.datetime).toLocaleString()}</td>
+          <td>${entry.username}</td>
+          <td>${entry.type}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    prefixInput.addEventListener('input', loadActivity);
+    window.onload = loadActivity;
+  </script>
+</body>
+</html>
