@@ -55,13 +55,13 @@
     }
 
     // הצגת שם המשתמש מתוך ה־cookie אם קיים
-const username = document.cookie
+const currentUser = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
   ?.split('=')[1];
 
-if (username) {
-  document.getElementById('welcome').innerText = `Welcome, ${username}!`;
+if (currentUser) {
+  document.getElementById('welcome').innerText = `Welcome, ${currentUser}!`;
 }
 
     function renderProducts(products) {
