@@ -2,33 +2,40 @@
 const nav = document.createElement('div');
 nav.className = 'nav-bar';
 
-// שליפת שם המשתמש מה-cookie
+const currentPage = window.location.pathname;
+
+let html = `
+  <a href="store.html">🏬 Store</a>
+  <a href="cart.html">🛒 Cart</a>
+  <a href="checkout.html">✅ Checkout</a>
+  <a href="myitems.html">📦 My Items</a>
+`;
+
+if (!currentPage.includes('login') && !currentPage.includes('register')) {
+  html += `<button onclick="logout()">Logout</button>`;
+}
+
+nav.innerHTML = html;
+
+// הצגת Welcome עם שם משתמש
 const username = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
   ?.split('=')[1];
 
+if (username) {
+  const welcome = document.createElement('span');
+  welcome.style.marginLeft = 'auto';
+  welcome.style.color = 'white';
+  welcome.textContent = `Welcome, ${username}`;
+  nav.appendChild(welcome);
+}
 
-nav.innerHTML = `
-  <a href="store.html">🏬 Store</a>
-  <a href="cart.html">🛒 Cart</a>
-  <a href="checkout.html">✅ Checkout</a>
-  <a href="myitems.html">📦 My Items</a>
-  <button onclick="logout()">Logout</button>
-  <div class="nav-right">
-    ${username ? `👋 Welcome, <strong>${username}</strong>` : ''}
-  </div>
-`;
 document.body.prepend(nav);
 
-// פונקציית logout – גרסה מעודכנת שתואמת לשרת
+// פונקציית logout
 async function logout() {
-  const res = await fetch('/logout', {
-    method: 'POST'
-  });
-  if (res.ok) {
-    window.location.href = 'login.html';
-  } else {
-    alert('Logout failed.');
-  }
+  await fetch('/logout', { method: 'POST' });
+  document.cookie = "username=; Max-Age=0; path=/";
+  window.location.href = 'login.html';
 }
