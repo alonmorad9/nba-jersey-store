@@ -21,19 +21,28 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    h1 {
+    h1, h2, h3 {
       text-align: center;
       margin-bottom: 20px;
       color: #333;
     }
 
-    input[type="text"] {
+    input[type="text"], input[type="number"] {
       width: 100%;
       padding: 10px;
       font-size: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
 
     table {
@@ -56,7 +65,7 @@
 </head>
 <body class="with-nav">
   <div class="form-container">
-    <h1>🛠 Admin Activity Log</h1>
+    <h1>🔨 Admin Activity Log</h1>
     <input type="text" id="prefixInput" placeholder="Filter by username prefix..." />
 
     <table>
@@ -67,14 +76,24 @@
           <th>Type</th>
         </tr>
       </thead>
-      <tbody id="activityTableBody">
-        <!-- rows will be inserted here -->
-      </tbody>
+      <tbody id="activityTableBody"></tbody>
     </table>
+
+    <hr style="margin: 40px 0;">
+    <h2>🧰 Manage Products</h2>
+    <form id="addProductForm">
+      <input type="text" id="productName" placeholder="Product Name" required>
+      <input type="text" id="productDescription" placeholder="Product Description" required>
+      <input type="number" id="productPrice" placeholder="Product Price" required step="0.01" min="0">
+      <input type="text" id="productImage" placeholder="Image URL (optional)">
+      <button type="submit">Add Product</button>
+    </form>
+
+    <h3>📟 Current Products</h3>
+    <ul id="productList" style="list-style: none; padding: 0;"></ul>
   </div>
 
   <script src="navbar.js"></script>
-
   <script>
     const prefixInput = document.getElementById('prefixInput');
     const tableBody = document.getElementById('activityTableBody');
@@ -97,7 +116,69 @@
     }
 
     prefixInput.addEventListener('input', loadActivity);
-    window.onload = loadActivity;
+    window.onload = () => {
+      loadActivity();
+      loadProducts();
+    };
+
+    // Product management
+    const addForm = document.getElementById('addProductForm');
+    const productList = document.getElementById('productList');
+
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('productName').value.trim();
+      const description = document.getElementById('productDescription').value.trim();
+      const price = parseFloat(document.getElementById('productPrice').value);
+      const image = document.getElementById('productImage').value.trim();
+
+      const res = await fetch('/admin-add-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description, price, image })
+      });
+
+      if (res.ok) {
+        alert('Product added!');
+        addForm.reset();
+        loadProducts();
+      } else {
+        alert('Error: ' + await res.text());
+      }
+    });
+
+    async function loadProducts() {
+      const res = await fetch('/admin-products');
+      const products = await res.json();
+
+      productList.innerHTML = '';
+      products.forEach(p => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '10px';
+        li.innerHTML = `
+          <strong>${p.name}</strong> - $${p.price.toFixed(2)}
+          <button onclick="removeProduct('${p.id}')" style="margin-left: 10px;">🗑 Remove</button>
+        `;
+        productList.appendChild(li);
+      });
+    }
+
+    async function removeProduct(id) {
+      if (!confirm('Are you sure you want to delete this product?')) return;
+
+      const res = await fetch('/admin-remove-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (res.ok) {
+        alert('Product removed');
+        loadProducts();
+      } else {
+        alert('Error: ' + await res.text());
+      }
+    }
   </script>
 </body>
 </html>
