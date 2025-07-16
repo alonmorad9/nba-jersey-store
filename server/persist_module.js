@@ -43,6 +43,30 @@ async function appendActivity({ username, type }) { // Append an activity log en
   }
 }
 
+const usersDir = path.join(dataDir, 'users');
+
+function userFilePath(username, filename) {
+  return path.join(usersDir, username, filename);
+}
+
+async function readUserFile(username, filename) {
+  try {
+    const filePath = userFilePath(username, filename);
+    const data = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+}
+
+async function writeUserFile(username, filename, data) {
+  const userDir = path.join(usersDir, username);
+  await fs.mkdir(userDir, { recursive: true });
+  const filePath = path.join(userDir, filename);
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+}
 
 
-module.exports = { readJSON, writeJSON, appendActivity }; // Export the readJSON and writeJSON and appendActivity functions for use in other modules
+
+
+module.exports = { readJSON, writeJSON, appendActivity, readUserFile, writeUserFile }; // Export the readJSON and writeJSON functions, along with activity logging and user file handling functions
