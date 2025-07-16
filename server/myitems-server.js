@@ -9,7 +9,38 @@ router.get('/my-items', async (req, res) => {
 
   try {
     const purchases = await persist.readJSON('purchases.json');
-    res.json(purchases[username] || []);
+    const allProducts = await persist.readJSON('products.json');
+    const userPurchases = purchases[username] || [];
+
+    const grouped = {};
+
+    for (const p of userPurchases) {
+      let productId, purchasedAt;
+
+      // תמיכה גם באובייקטים וגם במחרוזות מזהה פשוטות
+      if (typeof p === 'string') {
+        productId = p;
+        purchasedAt = null;
+      } else {
+        productId = p.productId || p.id;
+        purchasedAt = p.purchasedAt || null;
+      }
+
+      const product = allProducts[productId];
+      if (!product) continue;
+
+      if (!grouped[productId]) {
+        grouped[productId] = {
+          ...product,
+          quantity: 1,
+          purchasedAt // ניקח את הראשון
+        };
+      } else {
+        grouped[productId].quantity++;
+      }
+    }
+
+    res.json(Object.values(grouped));
   } catch (err) {
     console.error('Error loading my items:', err);
     res.status(500).send('Could not load purchases');

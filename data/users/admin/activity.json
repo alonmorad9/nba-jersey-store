@@ -1,0 +1,42 @@
+[
+  {
+    "datetime": "2025-07-16T19:44:53.908Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-07-16T19:45:03.405Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-07-16T19:55:32.696Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-07-16T19:56:02.147Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-07-16T19:57:25.059Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-07-16T19:57:35.316Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-07-16T19:59:39.992Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-07-16T20:00:21.351Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-07-16T20:00:37.139Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-07-16T20:00:44.698Z",
+    "type": "logout"
+  }
+]
