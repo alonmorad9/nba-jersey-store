@@ -23,5 +23,12 @@
     "description": "test",
     "price": 95.99,
     "image": ""
+  },
+  "6": {
+    "id": "6",
+    "name": "Miami Jersey",
+    "description": "Home",
+    "price": 90.99,
+    "image": ""
   }
 }
