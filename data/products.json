@@ -3,7 +3,8 @@
     "id": "1",
     "name": "Lakers Jersey",
     "description": "Classic gold and purple",
-    "price": 99.99
+    "price": 99.99,
+    "image": "images/lakers.jpeg"
   },
   "3": {
     "id": "3",
