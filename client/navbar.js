@@ -1,6 +1,7 @@
 const nav = document.createElement('div');
 nav.className = 'nav-bar';
 
+
 const username = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
@@ -45,7 +46,7 @@ nav.innerHTML = `
   </div>
 `;
 
-document.body.prepend(nav);
+document.body.prepend(nav); // הכנסת הסרגל לדף
 
 // הפעלת כפתור logout אם יש
 const logoutBtn = document.getElementById('logout-btn');
