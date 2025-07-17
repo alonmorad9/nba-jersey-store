@@ -8,7 +8,7 @@ const username = document.cookie
 
 const currentPage = window.location.pathname;
 
-// נבנה את צד שמאל של הסרגל דינמית לפי המשתמש
+// צד שמאל של הסרגל (קישורים קבועים)
 let leftNavHTML = `
   <a href="store.html">🏬 Store</a>
   <a href="cart.html">🛒 Cart</a>
@@ -20,32 +20,39 @@ if (username === 'admin') {
   leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
 }
 
+// צד ימין של הסרגל – דינמי
+let rightNavHTML = '';
+
+if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
+  const formattedName = username === 'admin' ? 'Admin 👑' : username;
+  rightNavHTML = `
+    <span id="welcome-user">Welcome, ${formattedName}!</span>
+    <button id="logout-btn">Logout</button>
+  `;
+} else {
+  rightNavHTML = `
+    <a href="login.html" id="login-link">🔑 Login</a>
+    <a href="register.html" id="register-link">📝 Register</a>
+  `;
+}
+
 nav.innerHTML = `
   <div class="nav-left">
     ${leftNavHTML}
   </div>
   <div class="nav-right">
-    <span id="welcome-user"></span>
-    <button id="logout-btn">Logout</button>
+    ${rightNavHTML}
   </div>
 `;
 
 document.body.prepend(nav);
 
+// הפעלת כפתור logout אם יש
 const logoutBtn = document.getElementById('logout-btn');
-const welcomeSpan = document.getElementById('welcome-user');
-
-if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
-  const formattedName = username === 'admin' ? 'Admin 👑' : username;
-  welcomeSpan.textContent = `Welcome, ${formattedName}!`;
-} else {
-  logoutBtn.style.display = 'none';
-  welcomeSpan.style.display = 'none';
+if (logoutBtn) {
+  logoutBtn.onclick = async () => {
+    await fetch('/logout', { method: 'POST' });
+    document.cookie = "username=; Max-Age=0; path=/";
+    window.location.href = 'login.html';
+  };
 }
-
-// פעולה ללחיצה על logout
-logoutBtn.onclick = async () => {
-  await fetch('/logout', { method: 'POST' });
-  document.cookie = "username=; Max-Age=0; path=/";
-  window.location.href = 'login.html';
-};
