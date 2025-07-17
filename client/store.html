@@ -10,10 +10,19 @@
       padding: 15px;
       margin-bottom: 10px;
       border-radius: 5px;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .product img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 10px;
     }
 
     .product h3 {
-      margin: 0;
+      margin: 10px 0 5px;
     }
 
     .product p {
@@ -33,7 +42,6 @@
     <h1>NBA Jerseys Store</h1>
     <p id="welcome" style="text-align: center; color: #333; font-weight: bold;"></p>
 
-
     <input
       type="text"
       id="searchInput"
@@ -46,29 +54,28 @@
 
   <script src="navbar.js"></script>
 
-
   <script>
+    // ברוך הבא
+    const currentUser = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('username='))
+      ?.split('=')[1];
+
+    if (currentUser) {
+      document.getElementById('welcome').innerText = `Welcome, ${currentUser}!`;
+    }
+
     async function loadProducts() {
       const res = await fetch('/products');
       const products = await res.json();
       renderProducts(products);
     }
 
-    // הצגת שם המשתמש מתוך ה־cookie אם קיים
-const currentUser = document.cookie
-  .split('; ')
-  .find(row => row.startsWith('username='))
-  ?.split('=')[1];
-
-if (currentUser) {
-  document.getElementById('welcome').innerText = `Welcome, ${currentUser}!`;
-}
-
     function renderProducts(products) {
       const search = document.getElementById('searchInput').value.toLowerCase();
       const filtered = products.filter(p =>
-        p.name.toLowerCase().startsWith(search) ||
-        p.description.toLowerCase().startsWith(search)
+        p.name.toLowerCase().includes(search) ||
+        p.description.toLowerCase().includes(search)
       );
 
       const container = document.getElementById('products');
@@ -77,47 +84,43 @@ if (currentUser) {
       filtered.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
+
         div.innerHTML = `
-  <h3>${p.name}</h3>
-  <p>${p.description}</p>
-  <p><strong>Price:</strong> $${p.price.toFixed(2)}</p>
-  <label>
-    Quantity:
-    <input type="number" id="qty-${p.id}" value="1" min="1" style="width: 60px; margin-left: 5px;">
-  </label>
-  <button onclick="addToCart('${p.id}')">Add to Cart</button>
-`;
-
-
-
+          ${p.image ? `<img src="${p.image}" alt="${p.name}">` : ''}
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <p><strong>Price:</strong> $${p.price.toFixed(2)}</p>
+          <label>
+            Quantity:
+            <input type="number" id="qty-${p.id}" value="1" min="1" style="width: 60px; margin-left: 5px;">
+          </label>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
+        `;
 
         container.appendChild(div);
       });
     }
 
     async function addToCart(productId) {
-  const qtyInput = document.getElementById(`qty-${productId}`);
-  const quantity = parseInt(qtyInput.value) || 1;
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      const quantity = parseInt(qtyInput.value) || 1;
 
-  const res = await fetch('/add-to-cart', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ productId, quantity })
-  });
+      const res = await fetch('/add-to-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, quantity })
+      });
 
-  if (res.status === 401) {
-    alert("You must be logged in to add items to your cart.");
-    window.location.href = 'login.html';
-  } else {
-    alert(await res.text());
-  }
-}
-
+      if (res.status === 401) {
+        alert("You must be logged in to add items to your cart.");
+        window.location.href = 'login.html';
+      } else {
+        alert(await res.text());
+      }
+    }
 
     document.getElementById('searchInput').addEventListener('input', loadProducts);
-
     loadProducts(); // initial load
-
   </script>
 </body>
 </html>
