@@ -20,7 +20,7 @@
       margin: 5px 0;
     }
 
-    .remove-btn {
+    .remove-all-btn {
       background-color: #dc3545;
       color: white;
       border: none;
@@ -29,7 +29,7 @@
       cursor: pointer;
     }
 
-    .remove-btn:hover {
+    .remove-all-btn:hover {
       background-color: #c82333;
     }
   </style>
@@ -106,7 +106,7 @@ function goToCheckout() {
   <label for="removeQty-${p.id}"><strong>Remove quantity:</strong></label>
   <input type="number" id="removeQty-${p.id}" class="quantity-input" min="1" max="${p.quantity}" value="1">
   <button class="remove-btn" onclick="removeQuantityFromCart('${p.id}')">Remove</button>
-  <button class="remove-all-btn" onclick="removeAllFromCart('${p.id}')">Remove all</button>
+  <button class="remove-all-btn" onclick="removeAllFromCart('${p.id}')">Remove All</button>
 </div>
 
     `;
