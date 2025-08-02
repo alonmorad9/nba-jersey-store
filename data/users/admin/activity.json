@@ -78,5 +78,13 @@
   {
     "datetime": "2025-07-17T15:36:53.314Z",
     "type": "logout"
+  },
+  {
+    "datetime": "2025-08-02T13:58:02.301Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-08-02T14:00:15.921Z",
+    "type": "logout"
   }
 ]

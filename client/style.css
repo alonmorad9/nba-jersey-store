@@ -147,6 +147,14 @@ input[type="password"] {
   text-align: center;
 }
 
+.form-logo {
+  display: block;
+  margin: 0 auto 20px;
+  height: 110px;
+  object-fit: contain;
+}
+
+
 
 
 /* -------- רווח לגוף שמתחת לתפריט -------- */
