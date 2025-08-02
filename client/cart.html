@@ -102,8 +102,13 @@ function goToCheckout() {
       <p><strong>Price:</strong> $${p.price.toFixed(2)}</p>
       <p><strong>Quantity:</strong> ${p.quantity}</p>
       <p><strong>Total:</strong> $${itemTotal.toFixed(2)}</p>
-      <button class="remove-btn" onclick="removeFromCart('${p.id}')">Remove one</button>
-      <button class="remove-all-btn" onclick="removeAllFromCart('${p.id}')">Remove all</button>
+      <div class="quantity-selector">
+  <label for="removeQty-${p.id}"><strong>Remove quantity:</strong></label>
+  <input type="number" id="removeQty-${p.id}" class="quantity-input" min="1" max="${p.quantity}" value="1">
+  <button class="remove-btn" onclick="removeQuantityFromCart('${p.id}')">Remove</button>
+  <button class="remove-all-btn" onclick="removeAllFromCart('${p.id}')">Remove all</button>
+</div>
+
     `;
     container.appendChild(div);
   });
@@ -127,6 +132,30 @@ async function removeAllFromCart(productId) {
     alert(await res.text());
   }
 }
+
+
+async function removeQuantityFromCart(productId) {
+  const input = document.getElementById(`removeQty-${productId}`);
+  const quantity = parseInt(input.value);
+
+  if (!quantity || quantity < 1) {
+    alert("Please enter a valid quantity.");
+    return;
+  }
+
+  const res = await fetch('/remove-from-cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productId, quantity })
+  });
+
+  if (res.ok) {
+    loadCart();
+  } else {
+    alert(await res.text());
+  }
+}
+
 
 
 

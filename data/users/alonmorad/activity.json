@@ -14,5 +14,25 @@
   {
     "datetime": "2025-07-17T15:36:59.214Z",
     "type": "login"
+  },
+  {
+    "datetime": "2025-07-17T15:57:32.531Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-07-17T16:17:37.851Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-08-02T13:31:16.875Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-08-02T13:34:00.688Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-08-02T13:48:36.402Z",
+    "type": "login"
   }
 ]

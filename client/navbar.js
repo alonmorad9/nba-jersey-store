@@ -57,3 +57,4 @@ if (logoutBtn) {
     window.location.href = 'login.html';
   };
 }
+
