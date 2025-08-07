@@ -431,7 +431,7 @@
                 class="quantity-input"
                 min="0" 
                 max="${p.quantity}" 
-                value="0"
+                value="${p.quantity}"
                 onchange="updateTotals()"
               >
               <span style="margin-left: 15px; color: #666; font-size: 0.9em;">
@@ -456,6 +456,9 @@
           </div>
         `;
         container.appendChild(summaryDiv);
+
+        // Update totals after rendering (since default values are now set to max quantities)
+        updateTotals();
 
       } catch (error) {
         console.error('Error loading checkout:', error);
@@ -517,7 +520,7 @@
 
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
-        errorDiv.textContent = 'Please select at least one item to purchase.';
+        errorDiv.textContent = 'Please select at least one item to purchase by setting quantity above 0.';
         
         const form = document.getElementById('checkoutForm');
         form.insertBefore(errorDiv, form.firstChild);
@@ -537,7 +540,7 @@
       
       const successDiv = document.createElement('div');
       successDiv.className = 'success-message';
-      successDiv.textContent = 'Items selected successfully! Redirecting to payment...';
+      successDiv.textContent = `${selected.length} item(s) selected for purchase! Redirecting to payment...`;
       
       const form = document.getElementById('checkoutForm');
       form.insertBefore(successDiv, form.firstChild);

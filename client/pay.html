@@ -5,166 +5,665 @@
   <title>Payment</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .item {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      --success-color: #28a745;
+      --error-color: #dc3545;
     }
-    .pay-btn {
-      background-color: #28a745;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+
+    body.with-nav {
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      min-height: 100vh;
     }
-    .pay-btn:hover {
-      background-color: #218838;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    input {
+
+    .form-container {
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 900px;
+      margin: 0 auto;
       width: 100%;
-      padding: 8px;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: var(--gradient-primary);
+      border-radius: 20px;
+      color: var(--text-light);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
+    .page-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      color: var(--text-light) !important;
+    }
+
+    .page-header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      color: var(--text-light) !important;
+      margin: 0;
+    }
+
+    /* Payment Container */
+    .payment-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    /* Order Summary Section */
+    .order-summary {
+      background: var(--light-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--accent-color);
+      text-align: center;
+    }
+
+    .order-item {
+      background: #f8f9fa;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .order-item:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-name {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    .item-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .item-subtotal {
+      font-weight: 600;
+      color: var(--secondary-color);
+      font-size: 1.1em;
+    }
+
+    .total-section {
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .total-amount {
+      font-size: 2em;
+      font-weight: 700;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Payment Form Section */
+    .payment-form {
+      background: var(--light-bg);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 1em;
+      transition: all 0.3s ease;
       box-sizing: border-box;
+      background: #fafafa;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(23, 64, 139, 0.1);
+      background: white;
+      transform: translateY(-1px);
+    }
+
+    .form-group input:valid {
+      border-color: var(--success-color);
+    }
+
+    .form-group input:invalid:not(:focus):not(:placeholder-shown) {
+      border-color: var(--error-color);
+    }
+
+    /* Input Icons */
+    .input-group {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      color: #666;
+      pointer-events: none;
+    }
+
+    .form-group input:focus + .input-icon {
+      color: var(--primary-color);
+    }
+
+    /* Card type detection */
+    .card-type {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5em;
+    }
+
+    /* Payment Button */
+    .pay-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      border: none;
+      border-radius: 25px;
+      font-size: 1.3em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+    }
+
+    .pay-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .pay-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .pay-btn.processing {
+      background: #6c757d;
+      position: relative;
+    }
+
+    .pay-btn.processing::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    /* Security Badge */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .security-badge .icon {
+      color: var(--success-color);
+      font-size: 1.2em;
+    }
+
+    .security-text {
+      font-size: 0.9em;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Error and Success Messages */
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 500;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Loading State */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      font-size: 1.2em;
+      color: var(--primary-color);
+    }
+
+    .loading::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .payment-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .order-summary {
+        position: static;
+        order: 2;
+      }
+
+      .page-header h1 {
+        font-size: 2.5em;
+      }
+
+      .form-container {
+        padding: 15px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="with-nav">
   <div class="form-container">
-    <h1>Payment</h1>
-    <div id="itemsSummary"></div>
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>💳 Secure Payment</h1>
+      <p>Complete your purchase with our secure payment system</p>
+    </div>
 
-    <form id="payForm">
-      <div class="form-group">
-        <label>Full Name:</label>
-        <input type="text" required>
-      </div>
-      <div class="form-group">
-        <label>Card Number:</label>
-        <input type="text" id="cardNumber" required title="16 digit card number" maxlength="19">
-      </div>
-      <div class="form-group">
-        <label>Expiry Date (MM/YY):</label>
-        <input type="text" id="expiryDate" required pattern="(0[1-9]|1[0-2])\/([0-9]{2})" title="MM/YY format" placeholder="MM/YY" maxlength="5">
-      </div>
-      <div class="form-group">
-        <label>CVV:</label>
-        <input type="text" id="cvv" required pattern="[0-9]{3}" title="3 digit CVV" maxlength="3">
+    <!-- Payment Container -->
+    <div class="payment-container">
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <div class="section-title">📋 Order Summary</div>
+        <div id="itemsSummary">
+          <div class="loading">Loading order details...</div>
+        </div>
       </div>
 
-      <button type="submit" class="pay-btn">Pay</button>
-    </form>
+      <!-- Payment Form -->
+      <div class="payment-form">
+        <div class="section-title">💳 Payment Details</div>
+        
+        <form id="payForm">
+          <div class="form-group">
+            <label for="fullName">
+              👤 Full Name *
+            </label>
+            <div class="input-group">
+              <input type="text" id="fullName" required placeholder="Enter your full name">
+              <span class="input-icon">👤</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cardNumber">
+              💳 Card Number *
+            </label>
+            <div class="input-group">
+              <input type="text" id="cardNumber" required title="16 digit card number" maxlength="19" placeholder="1234 5678 9012 3456">
+              <span class="card-type" id="cardType"></span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label for="expiryDate">
+                📅 Expiry Date *
+              </label>
+              <div class="input-group">
+                <input type="text" id="expiryDate" required pattern="(0[1-9]|1[0-2])\/([0-9]{2})" title="MM/YY format" placeholder="MM/YY" maxlength="5">
+                <span class="input-icon">📅</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cvv">
+                🔒 CVV *
+              </label>
+              <div class="input-group">
+                <input type="text" id="cvv" required pattern="[0-9]{3}" title="3 digit CVV" maxlength="3" placeholder="123">
+                <span class="input-icon">🔒</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="security-badge">
+            <span class="icon">🔒</span>
+            <span class="security-text">Your payment information is encrypted and secure</span>
+          </div>
+
+          <button type="submit" class="pay-btn" id="payButton">
+            🔐 Complete Payment
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script src="navbar.js"></script>
 
-
   <script>
     let checkoutItems = [];
+    let totalAmount = 0;
 
     async function loadItems() {
-      const raw = sessionStorage.getItem('checkoutItems');
-      if (!raw) {
-        alert("No items selected.");
-        window.location.href = 'checkout.html';
-        return;
-      }
-
-      checkoutItems = JSON.parse(raw);
-
-      // שליפת פרטים מלאים מהשרת
-      const res = await fetch('/cart');
-      const cartItems = await res.json();
-
-      // יצירת מפה של מוצרים לפי ID
-      const productMap = {};
-      cartItems.forEach(item => {
-        productMap[item.id] = item;
-      });
-
-      // קיבוץ מוצרים לפי ID וספירת כמות
-      const groupedItems = {};
-      checkoutItems.forEach(itemId => {
-        if (!groupedItems[itemId]) {
-          groupedItems[itemId] = {
-            ...productMap[itemId],
-            quantity: 1
-          };
-        } else {
-          groupedItems[itemId].quantity++;
+      const summaryContainer = document.getElementById('itemsSummary');
+      
+      try {
+        const raw = sessionStorage.getItem('checkoutItems');
+        if (!raw) {
+          throw new Error("No items selected.");
         }
-      });
 
-      const container = document.getElementById('itemsSummary');
-      let total = 0;
+        checkoutItems = JSON.parse(raw);
 
-      container.innerHTML = Object.values(groupedItems).map(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        return `<div class="item">
-          <strong>${item.name}</strong> - $${item.price.toFixed(2)} x ${item.quantity}
-          <br><strong>Subtotal:</strong> $${itemTotal.toFixed(2)}
-        </div>`;
-      }).join('');
+        // Fetch full details from server
+        const res = await fetch('/cart');
+        if (!res.ok) throw new Error('Failed to fetch cart items');
+        
+        const cartItems = await res.json();
 
-      container.innerHTML += `<p><strong>Total to pay:</strong> $${total.toFixed(2)}</p>`;
+        // Create product map by ID
+        const productMap = {};
+        cartItems.forEach(item => {
+          productMap[item.id] = item;
+        });
+
+        // Group products by ID and count quantities
+        const groupedItems = {};
+        checkoutItems.forEach(itemId => {
+          if (!groupedItems[itemId]) {
+            groupedItems[itemId] = {
+              ...productMap[itemId],
+              quantity: 1
+            };
+          } else {
+            groupedItems[itemId].quantity++;
+          }
+        });
+
+        // Render order summary
+        totalAmount = 0;
+        let itemsHtml = '';
+
+        Object.values(groupedItems).forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          totalAmount += itemTotal;
+          
+          itemsHtml += `
+            <div class="order-item">
+              <div class="item-name">${item.name}</div>
+              <div class="item-details">
+                <span>$${item.price.toFixed(2)} × ${item.quantity}</span>
+                <span class="item-subtotal">$${itemTotal.toFixed(2)}</span>
+              </div>
+            </div>
+          `;
+        });
+
+        summaryContainer.innerHTML = `
+          ${itemsHtml}
+          <div class="total-section">
+            <div style="font-size: 1.2em; margin-bottom: 10px;">Total Amount</div>
+            <div class="total-amount">$${totalAmount.toFixed(2)}</div>
+          </div>
+        `;
+
+      } catch (error) {
+        console.error('Error loading items:', error);
+        summaryContainer.innerHTML = `
+          <div class="message error">
+            ${error.message}
+            <div style="margin-top: 15px;">
+              <button onclick="window.location.href='checkout.html'" style="background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                ← Back to Checkout
+              </button>
+            </div>
+          </div>
+        `;
+      }
     }
 
+    // Card type detection
+    function detectCardType(number) {
+      const cardTypeEl = document.getElementById('cardType');
+      const cleanNumber = number.replace(/\s/g, '');
+      
+      if (cleanNumber.startsWith('4')) {
+        cardTypeEl.textContent = '💳'; // Visa
+        cardTypeEl.title = 'Visa';
+      } else if (cleanNumber.startsWith('5')) {
+        cardTypeEl.textContent = '💳'; // Mastercard
+        cardTypeEl.title = 'Mastercard';
+      } else if (cleanNumber.startsWith('3')) {
+        cardTypeEl.textContent = '💳'; // American Express
+        cardTypeEl.title = 'American Express';
+      } else {
+        cardTypeEl.textContent = '💳';
+        cardTypeEl.title = 'Credit Card';
+      }
+    }
+
+    // Form validation and submission
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      const payButton = document.getElementById('payButton');
+      const originalText = payButton.innerHTML;
+      
+      // Remove existing messages
+      const existingMessages = document.querySelectorAll('.message');
+      existingMessages.forEach(msg => msg.remove());
 
-      // בדיקת מספר כרטיס (הסרת רווחים ובדיקה שיש 16 ספרות)
-      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-      if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
-        alert('Please enter a valid 16-digit card number');
-        return;
-      }
+      try {
+        // Validate card number
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+          throw new Error('Please enter a valid 16-digit card number');
+        }
 
-      // בדיקת תאריך תפוגה
-      const expiryDate = document.getElementById('expiryDate').value;
-      if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)) {
-        alert('Please enter a valid expiry date in MM/YY format');
-        return;
-      }
+        // Validate expiry date
+        const expiryDate = document.getElementById('expiryDate').value;
+        if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate)) {
+          throw new Error('Please enter a valid expiry date in MM/YY format');
+        }
 
-      // בדיקת CVV
-      const cvv = document.getElementById('cvv').value;
-      if (cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
-        alert('Please enter a valid 3-digit CVV');
-        return;
-      }
+        // Validate CVV
+        const cvv = document.getElementById('cvv').value;
+        if (cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
+          throw new Error('Please enter a valid 3-digit CVV');
+        }
 
-      // תשלום מדומה
-      const res = await fetch('/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: checkoutItems })
-      });
+        // Show processing state
+        payButton.disabled = true;
+        payButton.className = 'pay-btn processing';
+        payButton.innerHTML = '🔄 Processing Payment...';
 
-      if (res.ok) {
-        sessionStorage.removeItem('checkoutItems');
-        window.location.href = 'thankyou.html';
-      } else {
-        alert(await res.text());
+        // Process payment
+        const res = await fetch('/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: checkoutItems })
+        });
+
+        if (res.ok) {
+          // Success
+          payButton.className = 'pay-btn';
+          payButton.innerHTML = '✅ Payment Successful!';
+          payButton.style.background = '#28a745';
+          
+          const successMsg = document.createElement('div');
+          successMsg.className = 'message success';
+          successMsg.textContent = 'Payment processed successfully! Redirecting...';
+          document.querySelector('.payment-form').insertBefore(successMsg, document.getElementById('payForm'));
+          
+          // Clean up and redirect
+          sessionStorage.removeItem('checkoutItems');
+          
+          setTimeout(() => {
+            window.location.href = 'thankyou.html';
+          }, 2000);
+          
+        } else {
+          throw new Error(await res.text());
+        }
+
+      } catch (error) {
+        console.error('Payment error:', error);
+        
+        // Reset button
+        payButton.disabled = false;
+        payButton.className = 'pay-btn';
+        payButton.innerHTML = originalText;
+        
+        // Show error message
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message error';
+        errorMsg.textContent = error.message;
+        document.querySelector('.payment-form').insertBefore(errorMsg, document.getElementById('payForm'));
+        
+        // Scroll to error
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
-    // פונקציה לעיצוב CVV - רק ספרות
+    // Input formatting
     document.getElementById('cvv').addEventListener('input', function(e) {
       e.target.value = e.target.value.replace(/\D/g, '');
     });
 
-    // פונקציה לעיצוב מספר כרטיס אשראי
     document.getElementById('cardNumber').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
       let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
       e.target.value = formattedValue;
+      detectCardType(value);
     });
 
-    // פונקציה לעיצוב תאריך תפוגה
     document.getElementById('expiryDate').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length >= 2) {
@@ -173,7 +672,8 @@
       e.target.value = value;
     });
 
-    loadItems();
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadItems);
   </script>
 </body>
 </html>
