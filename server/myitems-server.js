@@ -20,10 +20,10 @@ router.get('/my-items', async (req, res) => {
       // תמיכה גם באובייקטים וגם במחרוזות מזהה פשוטות
       if (typeof p === 'string') {
         productId = p;
-        purchasedAt = null;
+        purchasedAt = new Date().toISOString(); // אם אין תאריך, נשתמש בתאריך נוכחי
       } else {
         productId = p.productId || p.id;
-        purchasedAt = p.purchasedAt || null;
+        purchasedAt = p.purchasedAt || new Date().toISOString();
       }
 
       const product = allProducts[productId];
@@ -33,12 +33,30 @@ router.get('/my-items', async (req, res) => {
         grouped[productId] = {
           ...product,
           quantity: 1,
-          purchasedAt // ניקח את הראשון
+          purchasedAt: purchasedAt,
+          firstPurchaseAt: purchasedAt,
+          purchaseDates: [purchasedAt] // מערך של כל תאריכי הרכישה
         };
       } else {
         grouped[productId].quantity++;
+        grouped[productId].purchaseDates.push(purchasedAt);
+        
+        // עדכון תאריך הרכישה האחרונה
+        if (new Date(purchasedAt) > new Date(grouped[productId].purchasedAt)) {
+          grouped[productId].purchasedAt = purchasedAt;
+        }
+        
+        // שמירת תאריך הרכישה הראשונה
+        if (new Date(purchasedAt) < new Date(grouped[productId].firstPurchaseAt)) {
+          grouped[productId].firstPurchaseAt = purchasedAt;
+        }
       }
     }
+
+    // מיון תאריכי הרכישה בתוך כל מוצר
+    Object.values(grouped).forEach(item => {
+      item.purchaseDates.sort((a, b) => new Date(b) - new Date(a)); // מיון מהאחרון לראשון
+    });
 
     res.json(Object.values(grouped));
   } catch (err) {

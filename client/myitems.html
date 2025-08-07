@@ -6,75 +6,272 @@
   <title>My Items</title>
   <style>
     body.with-nav {
-      padding-top: 60px;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       margin: 0;
+      min-height: 100vh;
     }
 
     .form-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 1000px;
-      margin: auto;
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
     }
 
-    h1 {
+    .page-header {
       text-align: center;
-      margin-bottom: 30px;
-      color: #333;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      border-radius: 20px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
+    .page-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      color: white !important;
+    }
+
+    .page-header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      color: white !important;
+      margin: 0;
     }
 
     #items-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      gap: 15px;
-      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 25px;
+      padding: 20px 0;
     }
 
     .item-box {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 15px;
-      width: 250px;
+      background: white;
+      border: 3px solid transparent;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item-box:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: #17408B;
+    }
+
+    .item-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+    }
+
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
 
     .item-box h3 {
-      margin-top: 0;
+      margin: 0;
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #17408B;
+      flex-grow: 1;
     }
 
-    .item-box p {
-      margin: 5px 0;
+    .quantity-badge {
+      background: linear-gradient(135deg, #F9A01B 0%, #17408B 100%);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-left: 15px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .item-details {
+      margin-bottom: 20px;
+    }
+
+    .item-details p {
+      margin: 8px 0;
+      font-size: 1em;
+      line-height: 1.4;
+    }
+
+    .item-description {
+      color: #666;
+      font-style: italic;
+    }
+
+    .item-price {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #C9082A;
+      margin: 15px 0;
+    }
+
+    .purchase-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 15px;
+      border-left: 4px solid #17408B;
+    }
+
+    .purchase-info h4 {
+      margin: 0 0 10px 0;
+      color: #17408B;
+      font-size: 1em;
+      font-weight: 600;
+    }
+
+    .purchase-dates {
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .purchase-date {
+      padding: 5px 0;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .purchase-date:last-child {
+      border-bottom: none;
+    }
+
+    .purchase-date.latest {
+      font-weight: 600;
+      color: #C9082A;
+    }
+
+    .purchase-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .total-spent {
+      font-weight: 700;
+      color: #17408B;
+      font-size: 1.1em;
     }
 
     .back-btn {
       display: block;
-      margin: 30px auto 0;
-      padding: 10px 20px;
+      margin: 40px auto;
+      padding: 15px 30px;
       font-size: 16px;
-      background-color: #007bff;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 25px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .back-btn:hover {
-      background-color: #0056b3;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state-icon {
+      font-size: 5em;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    /* Scrollbar styling for purchase dates */
+    .purchase-dates::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .purchase-dates::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .purchase-dates::-webkit-scrollbar-thumb {
+      background: #17408B;
+      border-radius: 3px;
+    }
+
+    .purchase-dates::-webkit-scrollbar-thumb:hover {
+      background: #C9082A;
     }
   </style>
 </head>
 <body class="with-nav">
   <div class="form-container">
-    <h1>Items You Purchased</h1>
+    <div class="page-header">
+      <h1>📦 Items You Purchased</h1>
+      <p>Your complete purchase history</p>
+    </div>
+    
     <div id="items-container"></div>
+    
     <button class="back-btn" onclick="window.location.href='store.html'">← Back to Store</button>
   </div>
 
@@ -97,29 +294,80 @@
         const container = document.getElementById('items-container');
 
         if (items.length === 0) {
-          container.innerHTML = '<p style="text-align: center;">You haven’t purchased anything yet.</p>';
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🛒</div>
+              <h3>No purchases yet</h3>
+              <p>You haven't purchased anything yet. Start shopping!</p>
+              <button class="back-btn" onclick="window.location.href='store.html'" style="margin: 20px auto;">
+                🏬 Go Shopping
+              </button>
+            </div>
+          `;
           return;
         }
 
-        
         items.forEach(item => {
           if (!item || !item.price || !item.name || !item.description) {
-    console.warn("Incomplete item data:", item);
-    return;
-  }
+            console.warn("Incomplete item data:", item);
+            return;
+          }
+
+          const totalSpent = (item.price * item.quantity).toFixed(2);
+          
+          // יצירת רשימת תאריכי רכישה
+          let purchaseDatesHtml = '';
+          if (item.purchaseDates && item.purchaseDates.length > 0) {
+            purchaseDatesHtml = item.purchaseDates.map((date, index) => {
+              const isLatest = index === 0; // התאריך הראשון במערך הוא האחרון (ממוין)
+              const formattedDate = new Date(date).toLocaleString();
+              return `<div class="purchase-date ${isLatest ? 'latest' : ''}">${formattedDate} ${isLatest ? '(Latest)' : ''}</div>`;
+            }).join('');
+          } else {
+            // fallback אם אין מערך תאריכים
+            const formattedDate = item.purchasedAt ? new Date(item.purchasedAt).toLocaleString() : 'Unknown date';
+            purchaseDatesHtml = `<div class="purchase-date latest">${formattedDate}</div>`;
+          }
+
           const div = document.createElement('div');
           div.className = 'item-box';
           div.innerHTML = `
-            <h3>${item.name}</h3>
-            <p>${item.description}</p>
-            <p><strong>Price:</strong> $${item.price.toFixed(2)}</p>
-            <p><strong>Quantity:</strong> ${item.quantity}</p>
-            <p><strong>Purchased at:</strong> ${new Date(item.purchasedAt).toLocaleString()}</p>
+            <div class="item-header">
+              <h3>${item.name}</h3>
+              <div class="quantity-badge">${item.quantity} item${item.quantity > 1 ? 's' : ''}</div>
+            </div>
+            
+            <div class="item-details">
+              <p class="item-description">${item.description}</p>
+              <div class="item-price">$${item.price.toFixed(2)} each</div>
+            </div>
+            
+            <div class="purchase-info">
+              <h4>📅 Purchase History:</h4>
+              <div class="purchase-dates">
+                ${purchaseDatesHtml}
+              </div>
+              
+              <div class="purchase-summary">
+                <span>Total Purchases: ${item.quantity}</span>
+                <span class="total-spent">Total Spent: $${totalSpent}</span>
+              </div>
+            </div>
           `;
           container.appendChild(div);
         });
       } catch (err) {
-        alert('Error: ' + err.message);
+        const container = document.getElementById('items-container');
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>Error Loading Purchases</h3>
+            <p>Error: ${err.message}</p>
+            <button class="back-btn" onclick="location.reload()" style="margin: 20px auto;">
+              🔄 Try Again
+            </button>
+          </div>
+        `;
       }
     };
   </script>

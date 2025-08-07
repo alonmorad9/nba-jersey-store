@@ -66,5 +66,12 @@
     "description": "Home",
     "price": 90.99,
     "image": "images/lakers.jpeg"
+  },
+  "13": {
+    "id": "13",
+    "name": "Tel-Aviv",
+    "description": "Home",
+    "price": 10.22,
+    "image": ""
   }
 }
