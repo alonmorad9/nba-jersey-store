@@ -2,10 +2,12 @@ const express = require('express'); // Import the express module to create a web
 const app = express(); // Create an instance of an Express application
 const path = require('path'); // Import the path module to handle file paths
 const cookieParser = require('cookie-parser'); // Import the cookie-parser middleware to parse cookies in requests
+const dosLimiter = require('./dos-protection'); // Import the DOS protection middleware
 
 // Middleware
 app.use(express.json()); // Parse JSON bodies in requests
 app.use(cookieParser()); // Parse cookies in requests
+app.use(dosLimiter); // Apply the DOS protection middleware to limit request rates
 app.use(express.static(path.join(__dirname, '../client'))); // Serve static files from the 'client' directory
 
 // Routes
