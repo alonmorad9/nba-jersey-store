@@ -4,166 +4,517 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
+  <title>Login - NBA Thread</title>
   <style>
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      --success-color: #28a745;
+      --error-color: #dc3545;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       margin: 0;
       padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative;
+    }
+
+    /* Background Animation */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(23,64,139,0.05)"/></svg>') repeat;
+      animation: float 30s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
     }
 
     .login-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: var(--light-bg);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
       width: 100%;
       max-width: 400px;
+      position: relative;
+      z-index: 1;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 20px 20px 0 0;
+    }
+
+    /* Logo Section */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .form-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 5px;
+    }
+
+    .brand-subtitle {
+      color: #666;
+      font-size: 0.8em;
+      margin-bottom: 20px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
-      color: #333;
+      margin-bottom: 25px;
+      color: var(--primary-color);
+      font-size: 1.8em;
+      font-weight: 700;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
     }
 
     .form-group {
       margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1em;
+    }
+
+    .input-wrapper {
+      position: relative;
     }
 
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 15px;
       box-sizing: border-box;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      font-family: inherit;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(23, 64, 139, 0.1);
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    input[type="text"]:valid,
+    input[type="password"]:valid {
+      border-color: var(--success-color);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.2em;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-color);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .remember-me {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
-      gap: 8px;
+      margin-bottom: 30px;
+      gap: 12px;
     }
 
     .remember-me input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
       margin: 0;
+      accent-color: var(--primary-color);
+      cursor: pointer;
     }
 
     .remember-me label {
-      font-size: 14px;
-      color: #555;
+      font-size: 15px;
+      color: var(--text-dark);
       cursor: pointer;
+      font-weight: 500;
+      margin-bottom: 0;
     }
 
     .login-button {
       width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
+      padding: 16px;
+      background: var(--gradient-primary);
+      color: var(--text-light);
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
     }
 
-    .login-button:hover {
-      background-color: #0056b3;
+    .login-button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
-    #result {
-      margin-top: 15px;
+    .login-button:active {
+      transform: translateY(-1px);
+    }
+
+    .login-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-button.processing {
+      background: #6c757d;
+      position: relative;
+    }
+
+    .login-button.processing::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    .switch-link {
       text-align: center;
-      color: darkred;
+      margin-top: 25px;
+      font-size: 15px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .switch-link span {
+      color: #666;
+    }
+
+    .switch-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .switch-link a:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+
+    /* Result Messages */
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: 500;
+      animation: slideIn 0.3s ease;
+      display: none;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #result.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    #result.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    /* Security Badge */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .security-badge .icon {
+      color: var(--success-color);
+      font-size: 1.1em;
+    }
+
+    .security-text {
+      font-size: 0.85em;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 30px 25px;
+        margin: 10px;
+      }
+
+      .form-logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .brand-title {
+        font-size: 1.5em;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <img src="images/logo.jpg" alt="Logo" class="form-logo">
-    <h1>Login</h1>
+    <div class="logo-section">
+      <img src="images/logo.jpg" alt="The NBA Thread Logo" class="form-logo">
+      <div class="brand-title">THE NBA THREAD</div>
+      <div class="brand-subtitle">Unique Shirts for True Fans</div>
+    </div>
+
+    <h1>🔑 Login</h1>
 
     <form id="loginForm">
       <div class="form-group">
-        <input type="text" name="username" placeholder="Username" required>
+        <label for="username">👤 Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
       </div>
 
-      <div class="form-group" style="position: relative;">
-  <input type="password" id="password" name="password" placeholder="Password" required>
-  <span id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-    👁
-  </span>
-</div>
-
+      <div class="form-group">
+        <label for="password">🔒 Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          <span id="togglePassword" class="password-toggle">👁</span>
+        </div>
+      </div>
 
       <div class="remember-me">
         <input type="checkbox" id="remember" name="remember">
-        <label for="remember">Remember Me</label>
+        <label for="remember">Remember me for 12 days</label>
       </div>
 
-      <button type="submit" class="login-button">Login</button>
+      <button type="submit" class="login-button" id="loginBtn">
+        🚀 Login
+      </button>
+
       <div class="switch-link">
-  <span>Don't have an account? <a href="register.html">Register here</a></span>
-</div>
+        <span>Don't have an account? </span>
+        <a href="register.html">Register here</a>
+      </div>
 
+      <div class="security-badge">
+        <span class="icon">🔒</span>
+        <span class="security-text">Your login information is encrypted and secure</span>
+      </div>
 
-      <p id="result"></p>
+      <div id="result"></div>
     </form>
   </div>
 
   <script src="navbar.js"></script>
 
-
   <script>
     const form = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const resultEl = document.getElementById('result');
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const data = {
-        username: form.username.value.trim(),
-        password: form.password.value,
-        remember: form.remember.checked
-      };
+      const originalText = loginBtn.innerHTML;
+      
+      // Clear previous results
+      resultEl.className = '';
+      resultEl.style.display = 'none';
 
-      const res = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      try {
+        // Show processing state
+        loginBtn.disabled = true;
+        loginBtn.className = 'login-button processing';
+        loginBtn.innerHTML = '🔄 Logging in...';
 
-      const text = await res.text();
-      const resultEl = document.getElementById('result');
-      resultEl.innerText = text;
+        const data = {
+          username: form.username.value.trim(),
+          password: form.password.value,
+          remember: form.remember.checked
+        };
 
-      // צבע שונה לפי הצלחה או כישלון
-      resultEl.style.color = res.ok ? 'green' : 'darkred';
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
 
-      if (res.ok) {
-        document.getElementById('result').style.color = 'green';
-  document.getElementById('result').innerText = 'Login successful!';
-  setTimeout(() => {
-    window.location.href = 'store.html';
-  }, 1000);
+        const text = await res.text();
+
+        if (res.ok) {
+          // Success
+          loginBtn.className = 'login-button';
+          loginBtn.innerHTML = '✅ Login Successful!';
+          loginBtn.style.background = '#28a745';
+          
+          resultEl.textContent = 'Login successful! Redirecting to store...';
+          resultEl.className = 'success';
+          resultEl.style.display = 'block';
+          
+          setTimeout(() => {
+            window.location.href = 'store.html';
+          }, 1500);
+          
+        } else {
+          throw new Error(text);
+        }
+
+      } catch (error) {
+        // Reset button
+        loginBtn.disabled = false;
+        loginBtn.className = 'login-button';
+        loginBtn.innerHTML = originalText;
+        
+        // Show error
+        resultEl.textContent = error.message;
+        resultEl.className = 'error';
+        resultEl.style.display = 'block';
+        
+        // Scroll to error if needed
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
+    // Password toggle functionality
     document.getElementById('togglePassword').addEventListener('click', function () {
-  const passwordInput = document.getElementById('password');
-  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordInput.setAttribute('type', type);
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
 
-  // החלף אימוג'י לפי מצב
-  this.textContent = type === 'password' ? '👁' : '🙈';
-});
+      // Change icon based on state
+      this.textContent = type === 'password' ? '👁' : '🙈';
+    });
 
+    // Input validation feedback
+    document.querySelectorAll('input[required]').forEach(input => {
+      input.addEventListener('blur', function() {
+        if (this.value.trim()) {
+          this.style.borderColor = '#28a745';
+        } else {
+          this.style.borderColor = '#dc3545';
+        }
+      });
+
+      input.addEventListener('input', function() {
+        if (this.style.borderColor === '#dc3545') {
+          this.style.borderColor = '#e0e0e0';
+        }
+      });
+    });
   </script>
 </body>
 </html>

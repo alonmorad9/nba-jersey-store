@@ -4,159 +4,607 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Form</title>
+  <title>Register - NBA Thread</title>
   <style>
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      --success-color: #28a745;
+      --error-color: #dc3545;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       margin: 0;
       padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative;
+    }
+
+    /* Background Animation */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(201,8,42,0.05)"/></svg>') repeat;
+      animation: float 30s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
     }
 
     .register-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: var(--light-bg);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
       width: 100%;
       max-width: 400px;
+      position: relative;
+      z-index: 1;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .register-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 20px 20px 0 0;
+    }
+
+    /* Logo Section */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .form-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 5px;
+    }
+
+    .brand-subtitle {
+      color: #666;
+      font-size: 0.75em;
+      margin-bottom: 15px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
-      color: #333;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 1.6em;
+      font-weight: 700;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1em;
+    }
+
+    .input-wrapper {
+      position: relative;
     }
 
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      padding: 16px 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
       font-size: 16px;
       box-sizing: border-box;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      font-family: inherit;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(23, 64, 139, 0.1);
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    input[type="text"]:valid,
+    input[type="password"]:valid {
+      border-color: var(--success-color);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.3em;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-color);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .password-requirements {
+      margin-top: 10px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.9em;
+    }
+
+    .password-requirements h4 {
+      margin: 0 0 10px 0;
+      color: var(--primary-color);
+      font-size: 1em;
+    }
+
+    .requirement {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 5px 0;
+      color: #666;
+    }
+
+    .requirement.valid {
+      color: var(--success-color);
+    }
+
+    .requirement .icon {
+      width: 16px;
+      text-align: center;
     }
 
     .register-button {
       width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
+      padding: 16px;
+      background: var(--gradient-primary);
+      color: var(--text-light);
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
     }
 
-    .register-button:hover {
-      background-color: #0056b3;
+    .register-button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
-    #result {
-      margin-top: 15px;
-      text-align: center;
-      color: darkred;
+    .register-button:active {
+      transform: translateY(-1px);
+    }
+
+    .register-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .register-button.processing {
+      background: #6c757d;
+      position: relative;
+    }
+
+    .register-button.processing::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
     }
 
     .switch-link {
       text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 25px;
+      font-size: 15px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .switch-link span {
+      color: #666;
     }
 
     .switch-link a {
-      color: #007bff;
+      color: var(--primary-color);
       text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
 
     .switch-link a:hover {
+      color: var(--secondary-color);
       text-decoration: underline;
+    }
+
+    /* Result Messages */
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: 500;
+      animation: slideIn 0.3s ease;
+      display: none;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #result.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    #result.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    /* Welcome Benefits */
+    .welcome-benefits {
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(23,64,139,0.05) 0%, rgba(201,8,42,0.05) 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .welcome-benefits h4 {
+      margin: 0 0 15px 0;
+      color: var(--primary-color);
+      font-size: 1.1em;
+      text-align: center;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .benefit .icon {
+      font-size: 1.1em;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .register-container {
+        padding: 30px 25px;
+        margin: 10px;
+      }
+
+      .form-logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .brand-title {
+        font-size: 1.5em;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
     }
   </style>
 </head>
 <body>
   <div class="register-container">
-        <img src="images/logo.jpg" alt="Logo" class="form-logo">
-    <h1>Register</h1>
+    <div class="logo-section">
+      <img src="images/logo.jpg" alt="The NBA Thread Logo" class="form-logo">
+      <div class="brand-title">THE NBA THREAD</div>
+      <div class="brand-subtitle">Unique Shirts for True Fans</div>
+    </div>
+
+    <h1>📝 Register</h1>
 
     <form id="registerForm">
       <div class="form-group">
-        <input type="text" name="username" placeholder="Username" required>
+        <label for="username">👤 Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a unique username" required minlength="3">
       </div>
 
-      <div class="form-group" style="position: relative;">
-  <input type="password" id="password" name="password" placeholder="Password" required>
-  <span id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-    👁
-  </span>
-</div>
+      <div class="form-group">
+        <label for="password">🔒 Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" placeholder="Create a secure password" required minlength="6">
+          <span id="togglePassword" class="password-toggle">👁</span>
+        </div>
+        
+        <div class="password-requirements" id="passwordRequirements" style="display: none;">
+          <h4>Password Requirements:</h4>
+          <div class="requirement" id="req-length">
+            <span class="icon">❌</span>
+            <span>At least 6 characters long</span>
+          </div>
+          <div class="requirement" id="req-letter">
+            <span class="icon">❌</span>
+            <span>Contains at least one letter</span>
+          </div>
+        </div>
+      </div>
 
+      <button type="submit" class="register-button" id="registerBtn">
+        🎯 Create Account
+      </button>
 
-      <button type="submit" class="register-button">Register</button>
-      <p id="result"></p>
+      <div class="welcome-benefits">
+        <h4>🎉 Join The NBA Thread Family!</h4>
+        <div class="benefit">
+          <span class="icon">🏀</span>
+          <span>Access to exclusive NBA jerseys</span>
+        </div>
+        <div class="benefit">
+          <span class="icon">🛒</span>
+          <span>Personal shopping cart & wishlist</span>
+        </div>
+        <div class="benefit">
+          <span class="icon">📦</span>
+          <span>Track your orders & purchase history</span>
+        </div>
+        <div class="benefit">
+          <span class="icon">⚡</span>
+          <span>Fast and secure checkout process</span>
+        </div>
+      </div>
+
+      <div class="switch-link">
+        <span>Already have an account? </span>
+        <a href="login.html">Login here</a>
+      </div>
+
+      <div id="result"></div>
     </form>
-
-    <p class="switch-link">
-      Already have an account?
-      <a href="login.html">Login here</a>
-    </p>
   </div>
 
   <script src="navbar.js"></script>
 
-
   <script>
     const form = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const resultEl = document.getElementById('result');
+    const passwordInput = document.getElementById('password');
+    const passwordReqs = document.getElementById('passwordRequirements');
+
+    // Password validation
+    passwordInput.addEventListener('focus', function() {
+      passwordReqs.style.display = 'block';
+    });
+
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const lengthReq = document.getElementById('req-length');
+      const letterReq = document.getElementById('req-letter');
+
+      // Length check
+      if (password.length >= 6) {
+        lengthReq.classList.add('valid');
+        lengthReq.querySelector('.icon').textContent = '✅';
+      } else {
+        lengthReq.classList.remove('valid');
+        lengthReq.querySelector('.icon').textContent = '❌';
+      }
+
+      // Letter check
+      if (/[a-zA-Z]/.test(password)) {
+        letterReq.classList.add('valid');
+        letterReq.querySelector('.icon').textContent = '✅';
+      } else {
+        letterReq.classList.remove('valid');
+        letterReq.querySelector('.icon').textContent = '❌';
+      }
+    });
+
+    // Form submission
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const data = {
-        username: form.username.value.trim(),
-        password: form.password.value
-      };
+      const originalText = registerBtn.innerHTML;
+      
+      // Clear previous results
+      resultEl.className = '';
+      resultEl.style.display = 'none';
 
-      const res = await fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      try {
+        // Show processing state
+        registerBtn.disabled = true;
+        registerBtn.className = 'register-button processing';
+        registerBtn.innerHTML = '🔄 Creating Account...';
 
-      const text = await res.text();
-      const resultEl = document.getElementById('result');
-      resultEl.innerText = text;
-      resultEl.style.color = res.ok ? 'green' : 'darkred';
+        const data = {
+          username: form.username.value.trim(),
+          password: form.password.value
+        };
 
-      if (res.ok) {
-  const resultEl = document.getElementById('result');
-  resultEl.innerText = 'Registration successful!';
-  resultEl.style.color = 'green';
+        // Basic validation
+        if (data.username.length < 3) {
+          throw new Error('Username must be at least 3 characters long');
+        }
 
-  setTimeout(() => {
-    window.location.href = 'login.html';
-  }, 1000); // עיכוב של שנייה
-}
+        if (data.password.length < 6) {
+          throw new Error('Password must be at least 6 characters long');
+        }
 
+        if (!/[a-zA-Z]/.test(data.password)) {
+          throw new Error('Password must contain at least one letter');
+        }
+
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const text = await res.text();
+
+        if (res.ok) {
+          // Success
+          registerBtn.className = 'register-button';
+          registerBtn.innerHTML = '✅ Account Created!';
+          registerBtn.style.background = '#28a745';
+          
+          resultEl.textContent = 'Registration successful! Redirecting to login...';
+          resultEl.className = 'success';
+          resultEl.style.display = 'block';
+          
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+          
+        } else {
+          throw new Error(text);
+        }
+
+      } catch (error) {
+        // Reset button
+        registerBtn.disabled = false;
+        registerBtn.className = 'register-button';
+        registerBtn.innerHTML = originalText;
+        
+        // Show error
+        resultEl.textContent = error.message;
+        resultEl.className = 'error';
+        resultEl.style.display = 'block';
+        
+        // Scroll to error if needed
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
 
+    // Password toggle functionality
     document.getElementById('togglePassword').addEventListener('click', function () {
-  const passwordInput = document.getElementById('password');
-  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordInput.setAttribute('type', type);
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
 
-  // החלפת סמל 👁 / 🙈
-  this.textContent = type === 'password' ? '👁' : '🙈';
-});
+      // Change icon based on state
+      this.textContent = type === 'password' ? '👁' : '🙈';
+    });
 
+    // Input validation feedback
+    document.querySelectorAll('input[required]').forEach(input => {
+      input.addEventListener('blur', function() {
+        if (this.value.trim() && this.checkValidity()) {
+          this.style.borderColor = '#28a745';
+        } else if (this.value.trim()) {
+          this.style.borderColor = '#dc3545';
+        }
+      });
+
+      input.addEventListener('input', function() {
+        if (this.style.borderColor === '#dc3545') {
+          this.style.borderColor = '#e0e0e0';
+        }
+      });
+    });
+
+    // Username validation
+    document.getElementById('username').addEventListener('input', function() {
+      const username = this.value.trim();
+      if (username.length >= 3) {
+        this.style.borderColor = '#28a745';
+      } else if (username.length > 0) {
+        this.style.borderColor = '#ffc107';
+      }
+    });
   </script>
 </body>
 </html>
