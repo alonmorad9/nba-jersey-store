@@ -559,8 +559,14 @@
     async function addToCart(productId) {
       const qtyInput = document.getElementById(`qty-${productId}`);
       const quantity = parseInt(qtyInput.value) || 1;
+      const button = event.target;
+      const originalText = button.innerHTML;
 
       try {
+        // Add loading state
+        button.innerHTML = '<div style="display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite;"></div> Adding...';
+        button.disabled = true;
+
         const response = await fetch('/add-to-cart', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -574,11 +580,36 @@
         }
 
         const message = await response.text();
-        alert(message);
+        
+        // Success state
+        button.innerHTML = '✅ Added!';
+        button.style.background = '#28a745';
+        
+        // Update cart count in navbar
+        if (window.updateCartCount) {
+          window.updateCartCount();
+        }
+        
+        // Trigger cart updated event
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+        
+        // Reset button after 2 seconds
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.style.background = '';
+          button.disabled = false;
+        }, 2000);
 
       } catch (error) {
         console.error('Error adding to cart:', error);
-        alert('Error adding to cart');
+        button.innerHTML = '❌ Error';
+        button.style.background = '#dc3545';
+        
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.style.background = '';
+          button.disabled = false;
+        }, 2000);
       }
     }
 
