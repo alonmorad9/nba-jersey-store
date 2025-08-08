@@ -11,7 +11,7 @@ const currentPage = window.location.pathname;
 // Function to get cart count
 async function getCartCount() {
   if (!username) return 0;
-  
+
   try {
     const res = await fetch('/cart');
     if (res.ok) {
@@ -24,40 +24,33 @@ async function getCartCount() {
   return 0;
 }
 
-// Function to update cart count display
 async function updateCartDisplay() {
   const cartCount = await getCartCount();
   const cartLink = document.querySelector('a[href="cart.html"]');
-  
   if (cartLink) {
-    if (cartCount > 0) {
-      cartLink.innerHTML = `🛒 Cart (${cartCount})`;
-    } else {
-      cartLink.innerHTML = '🛒 Cart';
-    }
+    cartLink.innerHTML = cartCount > 0 ? `🛒 Cart (${cartCount})` : '🛒 Cart';
   }
 }
 
-// צד שמאל של הסרגל (קישורים קבועים)
+// צד שמאל
 let leftNavHTML = `
   <a href="store.html">🏬 Store</a>
   <a href="cart.html" id="cart-link">🛒 Cart</a>
   <a href="checkout.html">✅ Checkout</a>
   <a href="myitems.html">📦 My Items</a>
 `;
-
 if (username === 'admin') {
   leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
 }
 
-// צד ימין של הסרגל – דינמי
+// צד ימין
 let rightNavHTML = '';
-
 if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
   const formattedName = username === 'admin' ? 'Admin 👑' : username;
   rightNavHTML = `
     <span id="welcome-user">Welcome, ${formattedName}!</span>
     <button id="logout-btn">Logout</button>
+    <button id="darkToggleBtn" class="dark-toggle-btn">🌙</button>
   `;
 } else {
   rightNavHTML = `
@@ -75,9 +68,22 @@ nav.innerHTML = `
   </div>
 `;
 
-document.body.prepend(nav); // הכנסת הסרגל לדף
+document.body.prepend(nav);
 
-// הפעלת כפתור logout אם יש
+// עיצוב הכפתור
+const darkToggleStyle = document.createElement('style');
+darkToggleStyle.textContent = `
+  .dark-toggle-btn {
+    margin-left: 10px;
+    font-size: 1.2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+`;
+document.head.appendChild(darkToggleStyle);
+
+// הפעלת logout
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
   logoutBtn.onclick = async () => {
@@ -87,17 +93,28 @@ if (logoutBtn) {
   };
 }
 
-// Update cart count when page loads
+// Toggle Dark Mode
+function applyDarkModeFromStorage() {
+  const isDark = localStorage.getItem('darkMode') === 'true';
+  if (isDark) document.body.classList.add('dark-mode');
+  const toggleBtn = document.getElementById('darkToggleBtn');
+  if (toggleBtn) toggleBtn.textContent = isDark ? '☀️' : '🌙';
+}
+applyDarkModeFromStorage();
+
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'darkToggleBtn') {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+    e.target.textContent = isDark ? '☀️' : '🌙';
+  }
+});
+
+// Cart count
 if (username) {
-  // Wait a bit for the page to load completely
   setTimeout(updateCartDisplay, 100);
-  
-  // Also update cart count every 30 seconds
   setInterval(updateCartDisplay, 30000);
 }
-
-// Function to manually update cart count (can be called from other pages)
 window.updateCartCount = updateCartDisplay;
-
-// Listen for cart updates (can be triggered from store page)
 window.addEventListener('cartUpdated', updateCartDisplay);

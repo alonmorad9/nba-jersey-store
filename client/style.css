@@ -202,3 +202,125 @@ input[type="number"] {
 body.with-nav {
   padding-top: 70px;
 }
+
+
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f0f0f0;
+  }
+
+  .form-container,
+  .login-container,
+  .register-container,
+  .product,
+  .product-card,
+  .pagination-info {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    border-color: #444;
+  }
+
+  input, select, textarea {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #555;
+  }
+
+  a, a:visited {
+    color: #9cf;
+  }
+
+  .login-button,
+  .register-button,
+  .add-to-cart-btn,
+  .remove-btn {
+    background-color: #444;
+    color: white;
+  }
+
+  .login-button:hover,
+  .register-button:hover,
+  .add-to-cart-btn:hover,
+  .remove-btn:hover {
+    background-color: #666;
+  }
+}
+
+/* Class-based dark mode override (for toggle button) */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode .form-container,
+body.dark-mode .product,
+body.dark-mode .product-card {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border-color: #444;
+}
+
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .product-card {
+  background: #1f1f1f;
+  border-color: #333;
+}
+
+body.dark-mode .product-name {
+  color: #f0f0f0;
+}
+
+body.dark-mode .product-description {
+  color: #cccccc;
+}
+
+body.dark-mode .product-price {
+  color: #f44336;
+}
+
+body.dark-mode .quantity-container {
+  background: #2a2a2a;
+}
+
+body.dark-mode .quantity-input {
+  background: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+body.dark-mode .add-to-cart-btn {
+  background: linear-gradient(135deg, #2196F3, #4CAF50);
+  color: #fff;
+}
+
+body.dark-mode .store-header {
+  background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%);
+  color: #fff;
+}
+
+body.dark-mode .nav-bar {
+  background: linear-gradient(90deg, #0d47a1, #b71c1c);
+}
+
+body.dark-mode .nav-bar a,
+body.dark-mode .nav-bar span {
+  color: #fff;
+}
+
+body.dark-mode .nav-bar button {
+  background-color: #fbc02d;
+  color: #000;
+}
+
+body.dark-mode .quantity-container label {
+  color: #ffffff;
+}
+
+
