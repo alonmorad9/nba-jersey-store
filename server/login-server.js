@@ -4,16 +4,25 @@ const persist = require('./persist_module');
 const path = require('path');
 const fs = require('fs').promises;
 
+const {
+  loginLimiter,
+  recordLoginFailure,
+  clearLoginAttempts
+} = require('./login-protection');
+
 // POST /login
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   const { username, password, remember } = req.body;
 
   const users = await persist.readJSON('users.json');
 
   // אם המשתמש לא קיים או הסיסמה לא תואמת
   if (!users[username] || users[username].password !== password) {
+    recordLoginFailure(username, req.loginRateEntry);
     return res.status(401).send('Invalid username or password');
   }
+
+  clearLoginAttempts(username); // אפס את הניסיונות לאחר התחברות מוצלחת
 
   // זמן תפוגת העוגייה
   const maxAge = remember
