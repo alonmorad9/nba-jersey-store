@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const persist = require('./persist_module');
 
+// מעקב אחרי תוספות פר משתמש
+const addCartTracker = {};
+const RATE_LIMIT = 30; // מקסימום 30 פריטים בדקה
+const WINDOW_MS = 60 * 1000; // דקה
+
 // GET /products – שולף את כל המוצרים
 router.get('/products', async (req, res) => {
   const products = await persist.readJSON('products.json');
@@ -16,7 +21,26 @@ router.post('/add-to-cart', async (req, res) => {
   const { productId, quantity } = req.body;
   const qty = parseInt(quantity) || 1;
 
-  // --- 1. כתיבה ישנה ל־carts.json ---
+  // === הגנת DOS לפי כמות מוצרים שנוספה ===
+  const now = Date.now();
+  if (!addCartTracker[username]) {
+    addCartTracker[username] = [];
+  }
+
+  // השאר רק פעולות מהדקה האחרונה
+  addCartTracker[username] = addCartTracker[username].filter(ts => now - ts.time < WINDOW_MS);
+
+  // סכום הכמויות שכבר נוספו בדקה האחרונה
+  const totalAdded = addCartTracker[username].reduce((sum, ts) => sum + ts.qty, 0);
+
+  if (totalAdded + qty > RATE_LIMIT) {
+    return res.status(429).send(`❌ Too many items added. Limit is ${RATE_LIMIT} per minute.`);
+  }
+
+  // שמירת פעולה נוכחית
+  addCartTracker[username].push({ time: now, qty });
+
+  // === 1. כתיבה ל־carts.json ===
   const carts = await persist.readJSON('carts.json');
   if (!carts[username]) carts[username] = [];
   for (let i = 0; i < qty; i++) {
@@ -24,7 +48,7 @@ router.post('/add-to-cart', async (req, res) => {
   }
   await persist.writeJSON('carts.json', carts);
 
-  // --- 2. כתיבה חדשה ל־users/{username}/cart.json ---
+  // === 2. כתיבה ל־users/{username}/cart.json ===
   const userCart = await persist.readUserFile(username, 'cart.json');
   if (!Array.isArray(userCart.items)) userCart.items = [];
   for (let i = 0; i < qty; i++) {
@@ -32,7 +56,7 @@ router.post('/add-to-cart', async (req, res) => {
   }
   await persist.writeUserFile(username, 'cart.json', userCart);
 
-  // פעילות
+  // === פעילות ===
   await persist.appendActivity({ username, type: 'add-to-cart' });
 
   res.send(`${qty} item(s) added to cart`);
