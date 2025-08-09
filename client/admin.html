@@ -7,9 +7,10 @@
   <style>
     body.with-nav {
       padding-top: 60px;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
+      min-height: 100vh;
     }
 
     .form-container {
@@ -17,49 +18,298 @@
       margin: 40px auto;
       background-color: #fff;
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     h1, h2, h3 {
       text-align: center;
       margin-bottom: 20px;
       color: #333;
+      font-weight: 700;
     }
 
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      color: #17408B;
+      margin: 40px 0 25px 0;
+    }
+
+    h3 {
+      font-size: 1.4em;
+      color: #C9082A;
+      margin: 30px 0 20px 0;
+    }
+
+    /* Input Fields */
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px 16px;
       font-size: 16px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin-bottom: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background-color: #fff;
+      color: #333;
+      box-sizing: border-box;
     }
 
+    input[type="text"]:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: #17408B;
+      box-shadow: 0 0 0 3px rgba(23, 64, 139, 0.1);
+    }
+
+    /* Buttons */
     button {
-      padding: 10px 20px;
-      background-color: #007bff;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Table Styles */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
+      border: 1px solid #e0e0e0;
+      padding: 12px 16px;
       text-align: center;
+      transition: background-color 0.3s ease;
+      color: #333;
     }
 
     th {
-      background-color: #f0f0f0;
-      font-weight: bold;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      color: white;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9em;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    tbody tr:hover {
+      background-color: #e3f2fd;
+    }
+
+    /* Product List */
+    #productList {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    #productList li {
+      background-color: #fff;
+      margin-bottom: 15px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    #productList li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #productList li strong {
+      color: #17408B;
+      font-size: 1.1em;
+    }
+
+    #productList li .price {
+      color: #333;
+      font-weight: 600;
+    }
+
+    #productList li button {
+      background: #dc3545;
+      padding: 8px 16px;
+      font-size: 14px;
+      margin-left: 15px;
+    }
+
+    #productList li button:hover {
+      background: #c82333;
+    }
+
+    /* Form Section */
+    #addProductForm {
+      background-color: #f8f9fa;
+      padding: 25px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #17408B;
+    }
+
+    /* Separator */
+    hr {
+      border: none;
+      height: 3px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      margin: 40px 0;
+      border-radius: 2px;
+    }
+
+    /* ===== DARK MODE STYLES FOR ADMIN ===== */
+    /* Manual dark mode class overrides */
+    body.dark-mode.with-nav {
+      background-color: #121212 !important;
+    }
+
+    body.dark-mode .form-container {
+      background-color: #1e1e1e !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode h1, 
+    body.dark-mode h2, 
+    body.dark-mode h3 {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode h1 {
+      background: linear-gradient(135deg, #64b5f6 0%, #f44336 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.dark-mode h2 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode h3 {
+      color: #f44336 !important;
+    }
+
+    /* Input Fields Dark Mode */
+    body.dark-mode input[type="text"], 
+    body.dark-mode input[type="number"] {
+      background-color: #2a2a2a !important;
+      color: #f0f0f0 !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode input[type="text"]:focus, 
+    body.dark-mode input[type="number"]:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1) !important;
+    }
+
+    body.dark-mode input::placeholder {
+      color: #aaa !important;
+    }
+
+    /* Buttons Dark Mode */
+    body.dark-mode button {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode #productList li button {
+      background: #f44336 !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode #productList li button:hover {
+      background: #d32f2f !important;
+    }
+
+    /* Table Dark Mode */
+    body.dark-mode table {
+      background-color: #1e1e1e !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode th {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode td {
+      background-color: #2a2a2a !important;
+      color: #f0f0f0 !important;
+      border-color: #444 !important;
+    }
+
+    body.dark-mode tbody tr:nth-child(even) td {
+      background-color: #333 !important;
+    }
+
+    body.dark-mode tbody tr:hover td {
+      background-color: #424242 !important;
+    }
+
+    /* Product List Dark Mode */
+    body.dark-mode #productList {
+      background-color: #2a2a2a !important;
+    }
+
+    body.dark-mode #productList li {
+      background-color: #333 !important;
+      color: #f0f0f0 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode #productList li:hover {
+      background-color: #424242 !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark-mode #productList li strong {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode #productList li .price {
+      color: #f0f0f0 !important;
+    }
+
+    /* Form Section Dark Mode */
+    body.dark-mode #addProductForm {
+      background-color: #2a2a2a !important;
+      border-left-color: #64b5f6 !important;
+    }
+
+    /* Separator Dark Mode */
+    body.dark-mode hr {
+      background: linear-gradient(135deg, #64b5f6 0%, #f44336 100%) !important;
     }
   </style>
 </head>
@@ -79,7 +329,7 @@
       <tbody id="activityTableBody"></tbody>
     </table>
 
-    <hr style="margin: 40px 0;">
+    <hr>
     <h2>🧰 Manage Products</h2>
     <form id="addProductForm">
       <input type="text" id="productName" placeholder="Product Name" required>
@@ -154,10 +404,11 @@
       productList.innerHTML = '';
       products.forEach(p => {
         const li = document.createElement('li');
-        li.style.marginBottom = '10px';
         li.innerHTML = `
-          <strong>${p.name}</strong> - $${p.price.toFixed(2)}
-          <button onclick="removeProduct('${p.id}')" style="margin-left: 10px;">🗑 Remove</button>
+          <div>
+            <strong>${p.name}</strong> - <span class="price">${p.price.toFixed(2)}</span>
+          </div>
+          <button onclick="removeProduct('${p.id}')">🗑 Remove</button>
         `;
         productList.appendChild(li);
       });
