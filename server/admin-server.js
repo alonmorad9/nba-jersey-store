@@ -71,4 +71,23 @@ router.post('/admin-remove-product', async (req, res) => {
   res.send('Product removed');
 });
 
+// 🗑️ DELETE /admin-products/:id - מחיקת מוצר עם DELETE method
+router.delete('/admin-products/:id', async (req, res) => {
+  const { id } = req.params;
+  const products = await persist.readJSON('products.json');
+
+  if (!products[id]) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  const deletedProduct = products[id];
+  delete products[id];
+  await persist.writeJSON('products.json', products);
+  
+  res.json({ 
+    message: 'Product deleted successfully', 
+    deletedProduct: deletedProduct 
+  });
+});
+
 module.exports = router;
