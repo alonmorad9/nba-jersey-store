@@ -330,6 +330,139 @@
       text-align: center;
       font-weight: 500;
     }
+
+    /* ===== DARK MODE STYLES FOR CHECKOUT ===== */
+    /* Manual dark mode class overrides */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .checkout-form {
+      background: #1e1e1e !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .section-title {
+      color: #64b5f6 !important;
+      border-bottom-color: #fbc02d !important;
+    }
+
+    body.dark-mode .checkout-item {
+      background: #2a2a2a !important;
+      border-color: #444 !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .item-info h3 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .item-description {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .item-price {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .stock-badge {
+      background: #fbc02d !important;
+      color: #121212 !important;
+    }
+
+    body.dark-mode .purchase-selector {
+      background: #1a1a1a !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .purchase-selector label {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .quantity-input {
+      background-color: #2a2a2a !important;
+      color: #fff !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .quantity-input:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1) !important;
+    }
+
+    body.dark-mode .btn-primary {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode .btn-secondary {
+      background: #424242 !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode .btn-secondary:hover {
+      background: #616161 !important;
+    }
+
+    body.dark-mode .btn-outline {
+      background: transparent !important;
+      color: #64b5f6 !important;
+      border-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .btn-outline:hover {
+      background: #64b5f6 !important;
+      color: #121212 !important;
+    }
+
+    body.dark-mode .empty-checkout {
+      color: #bbb !important;
+    }
+
+    body.dark-mode .empty-checkout h3 {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .loading {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .loading::after {
+      border-color: #444 !important;
+      border-top-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .success-message {
+      background: #2e7d32 !important;
+      color: #c8e6c9 !important;
+      border-color: #4caf50 !important;
+    }
+
+    body.dark-mode .error-message {
+      background: #c62828 !important;
+      color: #ffcdd2 !important;
+      border-color: #f44336 !important;
+    }
+
+    /* Order Summary dark mode */
+    body.dark-mode #orderSummary {
+      background: #2a2a2a !important;
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode #orderSummary div:first-child {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode #orderSummary div:last-child {
+      color: #f44336 !important;
+    }
   </style>
 </head>
 <body class="with-nav">
