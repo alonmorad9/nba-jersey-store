@@ -85,6 +85,7 @@
       transition: all 0.3s ease;
       box-shadow: var(--shadow);
       background: var(--light-bg);
+      color: var(--text-dark);
     }
 
     .search-bar:focus {
@@ -208,6 +209,8 @@
       font-weight: 700;
       font-size: 1.1em;
       transition: all 0.3s ease;
+      background: var(--light-bg);
+      color: var(--text-dark);
     }
 
     .add-to-cart-btn {
@@ -337,6 +340,132 @@
       font-size: 1.8em;
       margin-bottom: 15px;
       color: var(--text-dark);
+    }
+
+    /* ===== DARK MODE STYLES FOR STORE ===== */
+    /* Manual dark mode class overrides */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .store-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    /* Search Bar Dark Mode */
+    body.dark-mode .search-bar {
+      background: #2a2a2a !important;
+      color: #f0f0f0 !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .search-bar:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 4px rgba(100, 181, 246, 0.1) !important;
+    }
+
+    body.dark-mode .search-bar::placeholder {
+      color: #aaa !important;
+    }
+
+    body.dark-mode .search-icon {
+      color: #64b5f6 !important;
+    }
+
+    /* Product Cards Dark Mode */
+    body.dark-mode .product-card {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .product-card:hover {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .product-name {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .product-description {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .product-price {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .quantity-container {
+      background: #2a2a2a !important;
+    }
+
+    body.dark-mode .quantity-container label {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .quantity-input {
+      background: #333 !important;
+      color: #f0f0f0 !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .quantity-input:focus {
+      border-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .add-to-cart-btn {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+      color: #fff !important;
+    }
+
+    /* Pagination Dark Mode */
+    body.dark-mode .pagination-info {
+      background: #1e1e1e !important;
+      color: #f0f0f0 !important;
+      border-color: #444 !important;
+    }
+
+    body.dark-mode .pagination-btn {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode .pagination-btn:disabled {
+      background: #424242 !important;
+      color: #888 !important;
+    }
+
+    body.dark-mode .page-number {
+      background: #1e1e1e !important;
+      color: #f0f0f0 !important;
+      border-color: #444 !important;
+    }
+
+    body.dark-mode .page-number:hover {
+      background: #64b5f6 !important;
+      color: #121212 !important;
+      border-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .page-number.active {
+      background: #f44336 !important;
+      color: #fff !important;
+      border-color: #f44336 !important;
+    }
+
+    /* Loading and Empty States Dark Mode */
+    body.dark-mode .loading {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .empty-state {
+      color: #bbb !important;
+    }
+
+    body.dark-mode .empty-state h3 {
+      color: #f0f0f0 !important;
     }
   </style>
 </head>
