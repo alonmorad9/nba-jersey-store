@@ -20,6 +20,17 @@
       --error-color: #dc3545;
     }
 
+    /* Dark mode variables */
+    body.dark-mode {
+      --light-bg: #1a1a1a;
+      --text-dark: #e0e0e0;
+      --text-light: #ffffff;
+      --border-color: #404040;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      --success-color: #32d74b;
+      --error-color: #ff453a;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -30,6 +41,12 @@
       align-items: center;
       min-height: 100vh;
       position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* Dark mode background */
+    body.dark-mode {
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
     }
 
     /* Background Animation */
@@ -44,6 +61,11 @@
       animation: float 30s infinite linear;
       pointer-events: none;
       z-index: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    body.dark-mode::before {
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.03)"/></svg>') repeat;
     }
 
     @keyframes float {
@@ -62,6 +84,11 @@
       z-index: 1;
       border: 2px solid transparent;
       background-clip: padding-box;
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .login-container {
+      border: 1px solid #404040;
     }
 
     .login-container::before {
@@ -91,6 +118,10 @@
       transition: transform 0.3s ease;
     }
 
+    body.dark-mode .form-logo {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
     .form-logo:hover {
       transform: scale(1.05);
     }
@@ -109,6 +140,11 @@
       color: #666;
       font-size: 0.8em;
       margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    body.dark-mode .brand-subtitle {
+      color: #888;
     }
 
     h1 {
@@ -118,6 +154,11 @@
       font-size: 1.8em;
       font-weight: 700;
       position: relative;
+      transition: color 0.3s ease;
+    }
+
+    body.dark-mode h1 {
+      color: #5a9fd4;
     }
 
     h1::after {
@@ -143,6 +184,7 @@
       font-weight: 600;
       color: var(--text-dark);
       font-size: 1em;
+      transition: color 0.3s ease;
     }
 
     .input-wrapper {
@@ -160,6 +202,13 @@
       transition: all 0.3s ease;
       background: #fafafa;
       font-family: inherit;
+      color: var(--text-dark);
+    }
+
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="password"] {
+      background: #2a2a2a;
+      color: var(--text-dark);
     }
 
     input[type="text"]:focus,
@@ -169,6 +218,13 @@
       box-shadow: 0 0 0 4px rgba(23, 64, 139, 0.1);
       background: white;
       transform: translateY(-2px);
+    }
+
+    body.dark-mode input[type="text"]:focus,
+    body.dark-mode input[type="password"]:focus {
+      background: #1a1a1a;
+      border-color: #5a9fd4;
+      box-shadow: 0 0 0 4px rgba(90, 159, 212, 0.2);
     }
 
     input[type="text"]:valid,
@@ -187,9 +243,17 @@
       transition: all 0.3s ease;
     }
 
+    body.dark-mode .password-toggle {
+      color: #888;
+    }
+
     .password-toggle:hover {
       color: var(--primary-color);
       transform: translateY(-50%) scale(1.1);
+    }
+
+    body.dark-mode .password-toggle:hover {
+      color: #5a9fd4;
     }
 
     .remember-me {
@@ -207,12 +271,17 @@
       cursor: pointer;
     }
 
+    body.dark-mode .remember-me input[type="checkbox"] {
+      accent-color: #5a9fd4;
+    }
+
     .remember-me label {
       font-size: 15px;
       color: var(--text-dark);
       cursor: pointer;
       font-weight: 500;
       margin-bottom: 0;
+      transition: color 0.3s ease;
     }
 
     .login-button {
@@ -237,6 +306,10 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
+    body.dark-mode .login-button:hover:not(:disabled) {
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
     .login-button:active {
       transform: translateY(-1px);
     }
@@ -245,6 +318,10 @@
       background: #ccc;
       cursor: not-allowed;
       transform: none;
+    }
+
+    body.dark-mode .login-button:disabled {
+      background: #555;
     }
 
     .login-button.processing {
@@ -278,10 +355,20 @@
       background: #f8f9fa;
       border-radius: 12px;
       border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .switch-link {
+      background: #2a2a2a;
     }
 
     .switch-link span {
       color: #666;
+      transition: color 0.3s ease;
+    }
+
+    body.dark-mode .switch-link span {
+      color: #888;
     }
 
     .switch-link a {
@@ -289,6 +376,10 @@
       text-decoration: none;
       font-weight: 600;
       transition: all 0.3s ease;
+    }
+
+    body.dark-mode .switch-link a {
+      color: #5a9fd4;
     }
 
     .switch-link a:hover {
@@ -305,6 +396,7 @@
       font-weight: 500;
       animation: slideIn 0.3s ease;
       display: none;
+      transition: all 0.3s ease;
     }
 
     @keyframes slideIn {
@@ -319,11 +411,23 @@
       display: block;
     }
 
+    body.dark-mode #result.success {
+      background: rgba(50, 215, 75, 0.2);
+      color: #32d74b;
+      border: 1px solid rgba(50, 215, 75, 0.3);
+    }
+
     #result.error {
       background: #f8d7da;
       color: #721c24;
       border: 1px solid #f5c6cb;
       display: block;
+    }
+
+    body.dark-mode #result.error {
+      background: rgba(255, 69, 58, 0.2);
+      color: #ff453a;
+      border: 1px solid rgba(255, 69, 58, 0.3);
     }
 
     /* Security Badge */
@@ -337,6 +441,11 @@
       background: #f8f9fa;
       border-radius: 8px;
       border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .security-badge {
+      background: #2a2a2a;
     }
 
     .security-badge .icon {
@@ -348,6 +457,11 @@
       font-size: 0.85em;
       color: #666;
       font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    body.dark-mode .security-text {
+      color: #888;
     }
 
     /* Responsive */

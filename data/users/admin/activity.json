@@ -162,5 +162,21 @@
   {
     "datetime": "2025-08-09T17:20:58.940Z",
     "type": "login"
+  },
+  {
+    "datetime": "2025-08-09T18:30:12.226Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-08-09T18:30:20.262Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-08-09T18:41:32.764Z",
+    "type": "login"
+  },
+  {
+    "datetime": "2025-08-09T18:44:40.134Z",
+    "type": "logout"
   }
 ]

@@ -53,9 +53,11 @@ if (username && !currentPage.includes('login') && !currentPage.includes('registe
     <button id="darkToggleBtn" class="dark-toggle-btn">🌙</button>
   `;
 } else {
+  // הוספת כפתור Dark Mode גם לעמודי login ו-register
   rightNavHTML = `
     <a href="login.html" id="login-link">🔑 Login</a>
     <a href="register.html" id="register-link">📝 Register</a>
+    <button id="darkToggleBtn" class="dark-toggle-btn">🌙</button>
   `;
 }
 
@@ -79,6 +81,14 @@ darkToggleStyle.textContent = `
     background: none;
     border: none;
     cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 8px;
+  }
+  
+  .dark-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
   }
 `;
 document.head.appendChild(darkToggleStyle);
