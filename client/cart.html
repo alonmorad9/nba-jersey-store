@@ -351,6 +351,73 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* ===== DARK MODE STYLES FOR CART ===== */
+    /* ONLY when dark-mode class is manually toggled */
+
+    /* Manual dark mode class overrides */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .cart-item {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .item-name {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .item-description {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .item-price {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .item-actions {
+      background: #2a2a2a !important;
+      border-left-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .actions-header {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .remove-controls label {
+      color: #ffffff !important;
+    }
+
+    body.dark-mode .quantity-input {
+      background-color: #2a2a2a !important;
+      color: #fff !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .cart-summary {
+      background: #1e1e1e !important;
+      border-color: #fbc02d !important;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .summary-total {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .total-price {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .total-label {
+      color: #f0f0f0 !important;
+    }
   </style>
 </head>
 <body class="with-nav">
