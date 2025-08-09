@@ -14,12 +14,68 @@
     }
 
     .form-container {
-      max-width: 900px;
-      margin: 40px auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      border-radius: 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
+    .page-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      color: white !important;
+    }
+
+    .page-header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      color: white !important;
+      margin: 0;
+    }
+
+    /* Admin Content Container */
+    .admin-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin: 40px 0;
     }
 
     h1, h2, h3 {
@@ -29,19 +85,19 @@
       font-weight: 700;
     }
 
-    h1 {
+    .admin-content h1 {
       font-size: 2.5em;
       margin-bottom: 30px;
       color: #333;
     }
 
-    h2 {
+    .admin-content h2 {
       font-size: 1.8em;
       color: #17408B;
       margin: 40px 0 25px 0;
     }
 
-    h3 {
+    .admin-content h3 {
       font-size: 1.4em;
       color: #C9082A;
       margin: 30px 0 20px 0;
@@ -192,30 +248,34 @@
       background-color: #121212 !important;
     }
 
-    body.dark-mode .form-container {
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .admin-content {
       background-color: #1e1e1e !important;
       color: #f0f0f0;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
-    body.dark-mode h1, 
-    body.dark-mode h2, 
-    body.dark-mode h3 {
+    body.dark-mode .admin-content h1, 
+    body.dark-mode .admin-content h2, 
+    body.dark-mode .admin-content h3 {
       color: #f0f0f0 !important;
     }
 
-    body.dark-mode h1 {
+    body.dark-mode .admin-content h1 {
       background: linear-gradient(135deg, #64b5f6 0%, #f44336 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    body.dark-mode h2 {
+    body.dark-mode .admin-content h2 {
       color: #64b5f6 !important;
     }
 
-    body.dark-mode h3 {
+    body.dark-mode .admin-content h3 {
       color: #f44336 !important;
     }
 
@@ -315,32 +375,40 @@
 </head>
 <body class="with-nav">
   <div class="form-container">
-    <h1>🔨 Admin Activity Log</h1>
-    <input type="text" id="prefixInput" placeholder="Filter by username prefix..." />
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>🔧 Admin Control Panel</h1>
+      <p>Manage users, products, and monitor system activity</p>
+    </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Datetime</th>
-          <th>Username</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody id="activityTableBody"></tbody>
-    </table>
+    <!-- Admin Content -->
+    <div class="admin-content">
+      <input type="text" id="prefixInput" placeholder="Filter by username prefix..." />
 
-    <hr>
-    <h2>🧰 Manage Products</h2>
-    <form id="addProductForm">
-      <input type="text" id="productName" placeholder="Product Name" required>
-      <input type="text" id="productDescription" placeholder="Product Description" required>
-      <input type="number" id="productPrice" placeholder="Product Price" required step="0.01" min="0">
-      <input type="text" id="productImage" placeholder="Image URL (optional)">
-      <button type="submit">Add Product</button>
-    </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Datetime</th>
+            <th>Username</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody id="activityTableBody"></tbody>
+      </table>
 
-    <h3>📟 Current Products</h3>
-    <ul id="productList" style="list-style: none; padding: 0;"></ul>
+      <hr>
+      <h2>🧰 Manage Products</h2>
+      <form id="addProductForm">
+        <input type="text" id="productName" placeholder="Product Name" required>
+        <input type="text" id="productDescription" placeholder="Product Description" required>
+        <input type="number" id="productPrice" placeholder="Product Price" required step="0.01" min="0">
+        <input type="text" id="productImage" placeholder="Image URL (optional)">
+        <button type="submit">Add Product</button>
+      </form>
+
+      <h3>📟 Current Products</h3>
+      <ul id="productList" style="list-style: none; padding: 0;"></ul>
+    </div>
   </div>
 
   <script src="navbar.js"></script>
@@ -406,7 +474,7 @@
         const li = document.createElement('li');
         li.innerHTML = `
           <div>
-            <strong>${p.name}</strong> - <span class="price">${p.price.toFixed(2)}</span>
+            <strong>${p.name}</strong> - <span class="price">$${p.price.toFixed(2)}</span>
           </div>
           <button onclick="removeProduct('${p.id}')">🗑 Remove</button>
         `;
