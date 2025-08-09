@@ -261,6 +261,98 @@
     .purchase-dates::-webkit-scrollbar-thumb:hover {
       background: #C9082A;
     }
+
+    /* ===== DARK MODE STYLES FOR MY ITEMS ===== */
+    /* Manual dark mode class overrides */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .item-box {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .item-box:hover {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .item-box h3 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .quantity-badge {
+      background: linear-gradient(135deg, #fbc02d 0%, #2196F3 100%) !important;
+      color: #121212 !important;
+    }
+
+    body.dark-mode .item-description {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .item-price {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .purchase-info {
+      background: #2a2a2a !important;
+      border-left-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .purchase-info h4 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .purchase-date {
+      color: #ccc !important;
+      border-bottom-color: #444 !important;
+    }
+
+    body.dark-mode .purchase-date.latest {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .purchase-summary {
+      border-top-color: #444 !important;
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .total-spent {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .back-btn {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+      color: #fff !important;
+    }
+
+    body.dark-mode .empty-state {
+      color: #bbb !important;
+    }
+
+    body.dark-mode .empty-state h3 {
+      color: #f0f0f0 !important;
+    }
+
+    /* Dark mode scrollbar */
+    body.dark-mode .purchase-dates::-webkit-scrollbar-track {
+      background: #2a2a2a !important;
+    }
+
+    body.dark-mode .purchase-dates::-webkit-scrollbar-thumb {
+      background: #64b5f6 !important;
+    }
+
+    body.dark-mode .purchase-dates::-webkit-scrollbar-thumb:hover {
+      background: #42a5f5 !important;
+    }
   </style>
 </head>
 <body class="with-nav">
