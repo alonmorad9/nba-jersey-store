@@ -14,6 +14,16 @@ const {
 router.post('/login', loginLimiter, async (req, res) => {
   const { username, password, remember } = req.body;
 
+  // Input validation
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required');
+  }
+
+  // Additional validation
+  if (username.trim().length === 0 || password.trim().length === 0) {
+    return res.status(400).send('Username and password cannot be empty');
+  }
+
   const users = await persist.readJSON('users.json');
 
   // אם המשתמש לא קיים או הסיסמה לא תואמת

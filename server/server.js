@@ -10,6 +10,11 @@ app.use(cookieParser()); // Parse cookies in requests
 app.use(dosLimiter); // Apply the DOS protection middleware to limit request rates
 app.use(express.static(path.join(__dirname, '../client'))); // Serve static files from the 'client' directory
 
+// Root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/store.html'));
+});
+
 // Routes
 app.use(require('./register-server')); // Import and use the registration route defined in 'register-server.js'
 app.use(require('./login-server')); // Import and use the login route defined in 'login-server.js'

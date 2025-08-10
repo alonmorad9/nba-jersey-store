@@ -4,6 +4,17 @@ const persist = require('./persist_module'); // Import the persistence module to
 
 router.post('/register', async (req, res) => { // Handle POST requests to the /register endpoint
   const { username, password } = req.body;
+
+  // Input validation
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required');
+  }
+
+  // Additional validation
+  if (username.trim().length === 0 || password.trim().length === 0) {
+    return res.status(400).send('Username and password cannot be empty');
+  }
+
   const users = await persist.readJSON('users.json'); // Read the existing users from the JSON file
 
   if (users[username]) { // Check if the username already exists
