@@ -198,7 +198,7 @@ async function runTests() {
   }, 400);
 
   await testRoute('POST', '/login', {
-    username: 'testuser2'
+    username: 'testuser2',
     // missing password
   }, 400);
 
