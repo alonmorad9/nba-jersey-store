@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "reviewId": "review_1756149916592_25ajxfh01",
+      "productId": "4",
+      "rating": 4,
+      "createdAt": "2025-08-25T19:25:16.592Z"
+    },
+    {
+      "reviewId": "review_1756151919152_zv2dnc9ik",
+      "productId": "6",
+      "rating": 1,
+      "createdAt": "2025-08-25T19:58:39.152Z"
+    }
+  ]
+}

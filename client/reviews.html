@@ -5,6 +5,124 @@
   <title>Product Reviews - NBA Thread</title>
   <link rel="stylesheet" href="style.css">
   <style>
+
+    /* === Review text fixes === */
+
+/* Review title (the bold headline inside a review) */
+.review-text strong,
+.review-title {
+  color: var(--text-dark);
+}
+body.dark-mode .review-text strong,
+body.dark-mode .review-title {
+  color: #ffffff !important;   /* bright in dark mode */
+}
+
+/* Review body/content */
+.review-text,
+.review-body {
+  color: var(--text-dark);
+}
+body.dark-mode .review-text,
+body.dark-mode .review-body {
+  color: #cccccc !important;   /* softer gray for readability */
+}
+
+
+    /* === Fix for "Select Product:" label === */
+.form-group label,
+.product-selector label {
+  color: var(--text-dark) !important;     /* visible in light mode */
+  font-weight: 600;
+}
+
+body.dark-mode .form-group label,
+body.dark-mode .product-selector label {
+  color: #f0f0f0 !important;              /* visible in dark mode */
+}
+
+
+    /* ---- Fix captions visibility in both modes ---- */
+
+/* Filter bar caption */
+.filter-section { 
+  color: var(--text-dark) !important;         /* light mode */
+  font-weight: 600;
+}
+body.dark-mode .filter-section {
+  color: #e6e6e6 !important;                  /* dark mode */
+}
+
+/* If you use an explicit element for the caption, ensure it’s visible too */
+.filter-section .filter-label,
+.filter-section .caption,
+.filter-section > span,
+.filter-section > p {
+  color: inherit !important;
+}
+
+/* Stars helper (“Select rating”) */
+.rating-input,
+.rating-input .select-rating,
+.rating-input .caption {
+  color: var(--text-dark) !important;
+}
+body.dark-mode .rating-input,
+body.dark-mode .rating-input .select-rating,
+body.dark-mode .rating-input .caption {
+  color: #e0e0e0 !important;
+}
+
+
+    /* === FIXES for black boxes & invisible captions === */
+
+/* Inputs & selects should always have the right background/foreground */
+.form-group input,
+.form-group textarea,
+.product-selector select,
+.filter-select {
+  background: #ffffff;          /* light mode background */
+  color: var(--text-dark);      /* ensure dark text */
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .product-selector select,
+body.dark-mode .filter-select {
+  background: #2a2a2a !important; /* dark mode background */
+  color: #f0f0f0 !important;       /* light text on dark */
+}
+
+/* Autofill fix (Chrome/Webkit sometimes forces dark bg) */
+.form-group input:-webkit-autofill,
+.form-group textarea:-webkit-autofill,
+.product-selector select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: var(--text-dark) !important;
+}
+body.dark-mode .form-group input:-webkit-autofill,
+body.dark-mode .form-group textarea:-webkit-autofill,
+body.dark-mode .product-selector select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #2a2a2a inset !important;
+  -webkit-text-fill-color: #f0f0f0 !important;
+}
+
+/* Captions / helper text */
+.caption,
+.helper,
+.hint,
+.small,
+.review-caption {
+  color: var(--text-dark);        /* visible in light mode */
+}
+body.dark-mode .caption,
+body.dark-mode .helper,
+body.dark-mode .hint,
+body.dark-mode .small,
+body.dark-mode .review-caption {
+  color: #aaa !important;         /* softer but visible in dark mode */
+}
+
     :root {
       --primary-color: #17408B;
       --secondary-color: #C9082A;
@@ -406,6 +524,8 @@
         align-items: flex-start;
       }
     }
+
+    
   </style>
 </head>
 <body class="with-nav">
