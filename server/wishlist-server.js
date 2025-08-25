@@ -147,6 +147,10 @@ router.post('/wishlist/add-all-to-cart', async (req, res) => {
     await persist.writeJSON('carts.json', carts);
     await persist.writeUserFile(username, 'cart.json', userCart);
 
+    // Clear the wishlist since all items were added to cart
+    const emptyWishlist = { items: [] };
+    await persist.writeUserFile(username, 'wishlist.json', emptyWishlist);
+
     // Log activity
     await persist.appendActivity({ username, type: 'wishlist-add-all-to-cart' });
 

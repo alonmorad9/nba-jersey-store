@@ -47,7 +47,10 @@
               <h3>{p.name}</h3>
               <p>{p.description}</p>
               <p><strong>Price:</strong> ${p.price.toFixed(2)}</p>
-              <button onClick={() => addToCart(p.id)}>Add to Cart</button>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button onClick={() => addToCart(p.id)}>🛒 Add to Cart</button>
+                <button onClick={() => addToWishlist(p.id)}>❤️ Add to Wishlist</button>
+              </div>
             </div>
           ))}
         </div>
@@ -59,13 +62,41 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity: 1 })
+             }).then(res => {
+         if (res.status === 401) {
+           alert("You must be logged in to add items.");
+           window.location.href = 'login.html';
+         } else {
+           alert("Added to cart! (Removed from wishlist if present)");
+         }
+       });
+    }
+
+    function addToWishlist(productId) {
+      fetch('/wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId })
       }).then(res => {
         if (res.status === 401) {
-          alert("You must be logged in to add items.");
+          alert("You must be logged in to add items to your wishlist.");
           window.location.href = 'login.html';
+        } else if (res.status === 400) {
+          res.text().then(message => {
+            if (message.includes('already in wishlist')) {
+              alert("Item is already in your wishlist!");
+            } else {
+              alert(message);
+            }
+          });
+        } else if (res.ok) {
+          alert("Added to wishlist!");
         } else {
-          alert("Added to cart!");
+          alert("Failed to add to wishlist");
         }
+      }).catch(error => {
+        console.error('Error adding to wishlist:', error);
+        alert("Failed to add to wishlist");
       });
     }
 

@@ -56,6 +56,24 @@ router.post('/add-to-cart', async (req, res) => {
   }
   await persist.writeUserFile(username, 'cart.json', userCart);
 
+  // === 3. הסרה מה־wishlist אם קיים ===
+  try {
+    const wishlist = await persist.readUserFile(username, 'wishlist.json');
+    if (wishlist.items && Array.isArray(wishlist.items)) {
+      const initialLength = wishlist.items.length;
+      wishlist.items = wishlist.items.filter(item => item.productId !== productId);
+      
+      // אם הוסר מה־wishlist, שמור את השינוי
+      if (wishlist.items.length < initialLength) {
+        await persist.writeUserFile(username, 'wishlist.json', wishlist);
+        await persist.appendActivity({ username, type: 'wishlist-remove-auto' });
+      }
+    }
+  } catch (error) {
+    console.error('Error removing from wishlist:', error);
+    // לא נכשל אם יש בעיה עם ה־wishlist
+  }
+
   // === פעילות ===
   await persist.appendActivity({ username, type: 'add-to-cart' });
 
