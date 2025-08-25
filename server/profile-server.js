@@ -24,8 +24,8 @@ router.get('/profile', async (req, res) => {
     
     // Get member since date (from user activity)
     const userActivity = await persist.readUserFile(username, 'activity.json');
-    const memberSince = userActivity.items && userActivity.items.length > 0 
-      ? new Date(userActivity.items[0].datetime).getFullYear()
+    const memberSince = userActivity && userActivity.length > 0 
+      ? new Date(userActivity[0].datetime).getFullYear()
       : new Date().getFullYear();
 
     const profile = {

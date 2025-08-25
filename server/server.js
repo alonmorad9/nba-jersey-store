@@ -24,7 +24,9 @@ app.use(require('./cart-server')); // Import and use the cart route defined in '
 app.use(require('./checkout-server')); // Import and use the checkout route defined in 'checkout-server.js'
 app.use(require('./myitems-server')); // Import and use the my items route defined in 'myitems-server.js'
 app.use(require('./admin-server')); // Import and use the admin activity route defined in 'admin-server.js'
-
+app.use(require('./profile-server')); // Import and use the profile route defined in 'profile-server.js'
+app.use(require('./reviews-server')); // Import and use the reviews route defined in 'reviews-server.js'
+app.use(require('./wishlist-server')); // Import and use the wishlist route defined in 'wishlist-server.js'
 
 // Start
 const PORT = 3000; // Define the port on which the server will listen

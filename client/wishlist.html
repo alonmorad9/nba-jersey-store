@@ -420,8 +420,8 @@
           showMessage(error, 'error');
         }
       } catch (error) {
-        console.error('Error removing from wishlist:', error);
-        showMessage('Failed to remove from wishlist', 'error');
+        console.error('Error adding to cart:', error);
+        showMessage('Failed to add to cart', 'error');
       }
     }
 
@@ -506,18 +506,6 @@
       }
     }
 
-    // Initialize wishlist when page loads
-    document.addEventListener('DOMContentLoaded', loadWishlist);
-  </script>
-</body>
-</html>error, 'error');
-        }
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-        showMessage('Failed to add to cart', 'error');
-      }
-    }
-
     async function removeFromWishlist(productId) {
       if (!confirm('Remove this item from your wishlist?')) return;
 
@@ -533,4 +521,16 @@
           loadWishlist(); // Reload wishlist
         } else {
           const error = await response.text();
-          showMessage(
+          showMessage(error, 'error');
+        }
+      } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        showMessage('Failed to remove from wishlist', 'error');
+      }
+    }
+
+    // Initialize wishlist when page loads
+    document.addEventListener('DOMContentLoaded', loadWishlist);
+  </script>
+</body>
+</html>
