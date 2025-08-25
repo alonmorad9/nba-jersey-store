@@ -30,9 +30,6 @@ router.get('/profile', async (req, res) => {
 
     const profile = {
       username,
-      email: userProfile.email || '',
-      fullName: userProfile.fullName || '',
-      phone: userProfile.phone || '',
       totalOrders,
       totalSpent: totalSpent.toFixed(2),
       memberSince

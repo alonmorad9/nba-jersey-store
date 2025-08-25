@@ -303,18 +303,6 @@
               <div class="info-value" id="displayUsername">Loading...</div>
             </div>
             <div class="info-group">
-              <label>Email Address</label>
-              <div class="info-value" id="displayEmail">Not provided</div>
-            </div>
-            <div class="info-group">
-              <label>Full Name</label>
-              <div class="info-value" id="displayFullName">Not provided</div>
-            </div>
-            <div class="info-group">
-              <label>Phone Number</label>
-              <div class="info-value" id="displayPhone">Not provided</div>
-            </div>
-            <div class="info-group">
               <label>Member Since</label>
               <div class="info-value" id="displayMemberSince">2025</div>
             </div>
@@ -363,9 +351,6 @@
 
     function populateProfile(profile) {
       document.getElementById('displayUsername').textContent = profile.username || 'Not provided';
-      document.getElementById('displayEmail').textContent = profile.email || 'Not provided';
-      document.getElementById('displayFullName').textContent = profile.fullName || 'Not provided';
-      document.getElementById('displayPhone').textContent = profile.phone || 'Not provided';
       document.getElementById('displayMemberSince').textContent = profile.memberSince || '2025';
     }
 
