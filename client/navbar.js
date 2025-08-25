@@ -80,9 +80,9 @@ if (username) {
   leftNavHTML = `
     <a href="store.html">🏬 Store</a>
     <a href="cart.html" id="cart-link">🛒 Cart</a>
-    <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="checkout.html">✅ Checkout</a>
     <a href="myitems.html">📦 My Items</a>
+    <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="profile.html">👤 Profile</a>
   `;
   
@@ -99,8 +99,6 @@ if (username) {
   // Public pages (non-authenticated users)
   leftNavHTML = `
     <a href="store.html">🏬 Store</a>
-    <a href="readme.html">📚 About</a>
-    <a href="reviews.html">⭐ Reviews</a>
   `;
 }
 
