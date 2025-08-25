@@ -60,7 +60,7 @@ async function updateWishlistDisplay() {
 function checkAuthentication() {
   const protectedPages = [
     'cart.html', 'checkout.html', 'myitems.html', 'admin.html', 
-    'profile.html', 'wishlist.html', 'reviews.html', 'stores.html'
+    'profile.html', 'wishlist.html', 'reviews.html'
   ];
   
   const currentPageFile = window.location.pathname.split('/').pop();
@@ -94,7 +94,6 @@ if (username) {
   // Add additional pages (accessible to all logged-in users)
   leftNavHTML += `
     <a href="reviews.html">⭐ Reviews</a>
-    <a href="stores.html">📍 Stores</a>
   `;
 } else {
   // Public pages (non-authenticated users)
@@ -102,7 +101,6 @@ if (username) {
     <a href="store.html">🏬 Store</a>
     <a href="readme.html">📚 About</a>
     <a href="reviews.html">⭐ Reviews</a>
-    <a href="stores.html">📍 Stores</a>
   `;
 }
 

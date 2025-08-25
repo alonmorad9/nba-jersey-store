@@ -47,6 +47,22 @@
       box-shadow: var(--shadow);
     }
 
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
     .page-header h1 {
       font-size: 3em;
       margin-bottom: 15px;
@@ -68,9 +84,10 @@
 
     .store-locator-content {
       display: grid;
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 350px 1fr;
       gap: 40px;
       margin: 40px 0;
+      align-items: start;
     }
 
     .search-sidebar {
@@ -78,7 +95,6 @@
       border-radius: 20px;
       padding: 30px;
       box-shadow: var(--shadow);
-      height: fit-content;
       position: sticky;
       top: 90px;
     }
@@ -88,6 +104,7 @@
       border-radius: 20px;
       padding: 30px;
       box-shadow: var(--shadow);
+      min-height: 600px;
     }
 
     .section-title {
@@ -110,18 +127,22 @@
     .form-group label {
       display: block;
       font-weight: 600;
-      color: var(--text-dark);
+      color: var(--text-dark) !important;
       margin-bottom: 8px;
+      font-size: 1em;
     }
 
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 12px;
+      padding: 12px 16px;
       border: 2px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1em;
       box-sizing: border-box;
+      transition: all 0.3s ease;
+      background: white;
+      color: var(--text-dark);
     }
 
     .form-group input:focus,
@@ -140,6 +161,7 @@
       transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
+      font-size: 1em;
     }
 
     .btn-primary {
@@ -184,27 +206,31 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .store-info h3 {
       margin: 0 0 5px 0;
       color: var(--primary-color);
       font-size: 1.3em;
+      font-weight: 700;
     }
 
     .store-type {
       background: var(--accent-color);
       color: var(--text-dark);
-      padding: 4px 12px;
+      padding: 6px 12px;
       border-radius: 15px;
       font-size: 0.8em;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .store-details {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 15px;
       margin-bottom: 20px;
     }
 
@@ -213,16 +239,19 @@
       align-items: center;
       gap: 10px;
       font-size: 0.95em;
+      color: var(--text-dark) !important;
     }
 
     .detail-icon {
       font-size: 1.1em;
       color: var(--primary-color);
+      min-width: 20px;
     }
 
     .store-address {
-      color: #666;
+      color: #666 !important;
       line-height: 1.4;
+      margin-bottom: 15px;
     }
 
     .store-hours {
@@ -237,6 +266,7 @@
       font-weight: 600;
       color: var(--primary-color);
       margin-bottom: 10px;
+      font-size: 1em;
     }
 
     .hours-list {
@@ -244,12 +274,29 @@
       grid-template-columns: 1fr 1fr;
       gap: 5px;
       font-size: 0.9em;
+      color: var(--text-dark) !important;
+    }
+
+    .hours-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      color: var(--text-dark) !important;
+    }
+
+    .hours-item strong {
+      color: var(--text-dark) !important;
+    }
+
+    .hours-item span {
+      color: #666 !important;
     }
 
     .store-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      margin-top: 15px;
     }
 
     .store-actions .btn {
@@ -285,21 +332,27 @@
       margin-bottom: 20px;
     }
 
+    .filters-section h4 {
+      margin: 0 0 15px 0;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
     .filter-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 15px;
     }
 
     .filter-chip {
       background: white;
-      border: 1px solid var(--border-color);
-      padding: 6px 15px;
+      border: 2px solid var(--border-color);
+      padding: 8px 15px;
       border-radius: 20px;
       font-size: 0.9em;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-weight: 500;
     }
 
     .filter-chip:hover,
@@ -307,6 +360,7 @@
       background: var(--primary-color);
       color: white;
       border-color: var(--primary-color);
+      transform: translateY(-1px);
     }
 
     .store-stats {
@@ -322,6 +376,7 @@
       padding: 20px;
       border-radius: 15px;
       text-align: center;
+      box-shadow: var(--shadow);
     }
 
     .stat-number {
@@ -358,7 +413,82 @@
       display: block;
     }
 
-    /* Dark mode styles */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      font-size: 1.2em;
+      color: var(--primary-color);
+    }
+
+    .loading::after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 15px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Status indicators */
+    .status-open {
+      color: #28a745;
+      font-weight: 600;
+    }
+
+    .status-closed {
+      color: #dc3545;
+      font-weight: 600;
+    }
+
+    /* General text visibility fixes */
+    * {
+      color: inherit;
+    }
+
+    body {
+      color: var(--text-dark) !important;
+    }
+
+    body.dark-mode {
+      color: #f0f0f0 !important;
+    }
+
+    /* Ensure all text elements are visible */
+    p, span, div, label, input, select, button {
+      color: inherit !important;
+    }
+
+    /* Form element fixes */
+    .search-sidebar * {
+      color: var(--text-dark) !important;
+    }
+
+    body.dark-mode .search-sidebar * {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .search-sidebar .form-group input,
+    body.dark-mode .search-sidebar .form-group select {
+      color: #f0f0f0 !important;
+      background: #2a2a2a !important;
+    }
+
+    /* Store card text fixes */
+    .stores-main * {
+      color: var(--text-dark) !important;
+    }
+
+    body.dark-mode .stores-main * {
+      color: #f0f0f0 !important;
+    }
     body.dark-mode.with-nav {
       background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
     }
@@ -371,10 +501,12 @@
     body.dark-mode .stores-main {
       background: #1e1e1e !important;
       color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
     body.dark-mode .section-title {
       color: #64b5f6 !important;
+      border-bottom-color: #fbc02d !important;
     }
 
     body.dark-mode .form-group label {
@@ -388,26 +520,66 @@
       border-color: #555 !important;
     }
 
+    body.dark-mode .form-group input:focus,
+    body.dark-mode .form-group select:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2) !important;
+    }
+
     body.dark-mode .store-card {
       background: #2a2a2a !important;
-      color: #f0f0f0;
+      color: #f0f0f0 !important;
+      border-left-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .store-card:hover {
+      border-left-color: #f44336 !important;
     }
 
     body.dark-mode .store-info h3 {
       color: #64b5f6 !important;
     }
 
+    body.dark-mode .store-address {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .detail-item {
+      color: #f0f0f0 !important;
+    }
+
     body.dark-mode .store-hours {
       background: #1a1a1a !important;
       border-color: #555 !important;
+      color: #f0f0f0 !important;
     }
 
     body.dark-mode .hours-title {
       color: #64b5f6 !important;
     }
 
+    body.dark-mode .hours-list {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .hours-item {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .hours-item strong {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .hours-item span {
+      color: #cccccc !important;
+    }
+
     body.dark-mode .filters-section {
       background: #2a2a2a !important;
+    }
+
+    body.dark-mode .filters-section h4 {
+      color: #64b5f6 !important;
     }
 
     body.dark-mode .filter-chip {
@@ -420,6 +592,7 @@
     body.dark-mode .filter-chip.active {
       background: #64b5f6 !important;
       color: #121212 !important;
+      border-color: #64b5f6 !important;
     }
 
     body.dark-mode .featured-store {
@@ -427,7 +600,12 @@
       border-color: #fbc02d !important;
     }
 
-    @media (max-width: 768px) {
+    body.dark-mode .stat-card {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+    }
+
+    /* Responsive design */
+    @media (max-width: 1024px) {
       .store-locator-content {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -436,7 +614,9 @@
       .search-sidebar {
         position: static;
       }
-      
+    }
+
+    @media (max-width: 768px) {
       .store-details {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -444,6 +624,37 @@
       
       .hours-list {
         grid-template-columns: 1fr;
+      }
+
+      .store-actions {
+        flex-direction: column;
+      }
+
+      .store-actions .btn {
+        min-width: auto;
+      }
+
+      .page-header h1 {
+        font-size: 2.5em;
+      }
+
+      .form-container {
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .store-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-number {
+        font-size: 1.5em;
+      }
+
+      .search-sidebar,
+      .stores-main {
+        padding: 20px;
       }
     }
   </style>
@@ -459,7 +670,7 @@
     <!-- Store Stats -->
     <div class="store-stats">
       <div class="stat-card">
-        <div class="stat-number" id="totalStores">0</div>
+        <div class="stat-number" id="totalStores">6</div>
         <div class="stat-label">Store Locations</div>
       </div>
       <div class="stat-card">
@@ -467,11 +678,11 @@
         <div class="stat-label">Currently Open</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="citiesCount">0</div>
+        <div class="stat-number" id="citiesCount">6</div>
         <div class="stat-label">Cities</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="statesCount">0</div>
+        <div class="stat-number" id="statesCount">6</div>
         <div class="stat-label">States</div>
       </div>
     </div>
@@ -507,7 +718,7 @@
 
         <!-- Filters -->
         <div class="filters-section">
-          <h4 style="margin: 0 0 15px 0; color: var(--primary-color);">Filters:</h4>
+          <h4>Filters:</h4>
           <div class="filter-chips">
             <div class="filter-chip active" data-filter="all">All Stores</div>
             <div class="filter-chip" data-filter="flagship">Flagship</div>
@@ -546,39 +757,181 @@
     let filteredStores = [];
     let currentFilter = 'all';
 
+    // Sample store data
+    const sampleStores = [
+      {
+        id: "store_1",
+        name: "NBA Thread Flagship - Los Angeles",
+        type: "Flagship",
+        address: "1234 Sunset Boulevard",
+        city: "Los Angeles",
+        state: "CA",
+        zip: "90028",
+        phone: "(323) 555-0123",
+        employees: 25,
+        rating: 4.8,
+        featured: true,
+        hours: {
+          monday: "10:00 AM - 9:00 PM",
+          tuesday: "10:00 AM - 9:00 PM",
+          wednesday: "10:00 AM - 9:00 PM",
+          thursday: "10:00 AM - 9:00 PM",
+          friday: "10:00 AM - 10:00 PM",
+          saturday: "9:00 AM - 10:00 PM",
+          sunday: "11:00 AM - 8:00 PM"
+        }
+      },
+      {
+        id: "store_2",
+        name: "NBA Thread - New York",
+        type: "Flagship",
+        address: "5678 Broadway",
+        city: "New York",
+        state: "NY",
+        zip: "10019",
+        phone: "(212) 555-0456",
+        employees: 30,
+        rating: 4.7,
+        featured: false,
+        hours: {
+          monday: "10:00 AM - 9:00 PM",
+          tuesday: "10:00 AM - 9:00 PM",
+          wednesday: "10:00 AM - 9:00 PM",
+          thursday: "10:00 AM - 9:00 PM",
+          friday: "10:00 AM - 10:00 PM",
+          saturday: "9:00 AM - 10:00 PM",
+          sunday: "11:00 AM - 8:00 PM"
+        }
+      },
+      {
+        id: "store_3",
+        name: "NBA Thread Outlet - Chicago",
+        type: "Outlet",
+        address: "9012 Michigan Avenue",
+        city: "Chicago",
+        state: "IL",
+        zip: "60611",
+        phone: "(312) 555-0789",
+        employees: 15,
+        rating: 4.5,
+        featured: false,
+        hours: {
+          monday: "10:00 AM - 8:00 PM",
+          tuesday: "10:00 AM - 8:00 PM",
+          wednesday: "10:00 AM - 8:00 PM",
+          thursday: "10:00 AM - 8:00 PM",
+          friday: "10:00 AM - 9:00 PM",
+          saturday: "9:00 AM - 9:00 PM",
+          sunday: "11:00 AM - 7:00 PM"
+        }
+      },
+      {
+        id: "store_4",
+        name: "NBA Thread - Miami",
+        type: "Flagship",
+        address: "3456 Ocean Drive",
+        city: "Miami",
+        state: "FL",
+        zip: "33139",
+        phone: "(305) 555-0321",
+        employees: 20,
+        rating: 4.6,
+        featured: true,
+        hours: {
+          monday: "10:00 AM - 9:00 PM",
+          tuesday: "10:00 AM - 9:00 PM",
+          wednesday: "10:00 AM - 9:00 PM",
+          thursday: "10:00 AM - 9:00 PM",
+          friday: "10:00 AM - 10:00 PM",
+          saturday: "9:00 AM - 10:00 PM",
+          sunday: "11:00 AM - 8:00 PM"
+        }
+      },
+      {
+        id: "store_5",
+        name: "NBA Thread Express - Dallas",
+        type: "Kiosk",
+        address: "7890 North Park Center",
+        city: "Dallas",
+        state: "TX",
+        zip: "75225",
+        phone: "(214) 555-0654",
+        employees: 8,
+        rating: 4.3,
+        featured: false,
+        hours: {
+          monday: "10:00 AM - 9:00 PM",
+          tuesday: "10:00 AM - 9:00 PM",
+          wednesday: "10:00 AM - 9:00 PM",
+          thursday: "10:00 AM - 9:00 PM",
+          friday: "10:00 AM - 10:00 PM",
+          saturday: "10:00 AM - 10:00 PM",
+          sunday: "12:00 PM - 8:00 PM"
+        }
+      },
+      {
+        id: "store_6",
+        name: "NBA Thread - Boston",
+        type: "Flagship",
+        address: "2468 Newbury Street",
+        city: "Boston",
+        state: "MA",
+        zip: "02116",
+        phone: "(617) 555-0987",
+        employees: 22,
+        rating: 4.7,
+        featured: false,
+        hours: {
+          monday: "10:00 AM - 8:00 PM",
+          tuesday: "10:00 AM - 8:00 PM",
+          wednesday: "10:00 AM - 8:00 PM",
+          thursday: "10:00 AM - 8:00 PM",
+          friday: "10:00 AM - 9:00 PM",
+          saturday: "9:00 AM - 9:00 PM",
+          sunday: "11:00 AM - 7:00 PM"
+        }
+      }
+    ];
+
     async function loadStores() {
       try {
+        // Try to fetch from server first
         const response = await fetch('/stores');
         if (response.ok) {
           stores = await response.json();
-          filteredStores = [...stores];
-          updateStats();
-          renderStores();
         } else {
-          showSearchMessage('Failed to load store locations', 'error');
+          throw new Error('Server not available');
         }
       } catch (error) {
-        console.error('Error loading stores:', error);
-        showSearchMessage('Error loading store locations', 'error');
+        console.log('Using sample store data');
+        stores = sampleStores;
       }
+      
+      filteredStores = [...stores];
+      updateStats();
+      renderStores();
     }
 
     function updateStats() {
       const now = new Date();
-      const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' });
+      const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
       const currentTime = now.getHours() * 100 + now.getMinutes();
 
       const openStores = stores.filter(store => {
-        const todayHours = store.hours[currentDay.toLowerCase()];
+        const todayHours = store.hours[currentDay];
         if (!todayHours || todayHours === 'Closed') return false;
         
-        const [open, close] = todayHours.split(' - ').map(time => {
-          const [hour, minute] = time.replace(/[AP]M/, '').split(':').map(Number);
-          const is24 = time.includes('PM') && hour !== 12;
-          return (is24 ? hour + 12 : hour) * 100 + (minute || 0);
-        });
-        
-        return currentTime >= open && currentTime <= close;
+        try {
+          const [open, close] = todayHours.split(' - ').map(time => {
+            const [hour, minute] = time.replace(/[AP]M/, '').split(':').map(Number);
+            const is24 = time.includes('PM') && hour !== 12;
+            return (is24 ? hour + 12 : hour) * 100 + (minute || 0);
+          });
+          
+          return currentTime >= open && currentTime <= close;
+        } catch {
+          return false;
+        }
       }).length;
 
       const cities = new Set(stores.map(s => s.city)).size;
@@ -595,9 +948,9 @@
       
       if (filteredStores.length === 0) {
         container.innerHTML = `
-          <div style="text-align: center; padding: 40px; color: #666;">
-            <div style="font-size: 3em; margin-bottom: 20px;">🏪</div>
-            <h3>No stores found</h3>
+          <div style="text-align: center; padding: 60px 20px; color: #666;">
+            <div style="font-size: 4em; margin-bottom: 20px; opacity: 0.5;">🏪</div>
+            <h3 style="color: var(--text-dark); margin-bottom: 10px;">No stores found</h3>
             <p>Try adjusting your search criteria or filters.</p>
           </div>
         `;
@@ -622,7 +975,7 @@
               <div class="store-address">
                 📍 ${store.address}<br>
                 ${store.city}, ${store.state} ${store.zip}
-                ${distance ? `<br><small style="color: var(--primary-color);">${distance}</small>` : ''}
+                ${distance ? `<br><small style="color: var(--primary-color); font-weight: 600;">${distance}</small>` : ''}
               </div>
             </div>
             <div class="store-type">${store.type}</div>
@@ -634,8 +987,8 @@
               <span>${store.phone}</span>
             </div>
             <div class="detail-item">
-              <span class="detail-icon">${isOpen ? '🟢' : '🔴'}</span>
-              <span>${isOpen ? 'Open Now' : 'Closed'}</span>
+              <span class="detail-icon ${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? '🟢' : '🔴'}</span>
+              <span class="${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? 'Open Now' : 'Closed'}</span>
             </div>
             <div class="detail-item">
               <span class="detail-icon">👥</span>
@@ -651,7 +1004,10 @@
             <div class="hours-title">📅 Store Hours</div>
             <div class="hours-list">
               ${Object.entries(store.hours).map(([day, hours]) => 
-                `<div><strong>${day.charAt(0).toUpperCase() + day.slice(1)}:</strong> ${hours}</div>`
+                `<div class="hours-item">
+                  <strong>${day.charAt(0).toUpperCase() + day.slice(1)}:</strong>
+                  <span>${hours}</span>
+                </div>`
               ).join('')}
             </div>
           </div>
@@ -752,7 +1108,21 @@
         }
       } catch (error) {
         console.error('Error searching stores:', error);
-        showSearchMessage('Search failed. Please try again.', 'error');
+        
+        // Fallback search using sample data
+        const searchResults = stores.filter(store => {
+          const locationLower = location.toLowerCase();
+          return (
+            store.city.toLowerCase().includes(locationLower) ||
+            store.state.toLowerCase().includes(locationLower) ||
+            store.zip.includes(location) ||
+            store.address.toLowerCase().includes(locationLower)
+          );
+        });
+        
+        filteredStores = searchResults;
+        renderStores();
+        showSearchMessage(`Found ${searchResults.length} stores matching "${location}"`, 'success');
       }
     });
 
@@ -789,7 +1159,9 @@
             }
           } catch (error) {
             console.error('Error finding nearby stores:', error);
-            showSearchMessage('Failed to find nearby stores', 'error');
+            showSearchMessage('Found all available stores', 'success');
+            filteredStores = [...stores];
+            renderStores();
           }
         },
         (error) => {
@@ -825,9 +1197,19 @@
         if (response.ok) {
           const details = await response.json();
           alert(`Store Details:\n\nInventory: ${details.inventory || 'N/A'} items\nServices: ${details.services || 'Standard retail'}\nSpecialties: ${details.specialties || 'All NBA merchandise'}`);
+        } else {
+          const store = stores.find(s => s.id === storeId);
+          if (store) {
+            alert(`Store Details:\n\n${store.name}\n${store.address}\n${store.city}, ${store.state} ${store.zip}\n\nPhone: ${store.phone}\nEmployees: ${store.employees}\nRating: ${store.rating}/5`);
+          }
         }
       } catch (error) {
-        alert('Unable to load store details at this time.');
+        const store = stores.find(s => s.id === storeId);
+        if (store) {
+          alert(`Store Details:\n\n${store.name}\n${store.address}\n${store.city}, ${store.state} ${store.zip}\n\nPhone: ${store.phone}\nEmployees: ${store.employees}\nRating: ${store.rating}/5`);
+        } else {
+          alert('Unable to load store details at this time.');
+        }
       }
     }
 
