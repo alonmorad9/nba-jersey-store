@@ -84,6 +84,7 @@ if (username) {
     <a href="myitems.html">📦 My Items</a>
     <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="profile.html">👤 Profile</a>
+    <a href="reviews.html">⭐ Reviews</a>
   `;
   
   // Add admin link for admin users
@@ -91,10 +92,6 @@ if (username) {
     leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
   }
   
-  // Add additional pages (accessible to all logged-in users)
-  leftNavHTML += `
-    <a href="reviews.html">⭐ Reviews</a>
-  `;
 } else {
   // Public pages (non-authenticated users)
   leftNavHTML = `
