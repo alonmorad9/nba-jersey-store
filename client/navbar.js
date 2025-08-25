@@ -24,6 +24,22 @@ async function getCartCount() {
   return 0;
 }
 
+// Function to get wishlist count
+async function getWishlistCount() {
+  if (!username) return 0;
+
+  try {
+    const res = await fetch('/wishlist');
+    if (res.ok) {
+      const wishlistItems = await res.json();
+      return wishlistItems.length;
+    }
+  } catch (error) {
+    console.error('Failed to get wishlist count:', error);
+  }
+  return 0;
+}
+
 async function updateCartDisplay() {
   const cartCount = await getCartCount();
   const cartLink = document.querySelector('a[href="cart.html"]');
@@ -32,18 +48,65 @@ async function updateCartDisplay() {
   }
 }
 
-// צד שמאל
-let leftNavHTML = `
-  <a href="store.html">🏬 Store</a>
-  <a href="cart.html" id="cart-link">🛒 Cart</a>
-  <a href="checkout.html">✅ Checkout</a>
-  <a href="myitems.html">📦 My Items</a>
-`;
-if (username === 'admin') {
-  leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
+async function updateWishlistDisplay() {
+  const wishlistCount = await getWishlistCount();
+  const wishlistLink = document.querySelector('a[href="wishlist.html"]');
+  if (wishlistLink) {
+    wishlistLink.innerHTML = wishlistCount > 0 ? `💖 Wishlist (${wishlistCount})` : '💖 Wishlist';
+  }
 }
 
-// צד ימין
+// Check if user is on a protected page without being logged in
+function checkAuthentication() {
+  const protectedPages = [
+    'cart.html', 'checkout.html', 'myitems.html', 'admin.html', 
+    'profile.html', 'wishlist.html', 'reviews.html', 'stores.html'
+  ];
+  
+  const currentPageFile = window.location.pathname.split('/').pop();
+  
+  if (!username && protectedPages.includes(currentPageFile)) {
+    alert('You must be logged in to access this page.');
+    window.location.href = 'login.html';
+    return false;
+  }
+  
+  return true;
+}
+
+// Left navigation (authenticated users only)
+let leftNavHTML = '';
+if (username) {
+  leftNavHTML = `
+    <a href="store.html">🏬 Store</a>
+    <a href="cart.html" id="cart-link">🛒 Cart</a>
+    <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
+    <a href="checkout.html">✅ Checkout</a>
+    <a href="myitems.html">📦 My Items</a>
+    <a href="profile.html">👤 Profile</a>
+  `;
+  
+  // Add admin link for admin users
+  if (username === 'admin') {
+    leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
+  }
+  
+  // Add additional pages (accessible to all logged-in users)
+  leftNavHTML += `
+    <a href="reviews.html">⭐ Reviews</a>
+    <a href="stores.html">📍 Stores</a>
+  `;
+} else {
+  // Public pages (non-authenticated users)
+  leftNavHTML = `
+    <a href="store.html">🏬 Store</a>
+    <a href="readme.html">📚 About</a>
+    <a href="reviews.html">⭐ Reviews</a>
+    <a href="stores.html">📍 Stores</a>
+  `;
+}
+
+// Right navigation
 let rightNavHTML = '';
 if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
   const formattedName = username === 'admin' ? 'Admin 👑' : username;
@@ -53,7 +116,7 @@ if (username && !currentPage.includes('login') && !currentPage.includes('registe
     <button id="darkToggleBtn" class="dark-toggle-btn">🌙</button>
   `;
 } else {
-  // הוספת כפתור Dark Mode גם לעמודי login ו-register
+  // Login/Register links for non-authenticated users
   rightNavHTML = `
     <a href="login.html" id="login-link">🔑 Login</a>
     <a href="register.html" id="register-link">📝 Register</a>
@@ -72,7 +135,7 @@ nav.innerHTML = `
 
 document.body.prepend(nav);
 
-// עיצוב הכפתור
+// Enhanced dark toggle button styling
 const darkToggleStyle = document.createElement('style');
 darkToggleStyle.textContent = `
   .dark-toggle-btn {
@@ -84,26 +147,95 @@ darkToggleStyle.textContent = `
     transition: all 0.3s ease;
     border-radius: 50%;
     padding: 8px;
+    color: white;
   }
   
   .dark-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: scale(1.1);
   }
+
+  /* Enhanced navigation styling */
+  .nav-bar a {
+    position: relative;
+    color: white !important;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .nav-bar a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.3s ease;
+  }
+
+  .nav-bar a:hover::before {
+    left: 0;
+  }
+
+  .nav-bar a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Consistent styling for all navigation links */
+  .nav-bar a {
+    background: none !important;
+    border: none !important;
+  }
+
+  .nav-bar a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Ensure all navigation items have consistent appearance */
+  .nav-bar .nav-left a,
+  .nav-bar .nav-right a {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    background: none !important;
+    border: none !important;
+  }
 `;
 document.head.appendChild(darkToggleStyle);
 
-// הפעלת logout
+// Handle logout functionality
 const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
   logoutBtn.onclick = async () => {
-    await fetch('/logout', { method: 'POST' });
-    document.cookie = "username=; Max-Age=0; path=/";
-    window.location.href = 'login.html';
+    try {
+      await fetch('/logout', { method: 'POST' });
+      document.cookie = "username=; Max-Age=0; path=/";
+      
+      // Clear any cached data
+      localStorage.removeItem('cartCount');
+      localStorage.removeItem('wishlistCount');
+      
+      // Redirect to login page
+      window.location.href = 'login.html';
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Force logout even if server request fails
+      document.cookie = "username=; Max-Age=0; path=/";
+      window.location.href = 'login.html';
+    }
   };
 }
 
-// Toggle Dark Mode
+// Dark Mode functionality
 function applyDarkModeFromStorage() {
   const isDark = localStorage.getItem('darkMode') === 'true';
   if (isDark) document.body.classList.add('dark-mode');
@@ -121,10 +253,109 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Cart count
+// Authentication check on page load
+document.addEventListener('DOMContentLoaded', () => {
+  checkAuthentication();
+});
+
+// Update cart and wishlist counts for authenticated users
 if (username) {
-  setTimeout(updateCartDisplay, 100);
-  setInterval(updateCartDisplay, 30000);
+  // Initial load
+  setTimeout(() => {
+    updateCartDisplay();
+    updateWishlistDisplay();
+  }, 100);
+  
+  // Periodic updates
+  setInterval(() => {
+    updateCartDisplay();
+    updateWishlistDisplay();
+  }, 30000); // Update every 30 seconds
 }
+
+// Global functions for updating counts
 window.updateCartCount = updateCartDisplay;
+window.updateWishlistCount = updateWishlistDisplay;
+
+// Event listeners for count updates
 window.addEventListener('cartUpdated', updateCartDisplay);
+window.addEventListener('wishlistUpdated', updateWishlistDisplay);
+
+// Navigation click handlers with authentication checks
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') {
+    const href = e.target.getAttribute('href');
+    const protectedPages = [
+      'cart.html', 'checkout.html', 'myitems.html', 'admin.html',
+      'profile.html', 'wishlist.html'
+    ];
+    
+    if (!username && protectedPages.includes(href)) {
+      e.preventDefault();
+      alert('You must be logged in to access this page.');
+      window.location.href = 'login.html';
+      return false;
+    }
+    
+    // Special handling for admin page
+    if (href === 'admin.html' && username !== 'admin') {
+      e.preventDefault();
+      alert('Admin access required.');
+      return false;
+    }
+  }
+});
+
+// Add wishlist functionality to store pages
+window.addToWishlist = async function(productId) {
+  if (!username) {
+    alert('You must be logged in to add items to your wishlist.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const response = await fetch('/wishlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId })
+    });
+
+    if (response.ok) {
+      // Show success message
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '💖 Added!';
+      button.style.background = '#28a745';
+      
+      // Update wishlist count
+      updateWishlistDisplay();
+      
+      // Trigger wishlist updated event
+      window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+      
+      // Reset button after 2 seconds
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.style.background = '';
+      }, 2000);
+      
+    } else {
+      const error = await response.text();
+      alert(error);
+    }
+  } catch (error) {
+    console.error('Error adding to wishlist:', error);
+    alert('Failed to add item to wishlist');
+  }
+};
+
+// Console log for debugging
+console.log('🚀 NBA Thread Navigation loaded');
+console.log(`👤 User: ${username || 'Not logged in'}`);
+console.log(`📄 Current page: ${currentPage}`);
+if (username) {
+  console.log('🔗 Available pages: Store, Cart, Wishlist, Checkout, My Items, Profile, Reviews, Stores' + (username === 'admin' ? ', Admin' : ''));
+} else {
+  console.log('🔗 Available pages: Store, Reviews, Stores, About (Login required for other pages)');
+}

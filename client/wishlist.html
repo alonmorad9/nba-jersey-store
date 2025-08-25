@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Wishlist - NBA Thread</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+    }
+
+    body.with-nav {
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: var(--gradient-primary);
+      border-radius: 20px;
+      color: var(--text-light);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .page-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      color: var(--text-light) !important;
+    }
+
+    .wishlist-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #545b62;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #a91e2e;
+      transform: translateY(-2px);
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .wishlist-item {
+      background: var(--light-bg);
+      border: 3px solid transparent;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wishlist-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: var(--primary-color);
+    }
+
+    .wishlist-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--gradient-primary);
+    }
+
+    .item-image {
+      width: 100%;
+      height: 200px;
+      background: var(--accent-color);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4em;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    .item-details h3 {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 0 0 10px 0;
+    }
+
+    .item-description {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 1em;
+    }
+
+    .item-price {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .item-added {
+      font-size: 0.9em;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .item-actions .btn {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .empty-wishlist {
+      text-align: center;
+      padding: 80px 20px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+
+    .empty-wishlist-icon {
+      font-size: 5em;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-wishlist h3 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: var(--text-dark);
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .wishlist-item {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .wishlist-item:hover {
+      border-color: #64b5f6 !important;
+    }
+
+    body.dark-mode .item-details h3 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .item-description {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .item-price {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .item-added {
+      color: #aaa !important;
+    }
+
+    body.dark-mode .empty-wishlist {
+      color: #bbb !important;
+    }
+
+    body.dark-mode .empty-wishlist h3 {
+      color: #f0f0f0 !important;
+    }
+  </style>
+</head>
+<body class="with-nav">
+  <div class="form-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>💖 My Wishlist</h1>
+      <p>Save your favorite jerseys for later</p>
+    </div>
+
+    <!-- Wishlist Actions -->
+    <div class="wishlist-actions">
+      <div>
+        <span id="itemCount">0 items</span> in your wishlist
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="addAllToCart()">🛒 Add All to Cart</button>
+        <button class="btn btn-secondary" onclick="shareWishlist()">📤 Share Wishlist</button>
+        <button class="btn btn-danger" onclick="clearWishlist()">🗑️ Clear All</button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages"></div>
+
+    <!-- Wishlist Grid -->
+    <div id="wishlistGrid" class="wishlist-grid">
+      <div class="loading">Loading your wishlist...</div>
+    </div>
+  </div>
+
+  <script src="navbar.js"></script>
+
+  <script>
+    let wishlistItems = [];
+
+    async function loadWishlist() {
+      try {
+        const response = await fetch('/wishlist');
+        if (response.status === 401) {
+          alert('You must be logged in to view your wishlist.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        if (response.ok) {
+          wishlistItems = await response.json();
+          renderWishlist();
+          updateItemCount();
+        } else {
+          showMessage('Error loading wishlist', 'error');
+        }
+      } catch (error) {
+        console.error('Error loading wishlist:', error);
+        showMessage('Failed to load wishlist', 'error');
+      }
+    }
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlistGrid');
+      
+      if (wishlistItems.length === 0) {
+        container.innerHTML = `
+          <div class="empty-wishlist">
+            <div class="empty-wishlist-icon">💔</div>
+            <h3>Your wishlist is empty</h3>
+            <p>Start adding jerseys you love to keep track of them!</p>
+            <button class="btn btn-primary" onclick="window.location.href='store.html'" style="margin-top: 20px;">
+              🏬 Browse Store
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+
+      wishlistItems.forEach(item => {
+        const wishlistItem = document.createElement('div');
+        wishlistItem.className = 'wishlist-item';
+        wishlistItem.innerHTML = `
+          <div class="item-image">
+            ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%; height:100%; object-fit:cover; border-radius:15px;">` : '🏀'}
+          </div>
+          
+          <div class="item-details">
+            <h3>${item.name}</h3>
+            <p class="item-description">${item.description}</p>
+            <div class="item-price">$${item.price.toFixed(2)}</div>
+            <div class="item-added">Added: ${new Date(item.addedAt).toLocaleDateString()}</div>
+          </div>
+
+          <div class="item-actions">
+            <button class="btn btn-primary" onclick="addToCart('${item.id}')">
+              🛒 Add to Cart
+            </button>
+            <button class="btn btn-danger" onclick="removeFromWishlist('${item.id}')">
+              💔 Remove
+            </button>
+          </div>
+        `;
+        container.appendChild(wishlistItem);
+      });
+    }
+
+    function updateItemCount() {
+      document.getElementById('itemCount').textContent = `${wishlistItems.length} item${wishlistItems.length !== 1 ? 's' : ''}`;
+    }
+
+    function showMessage(text, type) {
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+      setTimeout(() => {
+        messagesDiv.innerHTML = '';
+      }, 5000);
+    }
+
+    async function addToCart(productId) {
+      try {
+        const response = await fetch('/add-to-cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, quantity: 1 })
+        });
+
+        if (response.ok) {
+          showMessage('Item added to cart!', 'success');
+          // Update cart count in navbar
+          if (window.updateCartCount) {
+            window.updateCartCount();
+          }
+        } else {
+          const error = await response.text();
+          showMessage(error, 'error');
+        }
+      } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        showMessage('Failed to remove from wishlist', 'error');
+      }
+    }
+
+    async function addAllToCart() {
+      if (wishlistItems.length === 0) {
+        showMessage('No items in wishlist to add', 'error');
+        return;
+      }
+
+      if (!confirm(`Add all ${wishlistItems.length} items to cart?`)) return;
+
+      try {
+        const response = await fetch('/wishlist/add-all-to-cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          showMessage(`Added ${result.addedCount} items to cart!`, 'success');
+          // Update cart count in navbar
+          if (window.updateCartCount) {
+            window.updateCartCount();
+          }
+        } else {
+          const error = await response.text();
+          showMessage(error, 'error');
+        }
+      } catch (error) {
+        console.error('Error adding all to cart:', error);
+        showMessage('Failed to add items to cart', 'error');
+      }
+    }
+
+    async function clearWishlist() {
+      if (wishlistItems.length === 0) {
+        showMessage('Wishlist is already empty', 'error');
+        return;
+      }
+
+      if (!confirm('Clear your entire wishlist? This cannot be undone.')) return;
+
+      try {
+        const response = await fetch('/wishlist/clear', {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          showMessage('Wishlist cleared!', 'success');
+          loadWishlist(); // Reload wishlist
+        } else {
+          const error = await response.text();
+          showMessage(error, 'error');
+        }
+      } catch (error) {
+        console.error('Error clearing wishlist:', error);
+        showMessage('Failed to clear wishlist', 'error');
+      }
+    }
+
+    function shareWishlist() {
+      if (wishlistItems.length === 0) {
+        showMessage('No items to share', 'error');
+        return;
+      }
+
+      const shareText = `Check out my NBA Jersey wishlist:\n${wishlistItems.map(item => `• ${item.name} - ${item.price}`).join('\n')}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'My NBA Jersey Wishlist',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(shareText).then(() => {
+          showMessage('Wishlist copied to clipboard!', 'success');
+        }).catch(() => {
+          showMessage('Failed to copy wishlist', 'error');
+        });
+      }
+    }
+
+    // Initialize wishlist when page loads
+    document.addEventListener('DOMContentLoaded', loadWishlist);
+  </script>
+</body>
+</html>error, 'error');
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        showMessage('Failed to add to cart', 'error');
+      }
+    }
+
+    async function removeFromWishlist(productId) {
+      if (!confirm('Remove this item from your wishlist?')) return;
+
+      try {
+        const response = await fetch('/wishlist', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId })
+        });
+
+        if (response.ok) {
+          showMessage('Item removed from wishlist', 'success');
+          loadWishlist(); // Reload wishlist
+        } else {
+          const error = await response.text();
+          showMessage(
