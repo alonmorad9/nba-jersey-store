@@ -1,17 +1,20 @@
 const nav = document.createElement('div');
 nav.className = 'nav-bar';
 
+// Get username from cookies
 const username = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
   ?.split('=')[1];
 
+  // Get current page
 const currentPage = window.location.pathname;
 
 // Function to get cart count
 async function getCartCount() {
   if (!username) return 0;
 
+  // Get cart count from server
   try {
     const res = await fetch('/cart');
     if (res.ok) {
@@ -40,18 +43,20 @@ async function getWishlistCount() {
   return 0;
 }
 
+// Update cart display
 async function updateCartDisplay() {
   const cartCount = await getCartCount();
   const cartLink = document.querySelector('a[href="cart.html"]');
-  if (cartLink) {
+  if (cartLink) { // Update cart link text
     cartLink.innerHTML = cartCount > 0 ? `🛒 Cart (${cartCount})` : '🛒 Cart';
   }
 }
 
+// Update wishlist display
 async function updateWishlistDisplay() {
   const wishlistCount = await getWishlistCount();
   const wishlistLink = document.querySelector('a[href="wishlist.html"]');
-  if (wishlistLink) {
+  if (wishlistLink) { // Update wishlist link text
     wishlistLink.innerHTML = wishlistCount > 0 ? `💖 Wishlist (${wishlistCount})` : '💖 Wishlist';
   }
 }
@@ -60,11 +65,13 @@ async function updateWishlistDisplay() {
 function checkAuthentication() {
   const protectedPages = [
     'cart.html', 'checkout.html', 'myitems.html', 'admin.html', 
-    'profile.html', 'wishlist.html', 'reviews.html'
+    'profile.html', 'wishlist.html', 'reviews.html', 'contact.html'
   ];
-  
+
+  // Get current page
   const currentPageFile = window.location.pathname.split('/').pop();
-  
+
+  // Check if user is on a protected page without being logged in
   if (!username && protectedPages.includes(currentPageFile)) {
     alert('You must be logged in to access this page.');
     window.location.href = 'login.html';
@@ -79,11 +86,11 @@ let leftNavHTML = '';
 if (username) {
   leftNavHTML = `
     <a href="store.html">🏬 Store</a>
+    <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="cart.html" id="cart-link">🛒 Cart</a>
     <a href="checkout.html">✅ Checkout</a>
-    <a href="myitems.html">📦 My Items</a>
-    <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="profile.html">👤 Profile</a>
+    <a href="myitems.html">📦 My Items</a>
     <a href="reviews.html">⭐ Reviews</a>
     <a href="contact.html">✉️ Contact</a>
     <a href="README.html">❓ Readme</a>
@@ -94,15 +101,17 @@ if (username) {
   if (username === 'admin') {
     leftNavHTML += `<a href="admin.html">🔧 Admin</a>`;
   }
-  
-} else {
+
   // Public pages (non-authenticated users)
+} else {
   leftNavHTML = `
     <a href="store.html">🏬 Store</a>
+    <a href="README.html">❓ Readme</a>
+    <a href="LLM.html">💻 LLM</a>
   `;
 }
 
-// Right navigation
+// Right navigation - Authenticated users
 let rightNavHTML = '';
 if (username && !currentPage.includes('login') && !currentPage.includes('register')) {
   const formattedName = username === 'admin' ? 'Admin 👑' : username;
@@ -129,9 +138,10 @@ nav.innerHTML = `
   </div>
 `;
 
+// Prepend the navigation bar to the body
 document.body.prepend(nav);
 
-// Enhanced dark toggle button styling
+// Dark mode toggle button styling
 const darkToggleStyle = document.createElement('style');
 darkToggleStyle.textContent = `
   .dark-toggle-btn {
@@ -206,6 +216,8 @@ darkToggleStyle.textContent = `
     border: none !important;
   }
 `;
+
+// Append the dark mode toggle button styling to the document head
 document.head.appendChild(darkToggleStyle);
 
 // Handle logout functionality
@@ -213,7 +225,9 @@ const logoutBtn = document.getElementById('logout-btn');
 if (logoutBtn) {
   logoutBtn.onclick = async () => {
     try {
+      // Send logout request to server
       await fetch('/logout', { method: 'POST' });
+      // Clear user cookie
       document.cookie = "username=; Max-Age=0; path=/";
       
       // Clear any cached data
@@ -225,13 +239,14 @@ if (logoutBtn) {
     } catch (error) {
       console.error('Error during logout:', error);
       // Force logout even if server request fails
+      // cookie cleanup
       document.cookie = "username=; Max-Age=0; path=/";
       window.location.href = 'login.html';
     }
   };
 }
 
-// Dark Mode functionality
+// Dark Mode functionality - Apply saved preference
 function applyDarkModeFromStorage() {
   const isDark = localStorage.getItem('darkMode') === 'true';
   if (isDark) document.body.classList.add('dark-mode');
@@ -240,6 +255,7 @@ function applyDarkModeFromStorage() {
 }
 applyDarkModeFromStorage();
 
+// Dark mode toggle button functionality
 document.addEventListener('click', (e) => {
   if (e.target.id === 'darkToggleBtn') {
     document.body.classList.toggle('dark-mode');
@@ -260,7 +276,7 @@ if (username) {
   setTimeout(() => {
     updateCartDisplay();
     updateWishlistDisplay();
-  }, 100);
+  }, 100); // slight delay to ensure DOM is ready
   
   // Periodic updates
   setInterval(() => {
@@ -283,9 +299,10 @@ document.addEventListener('click', (e) => {
     const href = e.target.getAttribute('href');
     const protectedPages = [
       'cart.html', 'checkout.html', 'myitems.html', 'admin.html',
-      'profile.html', 'wishlist.html'
+      'profile.html', 'wishlist.html', 'contact.html'
     ];
-    
+
+    // Redirect to login if not authenticated
     if (!username && protectedPages.includes(href)) {
       e.preventDefault();
       alert('You must be logged in to access this page.');
@@ -310,6 +327,7 @@ window.addToWishlist = async function(productId) {
     return;
   }
 
+  // Add item to wishlist
   try {
     const response = await fetch('/wishlist', {
       method: 'POST',
@@ -351,7 +369,7 @@ console.log('🚀 NBA Thread Navigation loaded');
 console.log(`👤 User: ${username || 'Not logged in'}`);
 console.log(`📄 Current page: ${currentPage}`);
 if (username) {
-  console.log('🔗 Available pages: Store, Cart, Wishlist, Checkout, My Items, Profile, Reviews, Stores' + (username === 'admin' ? ', Admin' : ''));
+  console.log('🔗 Available pages: Store, Cart, Wishlist, Checkout, My Items, Profile, Reviews, Contact' + (username === 'admin' ? ', Admin' : ''));
 } else {
-  console.log('🔗 Available pages: Store, Reviews, Stores, About (Login required for other pages)');
+  console.log('🔗 Available pages: Store, Reviews, Contact, About (Login required for other pages)');
 }
