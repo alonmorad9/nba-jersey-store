@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      --success-color: #28a745;
+      --error-color: #dc3545;
+    }
+
+    body.with-nav {
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: var(--gradient-primary);
+      border-radius: 20px;
+      color: var(--text-light);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
+    .page-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      color: var(--text-light) !important;
+    }
+
+    .page-header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      color: var(--text-light) !important;
+      margin: 0;
+    }
+
+    /* Main Container */
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    /* Contact Form Section */
+    .contact-form {
+      background: var(--light-bg);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--accent-color);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      background: white;
+      color: black;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(23, 64, 139, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      border: none;
+      border-radius: 25px;
+      font-size: 1.2em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: var(--shadow);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* My Tickets Section */
+    .my-tickets {
+      background: var(--light-bg);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .ticket-item {
+      background: #f8f9fa;
+      border: 2px solid var(--border-color);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticket-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-color);
+    }
+
+    .ticket-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .ticket-id {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .ticket-status {
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .ticket-status.open {
+      background: #ffc107;
+      color: #856404;
+    }
+
+    .ticket-status.in-progress {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .ticket-status.resolved {
+      background: #28a745;
+      color: white;
+    }
+
+    .ticket-subject {
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    .ticket-category {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+    }
+
+    .ticket-date {
+      color: #888;
+      font-size: 0.85em;
+    }
+
+    /* Messages */
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 500;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      font-size: 1.2em;
+      color: var(--primary-color);
+    }
+
+    .loading::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 15px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-tickets {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .empty-tickets-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-tickets h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: var(--text-dark);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .contact-form,
+    body.dark-mode .my-tickets {
+      background: #1e1e1e !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .section-title {
+      color: #64b5f6 !important;
+      border-bottom-color: #fbc02d !important;
+    }
+
+    body.dark-mode .form-group label {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group select,
+    body.dark-mode .form-group textarea {
+      background-color: #2a2a2a !important;
+      color: #fff !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .form-group input:focus,
+    body.dark-mode .form-group select:focus,
+    body.dark-mode .form-group textarea:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1) !important;
+    }
+
+    body.dark-mode .ticket-item {
+      background: #2a2a2a !important;
+      border-color: #444 !important;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .ticket-id,
+    body.dark-mode .ticket-subject {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .ticket-category {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .ticket-date {
+      color: #aaa !important;
+    }
+
+    body.dark-mode .empty-tickets h3 {
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .empty-tickets {
+      color: #bbb !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .page-header h1 {
+        font-size: 2.5em;
+      }
+
+      .form-container {
+        padding: 15px;
+      }
+
+      .contact-form,
+      .my-tickets {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body class="with-nav">
+  <div class="form-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>📞 Contact Us</h1>
+      <p>Get help with your orders, account, or general questions</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="contact-container">
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <div class="section-title">📝 Submit a Support Ticket</div>
+        
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="category">
+              🏷️ Category *
+            </label>
+            <select id="category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="order">Order Issues</option>
+              <option value="account">Account Problems</option>
+              <option value="technical">Technical Support</option>
+              <option value="billing">Billing Questions</option>
+              <option value="return">Returns & Refunds</option>
+              <option value="general">General Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">
+              📋 Subject *
+            </label>
+            <input type="text" id="subject" name="subject" required placeholder="Brief description of your issue" maxlength="100">
+          </div>
+
+          <div class="form-group">
+            <label for="priority">
+              ⚡ Priority *
+            </label>
+            <select id="priority" name="priority" required>
+              <option value="">Select priority</option>
+              <option value="low">Low - General question</option>
+              <option value="medium">Medium - Account or order issue</option>
+              <option value="high">High - Urgent problem</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">
+              💬 Detailed Message *
+            </label>
+            <textarea id="message" name="message" required placeholder="Please provide as much detail as possible about your issue..." maxlength="1000"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            🚀 Submit Ticket
+          </button>
+        </form>
+      </div>
+
+      <!-- My Tickets -->
+      <div class="my-tickets">
+        <div class="section-title">🎫 My Support Tickets</div>
+        <div id="ticketsContainer">
+          <div class="loading">Loading your tickets...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="navbar.js"></script>
+
+  <script>
+    // Load tickets on page load
+    document.addEventListener('DOMContentLoaded', loadTickets);
+
+    // Form submission
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.innerHTML;
+      
+      // Remove existing messages
+      const existingMessages = document.querySelectorAll('.message');
+      existingMessages.forEach(msg => msg.remove());
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '🔄 Submitting...';
+
+        const formData = {
+          category: document.getElementById('category').value,
+          subject: document.getElementById('subject').value,
+          priority: document.getElementById('priority').value,
+          message: document.getElementById('message').value
+        };
+
+        const response = await fetch('/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.status === 401) {
+          throw new Error('You must be logged in to submit a support ticket');
+        }
+
+        if (response.ok) {
+          const result = await response.json();
+          
+          // Show success message
+          const successMsg = document.createElement('div');
+          successMsg.className = 'message success';
+          successMsg.innerHTML = `✅ Support ticket submitted successfully!<br>Ticket ID: <strong>${result.ticketId}</strong>`;
+          document.querySelector('.contact-form').insertBefore(successMsg, document.getElementById('contactForm'));
+          
+          // Reset form
+          document.getElementById('contactForm').reset();
+          
+          // Reload tickets
+          loadTickets();
+          
+        } else {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to submit ticket');
+        }
+
+      } catch (error) {
+        console.error('Error submitting ticket:', error);
+        
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message error';
+        errorMsg.textContent = error.message;
+        document.querySelector('.contact-form').insertBefore(errorMsg, document.getElementById('contactForm'));
+        
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+
+    // Load user's tickets
+    async function loadTickets() {
+      const container = document.getElementById('ticketsContainer');
+      
+      try {
+        const response = await fetch('/contact');
+        
+        if (response.status === 401) {
+          container.innerHTML = `
+            <div class="empty-tickets">
+              <div class="empty-tickets-icon">🔒</div>
+              <h3>Login Required</h3>
+              <p>Please log in to view your support tickets.</p>
+            </div>
+          `;
+          return;
+        }
+
+        if (response.ok) {
+          const tickets = await response.json();
+          
+          if (!tickets || tickets.length === 0) {
+            container.innerHTML = `
+              <div class="empty-tickets">
+                <div class="empty-tickets-icon">🎫</div>
+                <h3>No Support Tickets</h3>
+                <p>You haven't submitted any support tickets yet.</p>
+              </div>
+            `;
+            return;
+          }
+
+          // Render tickets
+          const ticketsHtml = tickets.map(ticket => `
+            <div class="ticket-item">
+              <div class="ticket-header">
+                <span class="ticket-id">#${ticket.id}</span>
+                <span class="ticket-status ${ticket.status}">${ticket.status.replace('-', ' ')}</span>
+              </div>
+              <div class="ticket-subject">${ticket.subject}</div>
+              <div class="ticket-category">📂 ${ticket.category.charAt(0).toUpperCase() + ticket.category.slice(1)}</div>
+              <div class="ticket-date">📅 ${new Date(ticket.created).toLocaleDateString()} at ${new Date(ticket.created).toLocaleTimeString()}</div>
+            </div>
+          `).join('');
+
+          container.innerHTML = ticketsHtml;
+          
+        } else {
+          throw new Error('Failed to load tickets');
+        }
+
+      } catch (error) {
+        console.error('Error loading tickets:', error);
+        container.innerHTML = `
+          <div class="empty-tickets">
+            <div class="empty-tickets-icon">⚠️</div>
+            <h3>Error Loading Tickets</h3>
+            <p>Unable to load your support tickets. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Character counter for message field
+    document.getElementById('message').addEventListener('input', function() {
+      const current = this.value.length;
+      const max = this.maxLength;
+      
+      let counter = document.getElementById('messageCounter');
+      if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'messageCounter';
+        counter.style.cssText = 'font-size: 0.8em; color: #666; text-align: right; margin-top: 5px;';
+        this.parentNode.appendChild(counter);
+      }
+      
+      counter.textContent = `${current}/${max} characters`;
+      counter.style.color = current > max * 0.9 ? '#dc3545' : '#666';
+    });
+  </script>
+</body>
+</html>

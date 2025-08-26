@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "id": "T1756197708729Y87",
+      "username": "alonmorad",
+      "category": "account",
+      "subject": "234234",
+      "priority": "medium",
+      "message": "123123",
+      "status": "open",
+      "created": "2025-08-26T08:41:48.729Z",
+      "updated": "2025-08-26T08:41:48.729Z"
+    },
+    {
+      "id": "T1756197717966PP2",
+      "username": "alonmorad",
+      "category": "return",
+      "subject": "124142",
+      "priority": "low",
+      "message": "12215125",
+      "status": "open",
+      "created": "2025-08-26T08:41:57.967Z",
+      "updated": "2025-08-26T08:41:57.967Z"
+    }
+  ]
+}

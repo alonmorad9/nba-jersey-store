@@ -27,6 +27,7 @@ app.use(require('./admin-server')); // Import and use the admin activity route d
 app.use(require('./profile-server')); // Import and use the profile route defined in 'profile-server.js'
 app.use(require('./reviews-server')); // Import and use the reviews route defined in 'reviews-server.js'
 app.use(require('./wishlist-server')); // Import and use the wishlist route defined in 'wishlist-server.js'
+app.use(require('./contact-server')); // Import and use the contact route defined in 'contact-server.js'
 
 // Start
 const PORT = 3000; // Define the port on which the server will listen

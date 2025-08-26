@@ -85,6 +85,7 @@ if (username) {
     <a href="wishlist.html" id="wishlist-link">💖 Wishlist</a>
     <a href="profile.html">👤 Profile</a>
     <a href="reviews.html">⭐ Reviews</a>
+    <a href="contact.html">✉️ Contact</a>
   `;
   
   // Add admin link for admin users
