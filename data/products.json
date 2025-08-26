@@ -4,67 +4,41 @@
     "name": "Lakers Jersey",
     "description": "Classic gold and purple",
     "price": 99.99,
-    "image": "images/lakers.jpeg"
+    "image": "https://fanatics.frgimages.com/los-angeles-lakers/mens-fanatics-lebron-james-gold-los-angeles-lakers-fast-break-replica-jersey-icon-edition_ss5_p-201451085+u-jgui2u1zrf8sskilncqf+v-71bpudeo4f1xayc0mwzd.jpg?_hv=2&w=400"
+  },
+  "2": {
+    "id": "2",
+    "name": "Celtics Jersey",
+    "description": "Green with white trim",
+    "price": 95.99,
+    "image": "https://fanatics.frgimages.com/boston-celtics/unisex-nike-jayson-tatum-kelly-green-boston-celtics-swingman-jersey-icon-edition_pi4650000_altimages_ff_4650391-20e3b038ad7098229d53alt1_full.jpg?_hv=2&w=900"
   },
   "3": {
     "id": "3",
-    "name": "Celtics Jersey",
-    "description": "Green with white trim",
-    "price": 95.99
+    "name": "Warriors Jersey",
+    "description": "Blue and gold",
+    "price": 102.99,
+    "image": "https://fanatics.frgimages.com/golden-state-warriors/youth-fanatics-stephen-curry-royal-golden-state-warriors-fast-break-replica-player-jersey-icon-edition_ss5_p-201291345+u-czow6kt0orpmfb5wjvg8+v-rvicbwxglwdysvkf8hkm.jpg?_hv=2&w=400"
   },
   "4": {
     "id": "4",
-    "name": "Warriors Jersey",
-    "description": "Blue and gold",
-    "price": 102.99
+    "name": "Miami Heat Jersey",
+    "description": "Classic home white",
+    "price": 90.99,
+    "image": "https://fanatics.frgimages.com/miami-heat/mens-mitchell-and-ness-dwyane-wade-white-miami-heat-2005/06-hardwood-classics-swingman-jersey_pi5292000_ff_5292891-feb11705a2d93ff8b8c0_full.jpg?_hv=2&w=400"
+  },
+  "5": {
+    "id": "5",
+    "name": "Bulls Jersey",
+    "description": "Iconic red and black",
+    "price": 98.99,
+    "image": "https://fanatics.frgimages.com/chicago-bulls/mens-mitchell-and-ness-michael-jordan-scarlet-chicago-bulls-1997/98-hardwood-classics-authentic-jersey_pi3902000_ff_3902287-1c1317b0ddf7fbe59314_full.jpg?_hv=2&w=400"
   },
   "6": {
     "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "7": {
-    "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "8": {
-    "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "9": {
-    "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "10": {
-    "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "11": {
-    "id": "6",
-    "name": "Miami Jersey",
-    "description": "Home",
-    "price": 90.99,
-    "image": "images/lakers.jpeg"
-  },
-  "12": {
-    "id": "12",
-    "name": "Tel-Aviv",
-    "description": "test",
-    "price": 100,
-    "image": ""
+    "name": "Nets Jersey",
+    "description": "Modern black design",
+    "price": 89.99,
+    "image": "https://fanatics.frgimages.com/brooklyn-nets/mens-fanatics-ben-saraf-black-brooklyn-nets-fast-break-replica-jersey-icon-edition_ss5_p-203388397+u-hdrslf7keavfio2rrfq4+v-d6pxwizokdyevfrpt8hj.jpg?_hv=2&w=400"
   }
 }
