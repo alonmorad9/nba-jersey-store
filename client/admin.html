@@ -625,6 +625,7 @@
       <h2>📊 User Activity</h2>
       <input type="text" id="prefixInput" placeholder="Filter by username prefix..." />
 
+      <!-- Activity Table -->
       <table>
         <thead>
           <tr>
@@ -637,6 +638,7 @@
       </table>
 
       <hr>
+      <!-- Support Tickets Management -->
       <h2>🎫 Support Tickets Management</h2>
       <div class="tickets-controls">
         <select id="statusFilter">
@@ -658,6 +660,7 @@
       </div>
 
       <hr>
+      <!-- Product Management -->
       <h2>🧰 Manage Products</h2>
       <form id="addProductForm">
         <input type="text" id="productName" placeholder="Product Name" required>
@@ -668,15 +671,18 @@
       </form>
 
       <h3>📟 Current Products</h3>
+      <!-- Product List -->
       <ul id="productList" style="list-style: none; padding: 0;"></ul>
     </div>
   </div>
 
-  <script src="navbar.js"></script>
+  <script src="navbar.js"></script> <!-- Navbar Script -->
   <script>
+    // Admin Activity
     const prefixInput = document.getElementById('prefixInput');
     const tableBody = document.getElementById('activityTableBody');
 
+    // Load Activity - Admin Activity
     async function loadActivity() {
       const prefix = prefixInput.value.trim();
       const res = await fetch('/admin-activity?prefix=' + encodeURIComponent(prefix));
@@ -712,25 +718,30 @@
         if (params.toString()) url += '?' + params.toString();
 
         const response = await fetch(url);
-        
+
+        // Check if the user is authenticated
         if (response.status === 401) {
           container.innerHTML = '<div class="empty-tickets">Access denied. Admin login required.</div>';
           return;
         }
 
+        // Check if the user is an admin
         if (response.status === 403) {
           container.innerHTML = '<div class="empty-tickets">Access denied. Admin privileges required.</div>';
           return;
         }
 
+        // Check if the response is okay
         if (response.ok) {
           const tickets = await response.json();
-          
+
+          // Check if the tickets array is empty
           if (!tickets || tickets.length === 0) {
             container.innerHTML = '<div class="empty-tickets">No support tickets found.</div>';
             return;
           }
 
+          // Generate HTML for each ticket
           const ticketsHtml = tickets.map(ticket => `
             <div class="ticket-item" id="ticket-${ticket.id}">
               <div class="ticket-header">
@@ -776,6 +787,7 @@
       }
     }
 
+    // Update Ticket Status - run when the user selects a new status
     async function updateTicketStatus(ticketId) {
       const statusSelect = document.getElementById(`status-${ticketId}`);
       const newStatus = statusSelect.value;
@@ -790,6 +802,7 @@
         updateButton.innerHTML = 'Updating...';
         updateButton.style.background = '#6c757d';
         
+        // Send PUT request to update ticket status
         const response = await fetch(`/admin/tickets/${ticketId}`, {
           method: 'PUT',
           headers: {
@@ -812,8 +825,8 @@
           setTimeout(() => {
             loadTickets();
           }, 1000);
-          
-        } else {
+
+        } else { // If the response is not okay
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to update ticket status');
         }
@@ -843,6 +856,7 @@
     const addForm = document.getElementById('addProductForm');
     const productList = document.getElementById('productList');
 
+    // Add product - run when the form is submitted
     addForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('productName').value.trim();
@@ -865,11 +879,13 @@
       }
     });
 
+    // Load products - run on page load
     async function loadProducts() {
       const res = await fetch('/admin-products');
       const products = await res.json();
 
       productList.innerHTML = '';
+      // Generate HTML for each product
       products.forEach(p => {
         const li = document.createElement('li');
         li.innerHTML = `
@@ -889,6 +905,7 @@
       });
     }
 
+    // Remove Product - run when the user clicks the remove button
     async function removeProduct(id) {
       if (!confirm('Are you sure you want to delete this product?')) return;
 
@@ -906,6 +923,7 @@
       }
     }
 
+    // Remove Product with DELETE - run when the user clicks the delete button - remove it after confirmation
     async function removeProductWithDelete(id) {
       if (!confirm('Are you sure you want to delete this product? (Using DELETE method)')) return;
 
@@ -928,7 +946,7 @@
       }
     }
 
-    // Initialize page
+    // Initialize page - run when the window loads
     window.onload = () => {
       loadActivity();
       loadProducts();
