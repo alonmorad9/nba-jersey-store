@@ -460,6 +460,7 @@
             </select>
           </div>
 
+          <!-- Form Group for Subject -->
           <div class="form-group">
             <label for="subject">
               📋 Subject *
@@ -511,7 +512,8 @@
     // Form submission
     document.getElementById('contactForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
+      // Get the submit button and its original text
       const submitBtn = document.getElementById('submitBtn');
       const originalText = submitBtn.innerHTML;
       
@@ -519,7 +521,8 @@
       const existingMessages = document.querySelectorAll('.message');
       existingMessages.forEach(msg => msg.remove());
 
-      try {
+      // Get the form data
+      try { 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '🔄 Submitting...';
 
@@ -530,6 +533,7 @@
           message: document.getElementById('message').value
         };
 
+        // Send the form data
         const response = await fetch('/contact', {
           method: 'POST',
           headers: {
@@ -538,10 +542,12 @@
           body: JSON.stringify(formData)
         });
 
+        // Check for authentication
         if (response.status === 401) {
           throw new Error('You must be logged in to submit a support ticket');
         }
 
+        // Check if the response is OK
         if (response.ok) {
           const result = await response.json();
           
@@ -556,21 +562,21 @@
           
           // Reload tickets
           loadTickets();
-          
-        } else {
+
+        } else { // Handle errors
           const errorText = await response.text();
           throw new Error(errorText || 'Failed to submit ticket');
         }
 
-      } catch (error) {
+      } catch (error) { // Handle form submission errors
         console.error('Error submitting ticket:', error);
         
         const errorMsg = document.createElement('div');
         errorMsg.className = 'message error';
         errorMsg.textContent = error.message;
         document.querySelector('.contact-form').insertBefore(errorMsg, document.getElementById('contactForm'));
-        
-      } finally {
+
+      } finally { // Always re-enable the submit button
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
       }
@@ -579,10 +585,11 @@
     // Load user's tickets
     async function loadTickets() {
       const container = document.getElementById('ticketsContainer');
-      
-      try {
+
+      try { // Load tickets
         const response = await fetch('/contact');
-        
+
+        // Check for authentication
         if (response.status === 401) {
           container.innerHTML = `
             <div class="empty-tickets">
@@ -594,9 +601,11 @@
           return;
         }
 
+        // Check if the response is OK
         if (response.ok) {
           const tickets = await response.json();
-          
+
+          // Check if tickets exist
           if (!tickets || tickets.length === 0) {
             container.innerHTML = `
               <div class="empty-tickets">
@@ -643,7 +652,8 @@
     document.getElementById('message').addEventListener('input', function() {
       const current = this.value.length;
       const max = this.maxLength;
-      
+
+      // Create the counter element
       let counter = document.getElementById('messageCounter');
       if (!counter) {
         counter = document.createElement('div');
@@ -651,9 +661,10 @@
         counter.style.cssText = 'font-size: 0.8em; color: #666; text-align: right; margin-top: 5px;';
         this.parentNode.appendChild(counter);
       }
-      
-      counter.textContent = `${current}/${max} characters`;
-      counter.style.color = current > max * 0.9 ? '#dc3545' : '#666';
+
+      // Update the counter text
+      counter.textContent = `${current}/${max} characters`; // Update character count
+      counter.style.color = current > max * 0.9 ? '#dc3545' : '#666'; // Change color if near limit
     });
   </script>
 </body>
