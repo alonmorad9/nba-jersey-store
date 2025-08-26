@@ -86,6 +86,8 @@ if (username) {
     <a href="profile.html">👤 Profile</a>
     <a href="reviews.html">⭐ Reviews</a>
     <a href="contact.html">✉️ Contact</a>
+    <a href="README.html">❓ Readme</a>
+    <a href="LLM.html">💻 LLM</a>
   `;
   
   // Add admin link for admin users

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NBA Thread - Project Documentation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.with-nav {
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .readme-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 60px 30px;
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      border-radius: 20px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .readme-header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      color: white !important;
+    }
+
+    .content-section {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin: 30px 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #17408B;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #F9A01B;
+    }
+
+    .route-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .route-table th,
+    .route-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .route-table th {
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      color: white;
+      font-weight: 600;
+    }
+
+    .route-table tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .method-badge {
+      padding: 4px 8px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .method-get { background: #28a745; color: white; }
+    .method-post { background: #007bff; color: white; }
+    .method-put { background: #ffc107; color: black; }
+    .method-delete { background: #dc3545; color: white; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 15px;
+      border-left: 4px solid #17408B;
+    }
+
+    .feature-card h4 {
+      color: #17408B;
+      margin-bottom: 10px;
+    }
+
+    .challenge-item {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+    }
+
+    .challenge-item h4 {
+      color: #856404;
+      margin-bottom: 10px;
+    }
+
+    /* Dark Mode */
+    body.dark-mode .content-section {
+      background: #1e1e1e !important;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .section-title {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .route-table th {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .route-table td {
+      background: #2a2a2a !important;
+      color: #f0f0f0 !important;
+      border-bottom-color: #444 !important;
+    }
+
+    body.dark-mode .route-table tr:hover td {
+      background: #333 !important;
+    }
+
+    body.dark-mode .feature-card {
+      background: #2a2a2a !important;
+      color: #f0f0f0 !important;
+    }
+
+    body.dark-mode .feature-card h4 {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+  </style>
+</head>
+<body class="with-nav">
+  <div class="form-container">
+    <!-- Header -->
+    <div class="readme-header">
+      <h1>🏀 NBA Thread Store</h1>
+      <p>Final Project Documentation - Internet Tech / FullStack</p>
+      <p><strong>Store Name:</strong> The NBA Thread - Unique Shirts for True Fans</p>
+    </div>
+
+    <!-- What We're Selling -->
+    <div class="content-section">
+      <div class="section-title">🛍️ What Are We Selling?</div>
+      <p>
+        <strong>NBA Thread</strong> is a premium online store specializing in authentic NBA jerseys and basketball merchandise. 
+        We offer a curated collection of high-quality jerseys from all your favorite teams including:
+      </p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>🏀 Premium Jerseys</h4>
+          <p>Authentic NBA team jerseys from Lakers, Celtics, Warriors, Heat, Bulls, and Nets with official team colors and designs.</p>
+        </div>
+        <div class="feature-card">
+          <h4>💯 Quality Guarantee</h4>
+          <p>Each jersey is carefully selected for quality, authenticity, and durability. Perfect for true basketball fans.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🎯 Fan Experience</h4>
+          <p>Complete fan experience with reviews, wishlists, and personalized shopping recommendations.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Pages -->
+    <div class="content-section">
+      <div class="section-title">📄 Additional Pages Added</div>
+      <p>Beyond the required functionality, we added <strong>4+ additional pages</strong> with server communication:</p>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>💖 Wishlist System</h4>
+          <p><strong>How to operate:</strong> Browse products and click "Add to Wishlist". View saved items in the Wishlist page, add all to cart, or remove individual items. Full CRUD operations with server sync.</p>
+        </div>
+        <div class="feature-card">
+          <h4>⭐ Product Reviews</h4>
+          <p><strong>How to operate:</strong> After login, go to Reviews page. Select a product, rate 1-5 stars, write a review. View all reviews with filtering by rating, product, and sorting options.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📞 Contact/Support</h4>
+          <p><strong>How to operate:</strong> Submit support tickets with category, priority, and detailed messages. Track ticket status (Open/In-Progress/Resolved). Admin can update ticket statuses.</p>
+        </div>
+        <div class="feature-card">
+          <h4>👤 User Profile</h4>
+          <p><strong>How to operate:</strong> View purchase statistics, total orders, total spent, and member information. Displays personalized user data and account overview.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🛍️ Shopping Cart</h4>
+          <p><strong>How to operate:</strong> Add items to your cart, view cart contents, and proceed to checkout. Supports guest and registered user sessions.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📦 Order History</h4>
+          <p><strong>How to operate:</strong> View past orders, track shipments, and initiate returns. Accessible from user profile.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Challenges -->
+    <div class="content-section">
+      <div class="section-title">🛠️ What Was Hard To Do?</div>
+      
+      <div class="challenge-item">
+        <h4>1. Complex State Management</h4>
+        <p>Managing cart, wishlist, and user states across multiple pages while maintaining data consistency was challenging. Implemented a robust system with both server-side persistence and client-side state management.</p>
+      </div>
+
+      <div class="challenge-item">
+        <h4>2. Dark Mode Implementation</h4>
+        <p>Creating a comprehensive dark mode that works across all pages with localStorage persistence required extensive CSS planning and JavaScript coordination across multiple files.</p>
+      </div>
+
+      <div class="challenge-item">
+        <h4>3. Security & DOS Protection</h4>
+        <p>Implementing proper rate limiting, input validation, and DOS protection while maintaining good user experience. Required careful balance between security and usability.</p>
+      </div>
+
+      <div class="challenge-item">
+        <h4>4. Data Persistence Architecture</h4>
+        <p>Designing a file-based persistence system that handles concurrent users, data integrity, and complex relationships between users, products, and transactions was complex.</p>
+      </div>
+
+      <div class="challenge-item">
+        <h4>5. Responsive Design</h4>
+        <p>Creating a professional, responsive UI that works across all devices and screen sizes while maintaining the NBA brand aesthetic required extensive CSS work.</p>
+      </div>
+    </div>
+
+    <!-- Partner Information -->
+    <div class="content-section">
+      <div class="section-title">👥 Partnership Information</div>
+      <p><strong>This project was completed individually.</strong></p>
+      <p>
+        <strong>Developer:</strong> Alon Morad - ID: 211604871<br>
+        <strong>Responsibilities:</strong> Full-stack development including:
+      </p>
+      <ul>
+        <li>Server-side architecture and API development</li>
+        <li>Frontend UI/UX design and implementation</li>
+        <li>Database design and data persistence</li>
+        <li>Security implementation and testing</li>
+        <li>Additional features development</li>
+      </ul>
+    </div>
+
+    <!-- Routes Documentation -->
+    <div class="content-section">
+      <div class="section-title">🛣️ All Different Routes</div>
+      
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Route</th>
+            <th>Description</th>
+            <th>Authentication</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Authentication Routes -->
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/register</td>
+            <td>User registration</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/login</td>
+            <td>User login with remember me</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/logout</td>
+            <td>User logout</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- Product Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/products</td>
+            <td>Get all products</td>
+            <td>None</td>
+          </tr>
+          
+          <!-- Cart Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/cart</td>
+            <td>Get user's cart items</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/add-to-cart</td>
+            <td>Add product to cart</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/remove-from-cart</td>
+            <td>Remove specific quantity from cart</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/remove-all-from-cart</td>
+            <td>Remove all instances of product</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- Checkout Routes -->
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/checkout</td>
+            <td>Process fake payment</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- User Data Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/my-items</td>
+            <td>Get user's purchase history</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/profile</td>
+            <td>Get user profile data</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- Admin Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/admin-activity</td>
+            <td>Get user activity with prefix filter</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/admin-products</td>
+            <td>Get products for admin</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/admin-add-product</td>
+            <td>Add new product</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/admin-remove-product</td>
+            <td>Remove product (POST method)</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-delete">DELETE</span></td>
+            <td>/admin-products/:id</td>
+            <td>Delete product (DELETE method)</td>
+            <td>None</td>
+          </tr>
+          
+          <!-- Wishlist Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/wishlist</td>
+            <td>Get user's wishlist</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/wishlist</td>
+            <td>Add item to wishlist</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-delete">DELETE</span></td>
+            <td>/wishlist</td>
+            <td>Remove item from wishlist</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/wishlist/add-all-to-cart</td>
+            <td>Add all wishlist items to cart</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-delete">DELETE</span></td>
+            <td>/wishlist/clear</td>
+            <td>Clear entire wishlist</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- Reviews Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/reviews</td>
+            <td>Get all product reviews</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/reviews</td>
+            <td>Submit new review</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/reviews/:id/like</td>
+            <td>Like/unlike a review</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/reviews/:id/report</td>
+            <td>Report inappropriate review</td>
+            <td>Required</td>
+          </tr>
+          
+          <!-- Contact/Support Routes -->
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/contact</td>
+            <td>Get user's support tickets</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-post">POST</span></td>
+            <td>/contact</td>
+            <td>Submit support ticket</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-get">GET</span></td>
+            <td>/admin/tickets</td>
+            <td>Admin view of all tickets</td>
+            <td>Admin</td>
+          </tr>
+          <tr>
+            <td><span class="method-badge method-put">PUT</span></td>
+            <td>/admin/tickets/:id</td>
+            <td>Update ticket status</td>
+            <td>Admin</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Testing Documentation -->
+    <div class="content-section">
+      <div class="section-title">🧪 How We Tested It</div>
+      
+      <div class="feature-card">
+        <h4>1. Automated Testing (test.js)</h4>
+        <p>
+          Comprehensive test suite using <code>node-fetch</code> that tests:
+        </p>
+        <ul>
+          <li><strong>20+ test categories</strong> including authentication, API routes, error handling</li>
+          <li><strong>Rate limiting protection</strong> - Tests DOS attack prevention</li>
+          <li><strong>Input validation</strong> - Tests malformed requests and missing fields</li>
+          <li><strong>Authentication flow</strong> - Login, logout, and session management</li>
+          <li><strong>Data persistence</strong> - Verifies data survives server restarts</li>
+          <li><strong>Static file serving</strong> - All HTML, CSS, and JS files</li>
+        </ul>
+        <p><strong>Usage:</strong> <code>node test.js</code> - Runs all tests and displays success rate</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>2. Manual Testing</h4>
+        <p>
+          Extensive manual testing performed on:
+        </p>
+        <ul>
+          <li><strong>User flows:</strong> Complete registration → login → shopping → checkout process</li>
+          <li><strong>Admin functionality:</strong> Product management, user activity monitoring</li>
+          <li><strong>Edge cases:</strong> Invalid inputs, unauthorized access, concurrent users</li>
+          <li><strong>Cross-browser compatibility:</strong> Chrome, Firefox, Safari, Edge</li>
+          <li><strong>Responsive design:</strong> Desktop, tablet, and mobile devices</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h4>3. Security Testing</h4>
+        <p>
+          Security measures tested include:
+        </p>
+        <ul>
+          <li><strong>DOS Protection:</strong> Rate limiting (1000 req/min per IP)</li>
+          <li><strong>Login Protection:</strong> Failed login attempt limiting</li>
+          <li><strong>Input Sanitization:</strong> SQL injection and XSS prevention</li>
+          <li><strong>Authentication:</strong> Session management and cookie security</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Technical Stack -->
+    <div class="content-section">
+      <div class="section-title">💻 Technical Implementation</div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>Backend</h4>
+          <ul>
+            <li>Node.js with Express.js framework</li>
+            <li>Modular architecture with separate route handlers</li>
+            <li>File-based persistence system</li>
+            <li>Cookie-based session management</li>
+            <li>Rate limiting and DOS protection</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card">
+          <h4>Frontend</h4>
+          <ul>
+            <li>Vanilla JavaScript with modern ES6+ features</li>
+            <li>Responsive CSS with mobile-first design</li>
+            <li>Dark mode with localStorage persistence</li>
+            <li>Component-based navigation system</li>
+            <li>React.js integration example</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="content-section" style="text-align: center; background: linear-gradient(135deg, #17408B 0%, #C9082A 100%); color: white;">
+      <h3>🏀 NBA Thread Store</h3>
+      <p>Final Project - Internet Technologies / FullStack Development</p>
+      <p>RUNI 2025</p>
+    </div>
+  </div>
+
+  <script src="navbar.js"></script>
+</body>
+</html>
