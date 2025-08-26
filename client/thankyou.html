@@ -5,59 +5,267 @@
   <title>Thank You</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+    :root {
+      --primary-color: #17408B;
+      --secondary-color: #C9082A;
+      --accent-color: #F9A01B;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      --success-color: #28a745;
+    }
+
+    body.with-nav {
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
     }
 
-    .thankyou-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
+    .form-container {
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Thank You Card */
+    .thankyou-card {
+      background: var(--light-bg);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: var(--shadow);
       text-align: center;
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+      overflow: hidden;
     }
 
-    h1 {
-      color: #28a745;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    p {
-      color: #555;
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-
-    .btn-home {
-      background-color: #007bff;
+    /* Success Icon */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      font-size: 2.5em;
       color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+      animation: successPulse 2s ease-in-out;
     }
 
-    .btn-home:hover {
-      background-color: #0056b3;
+    @keyframes successPulse {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .thankyou-title {
+      font-size: 2.2em;
+      font-weight: 700;
+      color: var(--success-color);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .thankyou-message {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* Primary Button */
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      padding: 16px 32px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Secondary Actions */
+    .secondary-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-top: 25px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-secondary {
+      background: #f8f9fa;
+      color: #495057;
+      padding: 12px 24px;
+      border: 2px solid #dee2e6;
+      border-radius: 20px;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background: #e9ecef;
+      color: #343a40;
+      border-color: #adb5bd;
+      transform: translateY(-1px);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .form-container {
+      background: transparent !important;
+    }
+
+    body.dark-mode .thankyou-card {
+      background: #1e1e1e !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .success-icon {
+      background: #4caf50 !important;
+    }
+
+    body.dark-mode .thankyou-title {
+      color: #4caf50 !important;
+    }
+
+    body.dark-mode .thankyou-message {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .btn-primary {
+      background: linear-gradient(135deg, #2196F3, #4CAF50) !important;
+    }
+
+    body.dark-mode .btn-secondary {
+      background: #343a40 !important;
+      color: #f8f9fa !important;
+      border-color: #6c757d !important;
+    }
+
+    body.dark-mode .btn-secondary:hover {
+      background: #495057 !important;
+      color: #ffffff !important;
+      border-color: #868e96 !important;
+    }
+
+    body.dark-mode .secondary-actions {
+      border-top-color: #444 !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 15px;
+      }
+
+      .thankyou-card {
+        padding: 40px 25px;
+      }
+
+      .thankyou-title {
+        font-size: 1.8em;
+      }
+
+      .thankyou-message {
+        font-size: 1em;
+      }
+
+      .btn-primary {
+        padding: 14px 28px;
+        font-size: 1em;
+      }
+
+      .secondary-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-secondary {
+        width: 180px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .thankyou-card {
+        padding: 30px 20px;
+      }
+
+      .success-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2em;
+      }
+
+      .thankyou-title {
+        font-size: 1.6em;
+      }
     }
   </style>
 </head>
-<body>
-  <div class="thankyou-container">
-    <h1>✅ Thank you for your purchase!</h1>
-    <p>Your fake payment was successful. We hope you enjoy your jerseys!</p>
-    <button class="btn-home" onclick="goHome()">🏠 Back to Store</button>
+<body class="with-nav">
+  <div class="form-container">
+    <div class="thankyou-card">
+      <div class="success-icon">✅</div>
+      
+      <h1 class="thankyou-title">Thank you for your purchase!</h1>
+      
+      <p class="thankyou-message">
+        Your fake payment was successful. We hope you enjoy your jerseys!
+      </p>
+      
+      <button class="btn-primary" onclick="goHome()">
+        🏠 Back to Store
+      </button>
+      
+      <div class="secondary-actions">
+        <a href="store.html" style="color: #1e1e1e;" class="btn-secondary">Continue Shopping</a>
+        <a href="cart.html" style="color: #1e1e1e;" class="btn-secondary">View Cart</a>
+      </div>
+    </div>
   </div>
 
   <script src="navbar.js"></script>
