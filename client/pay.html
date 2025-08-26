@@ -32,7 +32,7 @@
       padding: 20px;
       border-radius: 0;
       box-shadow: none;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       width: 100%;
     }
@@ -85,7 +85,7 @@
       margin: 0;
     }
 
-    /* Payment Container */
+    /* Payment Container - Two Column Layout */
     .payment-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -93,15 +93,13 @@
       margin: 40px 0;
     }
 
-    /* Order Summary Section */
+    /* Order Summary Section - Left Column */
     .order-summary {
       background: var(--light-bg);
       border-radius: 20px;
-      padding: 30px;
+      padding: 40px;
       box-shadow: var(--shadow);
       height: fit-content;
-      position: sticky;
-      top: 90px;
     }
 
     .section-title {
@@ -111,43 +109,63 @@
       margin-bottom: 25px;
       padding-bottom: 10px;
       border-bottom: 3px solid var(--accent-color);
-      text-align: center;
     }
 
     .order-item {
       background: #f8f9fa;
       border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 15px;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .order-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       border-color: var(--primary-color);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
     }
 
     .item-name {
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: 700;
       color: var(--primary-color);
-      margin-bottom: 8px;
+      margin: 0 0 8px 0;
+    }
+
+    .item-description {
+      color: #666;
+      margin-bottom: 10px;
     }
 
     .item-details {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #666;
       margin-bottom: 8px;
     }
 
+    .item-price {
+      font-size: 1.1em;
+      color: #666;
+    }
+
     .item-subtotal {
+      font-size: 1.2em;
       font-weight: 600;
       color: var(--secondary-color);
-      font-size: 1.1em;
     }
 
     .total-section {
@@ -165,7 +183,7 @@
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
 
-    /* Payment Form Section */
+    /* Payment Form Section - Right Column */
     .payment-form {
       background: var(--light-bg);
       border-radius: 20px;
@@ -181,8 +199,8 @@
     .form-group label {
       display: block;
       font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 8px;
+      color: var(--primary-color);
+      margin-bottom: 10px;
       font-size: 1.1em;
     }
 
@@ -190,19 +208,19 @@
       width: 100%;
       padding: 15px;
       border: 2px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 1em;
+      border-radius: 8px;
+      font-size: 1.1em;
       transition: all 0.3s ease;
       box-sizing: border-box;
-      background: #fafafa;
+      background: white;
       color: black;
+      font-weight: 600;
     }
 
     .form-group input:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(23, 64, 139, 0.1);
-      background: white;
       transform: translateY(-1px);
     }
 
@@ -240,6 +258,13 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 1.5em;
+    }
+
+    /* Two-column form layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
 
     /* Payment Button */
@@ -366,6 +391,83 @@
       margin-left: 15px;
     }
 
+    /* Dark Mode Styles */
+    body.dark-mode.with-nav {
+      background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%) !important;
+    }
+
+    body.dark-mode .page-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #b71c1c 100%) !important;
+    }
+
+    body.dark-mode .order-summary,
+    body.dark-mode .payment-form {
+      background: #1e1e1e !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .section-title {
+      color: #64b5f6 !important;
+      border-bottom-color: #fbc02d !important;
+    }
+
+    body.dark-mode .order-item {
+      background: #2a2a2a !important;
+      border-color: #444 !important;
+      color: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode .item-name {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .item-description,
+    body.dark-mode .item-price {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .item-subtotal {
+      color: #f44336 !important;
+    }
+
+    body.dark-mode .form-group label {
+      color: #64b5f6 !important;
+    }
+
+    body.dark-mode .form-group input {
+      background-color: #2a2a2a !important;
+      color: #fff !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .form-group input:focus {
+      border-color: #64b5f6 !important;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1) !important;
+    }
+
+    body.dark-mode .security-badge {
+      background: #2a2a2a !important;
+      border-color: #555 !important;
+    }
+
+    body.dark-mode .security-text {
+      color: #cccccc !important;
+    }
+
+    body.dark-mode .message.success {
+      background: #2e7d32 !important;
+      color: #c8e6c9 !important;
+      border-color: #4caf50 !important;
+    }
+
+    body.dark-mode .message.error {
+      background: #c62828 !important;
+      color: #ffcdd2 !important;
+      border-color: #f44336 !important;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .payment-container {
@@ -373,9 +475,9 @@
         gap: 20px;
       }
 
-      .order-summary {
-        position: static;
-        order: 2;
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
       }
 
       .page-header h1 {
@@ -431,7 +533,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="form-row">
             <div class="form-group">
               <label for="expiryDate">
                 📅 Expiry Date *
@@ -519,8 +621,9 @@
           itemsHtml += `
             <div class="order-item">
               <div class="item-name">${item.name}</div>
+              <div class="item-description">${item.description}</div>
               <div class="item-details">
-                <span>$${item.price.toFixed(2)} × ${item.quantity}</span>
+                <span class="item-price">$${item.price.toFixed(2)} × ${item.quantity}</span>
                 <span class="item-subtotal">$${itemTotal.toFixed(2)}</span>
               </div>
             </div>
@@ -530,7 +633,7 @@
         summaryContainer.innerHTML = `
           ${itemsHtml}
           <div class="total-section">
-            <div style="font-size: 1.2em; margin-bottom: 10px;">Total Amount</div>
+            <div style="font-size: 1.3em; margin-bottom: 10px;">Total Amount</div>
             <div class="total-amount">$${totalAmount.toFixed(2)}</div>
           </div>
         `;
