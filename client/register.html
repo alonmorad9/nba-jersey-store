@@ -596,23 +596,25 @@
   <script src="navbar.js"></script>
 
   <script>
+    // Initialize variables
     const form = document.getElementById('registerForm');
     const registerBtn = document.getElementById('registerBtn');
     const resultEl = document.getElementById('result');
     const passwordInput = document.getElementById('password');
     const passwordReqs = document.getElementById('passwordRequirements');
 
-    // Password validation
+    // Password focus - show requirements
     passwordInput.addEventListener('focus', function() {
       passwordReqs.style.display = 'block';
     });
 
+    // Password input validation - check requirements
     passwordInput.addEventListener('input', function() {
       const password = this.value;
       const lengthReq = document.getElementById('req-length');
       const letterReq = document.getElementById('req-letter');
 
-      // Length check
+      // Length check - at least 6 characters
       if (password.length >= 6) {
         lengthReq.classList.add('valid');
         lengthReq.querySelector('.icon').textContent = '✅';
@@ -621,7 +623,7 @@
         lengthReq.querySelector('.icon').textContent = '❌';
       }
 
-      // Letter check
+      // Letter check - at least one letter
       if (/[a-zA-Z]/.test(password)) {
         letterReq.classList.add('valid');
         letterReq.querySelector('.icon').textContent = '✅';
@@ -631,7 +633,7 @@
       }
     });
 
-    // Form submission
+    // Form submission - handle registration
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -647,6 +649,7 @@
         registerBtn.className = 'register-button processing';
         registerBtn.innerHTML = '🔄 Creating Account...';
 
+        // Prepare data for registration
         const data = {
           username: form.username.value.trim(),
           password: form.password.value
@@ -665,12 +668,14 @@
           throw new Error('Password must contain at least one letter');
         }
 
+        // Send registration request
         const res = await fetch('/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
+        // Check if response is OK
         const text = await res.text();
 
         if (res.ok) {
@@ -682,8 +687,8 @@
           resultEl.textContent = 'Registration successful! Redirecting to login...';
           resultEl.className = 'success';
           resultEl.style.display = 'block';
-          
-          setTimeout(() => {
+
+          setTimeout(() => { // Redirect to login
             window.location.href = 'login.html';
           }, 2000);
           
@@ -707,7 +712,7 @@
       }
     });
 
-    // Password toggle functionality
+    // Password toggle functionality - show/hide password
     document.getElementById('togglePassword').addEventListener('click', function () {
       const passwordInput = document.getElementById('password');
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -717,7 +722,7 @@
       this.textContent = type === 'password' ? '👁' : '🙈';
     });
 
-    // Input validation feedback
+    // Input validation feedback - show/hide error messages
     document.querySelectorAll('input[required]').forEach(input => {
       input.addEventListener('blur', function() {
         if (this.value.trim() && this.checkValidity()) {
@@ -727,6 +732,7 @@
         }
       });
 
+      // Input reset on change
       input.addEventListener('input', function() {
         if (this.style.borderColor === '#dc3545') {
           this.style.borderColor = '#e0e0e0';
@@ -734,7 +740,7 @@
       });
     });
 
-    // Username validation
+    // Username validation - check length
     document.getElementById('username').addEventListener('input', function() {
       const username = this.value.trim();
       if (username.length >= 3) {

@@ -325,17 +325,22 @@
   <script src="navbar.js"></script>
 
   <script>
+    // User Profile
     let userProfile = {};
 
+    // Load user profile data
     async function loadProfile() {
       try {
+        // Fetch user profile data
         const response = await fetch('/profile');
+        // Check if user is authenticated
         if (response.status === 401) {
           alert('You must be logged in to view your profile.');
           window.location.href = 'login.html';
           return;
         }
 
+        // Check if response is OK
         if (response.ok) {
           userProfile = await response.json();
           populateProfile(userProfile);
@@ -349,17 +354,20 @@
       }
     }
 
+    // Populate profile information
     function populateProfile(profile) {
       document.getElementById('displayUsername').textContent = profile.username || 'Not provided';
       document.getElementById('displayMemberSince').textContent = profile.memberSince || '2025';
     }
 
+    // Update profile statistics
     function updateStats(profile) {
       document.getElementById('totalOrders').textContent = profile.totalOrders || 0;
       document.getElementById('totalSpent').textContent = `$${profile.totalSpent || 0}`;
       document.getElementById('memberSince').textContent = profile.memberSince || '2025';
     }
 
+    // Show message
     function showMessage(text, type) {
       const messagesDiv = document.getElementById('messages');
       messagesDiv.innerHTML = `<div class="message ${type}">${text}</div>`;

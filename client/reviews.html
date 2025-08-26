@@ -633,10 +633,12 @@ body.dark-mode .review-caption {
   <script src="navbar.js"></script>
 
   <script>
+    // Review form handling
     let currentRating = 0;
     let reviews = [];
     let products = [];
 
+    // Load products for the product selector
     async function loadProducts() {
       try {
         const response = await fetch('/products');
@@ -649,16 +651,19 @@ body.dark-mode .review-caption {
       }
     }
 
+    // Populate product selectors - for review form and filters
     function populateProductSelectors() {
       const productSelect = document.getElementById('productSelect');
       const productFilter = document.getElementById('productFilter');
-      
+
+      // Populate product select options - for review form
       products.forEach(product => {
         const option1 = document.createElement('option');
         option1.value = product.id;
         option1.textContent = product.name;
         productSelect.appendChild(option1);
 
+        // Populate product filter options - for filtering reviews
         const option2 = document.createElement('option');
         option2.value = product.id;
         option2.textContent = product.name;
@@ -666,6 +671,7 @@ body.dark-mode .review-caption {
       });
     }
 
+    // Load reviews for the selected product
     async function loadReviews() {
       try {
         const response = await fetch('/reviews');
@@ -679,6 +685,7 @@ body.dark-mode .review-caption {
       }
     }
 
+    // Update review statistics
     function updateStats() {
       const totalReviews = reviews.length;
       const averageRating = totalReviews > 0 ? 
@@ -691,11 +698,13 @@ body.dark-mode .review-caption {
         ?.split('=')[1];
       const myReviews = username ? reviews.filter(r => r.username === username).length : 0;
 
+      // Update DOM elements with the statistics
       document.getElementById('totalReviews').textContent = totalReviews;
       document.getElementById('averageRating').textContent = averageRating;
       document.getElementById('myReviews').textContent = myReviews;
     }
 
+    // Filter and display reviews
     function filterAndDisplayReviews() {
       const productFilter = document.getElementById('productFilter').value;
       const ratingFilter = document.getElementById('ratingFilter').value;
@@ -727,9 +736,11 @@ body.dark-mode .review-caption {
         }
       });
 
+      // Render the filtered reviews
       renderReviews(filteredReviews);
     }
 
+    // Render the reviews
     function renderReviews(reviewsToShow) {
       const container = document.getElementById('reviewsList');
       
@@ -746,6 +757,7 @@ body.dark-mode .review-caption {
 
       container.innerHTML = '';
 
+      // Render each review - create a new element for each review
       reviewsToShow.forEach(review => {
         const product = products.find(p => p.id === review.productId);
         const reviewItem = document.createElement('div');
@@ -804,10 +816,11 @@ body.dark-mode .review-caption {
       }
     });
 
-    // Form submission
+    // Form submission - handle review submission
     document.getElementById('reviewForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
+      // Gather form data
       const formData = {
         productId: document.getElementById('productSelect').value,
         rating: currentRating,
@@ -815,6 +828,7 @@ body.dark-mode .review-caption {
         review: document.getElementById('reviewText').value
       };
 
+      // Submit the review
       try {
         const response = await fetch('/reviews', {
           method: 'POST',
@@ -822,11 +836,13 @@ body.dark-mode .review-caption {
           body: JSON.stringify(formData)
         });
 
+        // Check if the user is authenticated
         if (response.status === 401) {
           showFormMessage('You must be logged in to write reviews', 'error');
           return;
         }
 
+        // Review submitted successfully
         if (response.ok) {
           showFormMessage('Review submitted successfully!', 'success');
           document.getElementById('reviewForm').reset();
@@ -835,6 +851,7 @@ body.dark-mode .review-caption {
           document.getElementById('ratingText').textContent = 'Select rating';
           loadReviews(); // Reload reviews
         } else {
+          // Handle error response
           const error = await response.text();
           showFormMessage(error, 'error');
         }
@@ -844,6 +861,7 @@ body.dark-mode .review-caption {
       }
     });
 
+    // Show form message - feedback to the user
     function showFormMessage(text, type) {
       const messagesDiv = document.getElementById('formMessages');
       messagesDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
@@ -852,6 +870,7 @@ body.dark-mode .review-caption {
       }, 5000);
     }
 
+    // Like a review
     async function likeReview(reviewId) {
       try {
         const response = await fetch(`/reviews/${reviewId}/like`, {
@@ -867,6 +886,7 @@ body.dark-mode .review-caption {
       }
     }
 
+    // Report a review
     function reportReview(reviewId) {
       if (confirm('Report this review as inappropriate?')) {
         fetch(`/reviews/${reviewId}/report`, { method: 'POST' })
@@ -875,12 +895,12 @@ body.dark-mode .review-caption {
       }
     }
 
-    // Filter event listeners
+    // Filter event listeners - handle filtering and displaying reviews
     document.getElementById('productFilter').addEventListener('change', filterAndDisplayReviews);
     document.getElementById('ratingFilter').addEventListener('change', filterAndDisplayReviews);
     document.getElementById('sortFilter').addEventListener('change', filterAndDisplayReviews);
 
-    // Initialize page
+    // Initialize page - load products and reviews
     document.addEventListener('DOMContentLoaded', () => {
       loadProducts();
       loadReviews();

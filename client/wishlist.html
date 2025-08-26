@@ -317,8 +317,10 @@
   <script src="navbar.js"></script>
 
   <script>
+    // Wishlist management
     let wishlistItems = [];
 
+    // Load wishlist items from the server - fetch data from the API
     async function loadWishlist() {
       try {
         const response = await fetch('/wishlist');
@@ -341,6 +343,7 @@
       }
     }
 
+    // Render the wishlist items - display each item in the wishlist
     function renderWishlist() {
       const container = document.getElementById('wishlistGrid');
       
@@ -360,6 +363,7 @@
 
       container.innerHTML = '';
 
+      // Render each wishlist item - create a visual representation of the item
       wishlistItems.forEach(item => {
         const wishlistItem = document.createElement('div');
         wishlistItem.className = 'wishlist-item';
@@ -388,10 +392,12 @@
       });
     }
 
+    // Update item count display
     function updateItemCount() {
       document.getElementById('itemCount').textContent = `${wishlistItems.length} item${wishlistItems.length !== 1 ? 's' : ''}`;
     }
 
+    // Show message to user - display feedback messages
     function showMessage(text, type) {
       const messagesDiv = document.getElementById('messages');
       messagesDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
@@ -400,6 +406,7 @@
       }, 5000);
     }
 
+    // Add item to cart - move item from wishlist to cart
     async function addToCart(productId) {
       try {
         const response = await fetch('/add-to-cart', {
@@ -426,12 +433,14 @@
       }
     }
 
+    // Add all items to cart - move all items from wishlist to cart
     async function addAllToCart() {
       if (wishlistItems.length === 0) {
         showMessage('No items in wishlist to add', 'error');
         return;
       }
 
+      // Confirm with the user
       if (!confirm(`Add all ${wishlistItems.length} items to cart?`)) return;
 
       try {
@@ -459,12 +468,14 @@
       }
     }
 
+    // Clear wishlist - remove all items from wishlist
     async function clearWishlist() {
       if (wishlistItems.length === 0) {
         showMessage('Wishlist is already empty', 'error');
         return;
       }
 
+      // Confirm with the user
       if (!confirm('Clear your entire wishlist? This cannot be undone.')) return;
 
       try {
@@ -485,8 +496,7 @@
       }
     }
 
-
-
+    // Remove item from wishlist
     async function removeFromWishlist(productId) {
       if (!confirm('Remove this item from your wishlist?')) return;
 

@@ -579,6 +579,7 @@
         .find(row => row.startsWith('username='))
         ?.split('=')[1];
 
+        // Decode the username
       if (currentUser) {
         const welcomeEl = document.getElementById('welcome');
         if (welcomeEl) {
@@ -594,7 +595,8 @@
     // Load products from server
     async function loadProducts() {
       console.log('Loading products...');
-      
+
+      // Fetch products from server
       try {
         const response = await fetch('/products');
         console.log('Response status:', response.status);
@@ -602,7 +604,8 @@
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
+        // Parse JSON response
         const data = await response.json();
         console.log('Products data:', data);
         
@@ -647,18 +650,20 @@
         
         console.log('Using demo products:', storeProducts);
       }
-      
+
+      // Filter products
       storeFilteredProducts = [...storeProducts];
       storeCurrentPage = 1;
       renderProducts();
       updatePagination();
     }
 
-    // Render products
+    // Render products - display the products in the UI
     function renderProducts() {
       console.log('Rendering products...');
       const container = document.getElementById('products');
-      
+
+      // Check if there are any filtered products
       if (!storeFilteredProducts || storeFilteredProducts.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
@@ -670,12 +675,15 @@
         return;
       }
 
+      // Paginate products - determine the current page's products
       const startIndex = (storeCurrentPage - 1) * storeItemsPerPage;
       const endIndex = startIndex + storeItemsPerPage;
       const currentProducts = storeFilteredProducts.slice(startIndex, endIndex);
 
+      // Clear the container for new content
       container.innerHTML = '';
 
+      // Create product cards
       currentProducts.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
@@ -710,20 +718,24 @@
       console.log('Products rendered successfully');
     }
 
-    // Update pagination
+    // Update pagination - display current page info and enable/disable buttons
     function updatePagination() {
       const totalPages = Math.ceil(storeFilteredProducts.length / storeItemsPerPage);
-      
+
+      // Update page info - display current page info
       document.getElementById('pageInfo').textContent = `Page ${storeCurrentPage} of ${totalPages}`;
       document.getElementById('prevBtn').disabled = storeCurrentPage === 1;
       document.getElementById('nextBtn').disabled = storeCurrentPage === totalPages;
-      
+
+      // Update page numbers - display pagination numbers
       const pageNumbersContainer = document.getElementById('pageNumbers');
       pageNumbersContainer.innerHTML = '';
-      
+
+      // Determine the range of page numbers to display - show up to 5 page numbers at a time
       const startPage = Math.max(1, storeCurrentPage - 2);
       const endPage = Math.min(totalPages, startPage + 4);
-      
+
+      // Create page number elements
       for (let i = startPage; i <= endPage; i++) {
         const pageNumber = document.createElement('div');
         pageNumber.className = `page-number ${i === storeCurrentPage ? 'active' : ''}`;
@@ -733,7 +745,7 @@
       }
     }
 
-    // Go to page
+    // Go to page - change current page and re-render products
     function goToPage(page) {
       const totalPages = Math.ceil(storeFilteredProducts.length / storeItemsPerPage);
       if (page >= 1 && page <= totalPages) {
@@ -820,12 +832,12 @@
           button.disabled = false;
         }, 2000);
 
-      } catch (error) {
+      } catch (error) { // Handle errors
         console.error('Error adding to cart:', error);
         button.innerHTML = '❌ Error';
         button.style.background = '#dc3545';
         
-        setTimeout(() => {
+        setTimeout(() => { 
           button.innerHTML = originalText;
           button.style.background = '';
           button.disabled = false;
@@ -833,7 +845,7 @@
       }
     }
 
-    // Add to wishlist
+    // Add to wishlist - handle adding items to the wishlist
     async function addToWishlist(productId) {
       const button = event.target;
       const originalText = button.innerHTML;
@@ -855,7 +867,7 @@
           return;
         }
 
-        if (response.status === 400) {
+        if (response.status === 400) { // 
           const errorMessage = await response.text();
           if (errorMessage.includes('already in wishlist')) {
             button.innerHTML = '❤️ Already Added';
@@ -903,7 +915,7 @@
       }
     }
 
-    // Search functionality
+    // Search functionality - filter products based on user input
     function filterProducts() {
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
       
@@ -915,28 +927,30 @@
           product.description.toLowerCase().includes(search)
         );
       }
-      
+
+      // Update current page
       storeCurrentPage = 1;
       renderProducts();
       updatePagination();
     }
 
-    // Event listeners
+    // Event listeners - handle user interactions
     document.addEventListener('DOMContentLoaded', function() {
       console.log('DOM loaded');
       setWelcomeMessage();
       loadProducts();
-      
-      // Search
+
+      // Search - filter products based on user input
       document.getElementById('searchInput').addEventListener('input', filterProducts);
-      
-      // Pagination
+
+      // Pagination - handle page navigation
       document.getElementById('prevBtn').addEventListener('click', () => {
         if (storeCurrentPage > 1) {
           goToPage(storeCurrentPage - 1);
         }
       });
 
+      // Next button - navigate to the next page
       document.getElementById('nextBtn').addEventListener('click', () => {
         const totalPages = Math.ceil(storeFilteredProducts.length / storeItemsPerPage);
         if (storeCurrentPage < totalPages) {

@@ -571,9 +571,11 @@
   <script src="navbar.js"></script>
 
   <script>
+    // Initialize checkout variables
     let checkoutItems = [];
     let totalAmount = 0;
 
+    // Load items from session storage
     async function loadItems() {
       const summaryContainer = document.getElementById('itemsSummary');
       
@@ -583,6 +585,7 @@
           throw new Error("No items selected.");
         }
 
+        // Parse the checkout items
         checkoutItems = JSON.parse(raw);
 
         // Fetch full details from server
@@ -614,10 +617,11 @@
         totalAmount = 0;
         let itemsHtml = '';
 
+        // Create HTML for each item
         Object.values(groupedItems).forEach(item => {
           const itemTotal = item.price * item.quantity;
           totalAmount += itemTotal;
-          
+
           itemsHtml += `
             <div class="order-item">
               <div class="item-name">${item.name}</div>
@@ -630,6 +634,7 @@
           `;
         });
 
+        // Update the summary container with the generated HTML
         summaryContainer.innerHTML = `
           ${itemsHtml}
           <div class="total-section">
@@ -657,7 +662,8 @@
     function detectCardType(number) {
       const cardTypeEl = document.getElementById('cardType');
       const cleanNumber = number.replace(/\s/g, '');
-      
+
+      // Detect card type
       if (cleanNumber.startsWith('4')) {
         cardTypeEl.textContent = '💳'; // Visa
         cardTypeEl.title = 'Visa';
@@ -667,7 +673,7 @@
       } else if (cleanNumber.startsWith('3')) {
         cardTypeEl.textContent = '💳'; // American Express
         cardTypeEl.title = 'American Express';
-      } else {
+      } else { // Other
         cardTypeEl.textContent = '💳';
         cardTypeEl.title = 'Credit Card';
       }
@@ -676,7 +682,8 @@
     // Form validation and submission
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
+      // Initialize checkout variables
       const payButton = document.getElementById('payButton');
       const originalText = payButton.innerHTML;
       
@@ -728,11 +735,12 @@
           
           // Clean up and redirect
           sessionStorage.removeItem('checkoutItems');
-          
+
+          // Redirect to thank you page
           setTimeout(() => {
             window.location.href = 'thankyou.html';
-          }, 2000);
-          
+          }, 2000); // Redirect after 2 seconds
+
         } else {
           throw new Error(await res.text());
         }
@@ -756,11 +764,12 @@
       }
     });
 
-    // Input formatting
+    // Input formatting - CVV
     document.getElementById('cvv').addEventListener('input', function(e) {
       e.target.value = e.target.value.replace(/\D/g, '');
     });
 
+    // Input formatting - Card Number
     document.getElementById('cardNumber').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
       let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
@@ -768,6 +777,7 @@
       detectCardType(value);
     });
 
+    // Input formatting - Expiry Date
     document.getElementById('expiryDate').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length >= 2) {
@@ -776,7 +786,7 @@
       e.target.value = value;
     });
 
-    // Initialize
+    // Initialize - Load checkout items
     document.addEventListener('DOMContentLoaded', loadItems);
   </script>
 </body>
