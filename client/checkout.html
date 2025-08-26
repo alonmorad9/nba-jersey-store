@@ -499,9 +499,11 @@
   <script>
     let grouped = {}; // Store grouped items for form submission
 
+    // Load checkout items
     async function loadCheckout() {
       const container = document.getElementById('itemsContainer');
       
+      // Fetch cart items from server
       try {
         const res = await fetch('/cart');
         if (res.status === 401) {
@@ -513,6 +515,7 @@
         const items = await res.json();
         container.innerHTML = '';
 
+        // Show empty cart message
         if (!items || items.length === 0) {
           container.innerHTML = `
             <div class="empty-checkout">
@@ -575,7 +578,7 @@
           container.appendChild(checkoutItem);
         });
 
-        // Add summary section
+        // Add summary section - Order Summary
         const summaryDiv = document.createElement('div');
         summaryDiv.innerHTML = `
           <div class="section-title" style="margin-top: 40px;">📊 Order Summary</div>
@@ -593,6 +596,7 @@
         // Update totals after rendering (since default values are now set to max quantities)
         updateTotals();
 
+        // Show empty cart message
       } catch (error) {
         console.error('Error loading checkout:', error);
         container.innerHTML = `
@@ -613,19 +617,22 @@
       let totalItems = 0;
       let totalPrice = 0;
 
+      // Calculate totals for each item
       Object.values(grouped).forEach(p => {
         const input = document.getElementById(`qty-${p.id}`);
         const qty = parseInt(input.value) || 0;
         
+        // Ensure quantity does not exceed available
         totalItems += qty;
         totalPrice += (p.price * qty);
       });
 
+      // Update summary totals
       document.getElementById('totalItems').textContent = totalItems;
       document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
     }
 
-    // Handle form submission
+    // Handle form submission - Checkout Form
     document.getElementById('checkoutForm').addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -651,6 +658,7 @@
           existingError.remove();
         }
 
+        // Show error message
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.textContent = 'Please select at least one item to purchase by setting quantity above 0.';
@@ -670,19 +678,21 @@
       // Show success message before redirect
       const existingMessages = document.querySelectorAll('.success-message, .error-message');
       existingMessages.forEach(msg => msg.remove());
-      
+
       const successDiv = document.createElement('div');
       successDiv.className = 'success-message';
       successDiv.textContent = `${selected.length} item(s) selected for purchase! Redirecting to payment...`;
       
       const form = document.getElementById('checkoutForm');
       form.insertBefore(successDiv, form.firstChild);
-      
+
+      // Redirect to payment page - timeout
       setTimeout(() => {
         window.location.href = 'pay.html';
       }, 1500);
     });
 
+    // Navigation functions
     function goToCart() {
       window.location.href = 'cart.html';
     }
