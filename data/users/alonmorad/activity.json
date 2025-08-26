@@ -134,5 +134,13 @@
   {
     "datetime": "2025-08-26T08:37:45.746Z",
     "type": "login"
+  },
+  {
+    "datetime": "2025-08-26T08:43:12.106Z",
+    "type": "logout"
+  },
+  {
+    "datetime": "2025-08-26T08:56:52.121Z",
+    "type": "login"
   }
 ]

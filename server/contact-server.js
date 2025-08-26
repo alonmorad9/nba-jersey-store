@@ -13,7 +13,10 @@ router.get('/contact', async (req, res) => {
 
     // Load user's tickets from their personal file
     const userTickets = await persist.readUserFile(username, 'tickets.json');
-    if (!Array.isArray(userTickets.items)) userTickets.items = [];
+    if (!userTickets || !Array.isArray(userTickets.items)) {
+      // Return empty array if no tickets exist yet
+      return res.json([]);
+    }
 
     // Sort by date (newest first)
     const sortedTickets = userTickets.items.sort((a, b) => 
@@ -83,12 +86,19 @@ router.post('/contact', async (req, res) => {
 
     // Save to user's personal tickets file
     const userTickets = await persist.readUserFile(username, 'tickets.json');
-    if (!Array.isArray(userTickets.items)) userTickets.items = [];
+    // Ensure the structure exists
+    if (!userTickets.items || !Array.isArray(userTickets.items)) {
+      userTickets.items = [];
+    }
     userTickets.items.push(newTicket);
     await persist.writeUserFile(username, 'tickets.json', userTickets);
 
     // Also save to global tickets file for admin access
     const globalTickets = await persist.readJSON('tickets.json');
+    // Ensure globalTickets is an object, not an array
+    if (!globalTickets || typeof globalTickets !== 'object') {
+      globalTickets = {};
+    }
     globalTickets[ticketId] = newTicket;
     await persist.writeJSON('tickets.json', globalTickets);
 
@@ -109,25 +119,29 @@ router.post('/contact', async (req, res) => {
   }
 });
 
-// GET /admin/tickets - Admin view of all tickets
+// GET /admin/tickets - Admin view of all tickets with filtering
 router.get('/admin/tickets', async (req, res) => {
   try {
-    // Check if user is admin
-    const username = req.cookies.username;
-    if (!username) {
-      return res.status(401).send('Not logged in');
-    }
-
-    const users = await persist.readJSON('users.json');
-    const user = Object.values(users).find(u => u.username === username);
-    
-    if (!user || !user.isAdmin) {
-      return res.status(403).send('Admin access required');
-    }
-
     // Load all tickets from global file
-    const tickets = await persist.readJSON('tickets.json');
-    const ticketsArray = Object.values(tickets);
+    const globalTickets = await persist.readJSON('tickets.json');
+    
+    // Handle both empty file and ensure it's an object
+    if (!globalTickets || typeof globalTickets !== 'object') {
+      return res.json([]);
+    }
+
+    let ticketsArray = Object.values(globalTickets);
+    
+    // Apply filters from query parameters
+    const { status, priority } = req.query;
+    
+    if (status) {
+      ticketsArray = ticketsArray.filter(ticket => ticket.status === status);
+    }
+    
+    if (priority) {
+      ticketsArray = ticketsArray.filter(ticket => ticket.priority === priority);
+    }
     
     // Sort by priority (high first) then by date (newest first)
     const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
@@ -149,36 +163,29 @@ router.get('/admin/tickets', async (req, res) => {
 // PUT /admin/tickets/:ticketId - Update ticket status (admin only)
 router.put('/admin/tickets/:ticketId', async (req, res) => {
   try {
-    // Check if user is admin
-    const username = req.cookies.username;
-    if (!username) {
-      return res.status(401).send('Not logged in');
-    }
-
-    const users = await persist.readJSON('users.json');
-    const user = Object.values(users).find(u => u.username === username);
-    
-    if (!user || !user.isAdmin) {
-      return res.status(403).send('Admin access required');
-    }
-
     const { ticketId } = req.params;
     const { status } = req.body;
 
     // Validate status
     const validStatuses = ['open', 'in-progress', 'resolved'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).send('Invalid status');
+      return res.status(400).json({ error: 'Invalid status' });
     }
 
     // Load tickets from global file
     const globalTickets = await persist.readJSON('tickets.json');
     
+    // Ensure globalTickets is an object
+    if (!globalTickets || typeof globalTickets !== 'object') {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+    
     if (!globalTickets[ticketId]) {
-      return res.status(404).send('Ticket not found');
+      return res.status(404).json({ error: 'Ticket not found' });
     }
 
     const ticket = globalTickets[ticketId];
+    const oldStatus = ticket.status;
     ticket.status = status;
     ticket.updated = new Date().toISOString();
 
@@ -186,23 +193,34 @@ router.put('/admin/tickets/:ticketId', async (req, res) => {
     await persist.writeJSON('tickets.json', globalTickets);
 
     // Update user's personal tickets file
-    const userTickets = await persist.readUserFile(ticket.username, 'tickets.json');
-    if (Array.isArray(userTickets.items)) {
-      const ticketIndex = userTickets.items.findIndex(t => t.id === ticketId);
-      if (ticketIndex !== -1) {
-        userTickets.items[ticketIndex].status = status;
-        userTickets.items[ticketIndex].updated = ticket.updated;
-        await persist.writeUserFile(ticket.username, 'tickets.json', userTickets);
+    try {
+      const userTickets = await persist.readUserFile(ticket.username, 'tickets.json');
+      if (userTickets && userTickets.items && Array.isArray(userTickets.items)) {
+        const ticketIndex = userTickets.items.findIndex(t => t.id === ticketId);
+        if (ticketIndex !== -1) {
+          userTickets.items[ticketIndex].status = status;
+          userTickets.items[ticketIndex].updated = ticket.updated;
+          await persist.writeUserFile(ticket.username, 'tickets.json', userTickets);
+        }
       }
+    } catch (userFileError) {
+      // Log error but don't fail the request if user file can't be updated
+      console.error('Error updating user ticket file:', userFileError);
     }
 
-    console.log(`Ticket ${ticketId} status updated to ${status} by admin ${username}`);
+    console.log(`Ticket ${ticketId} status updated from ${oldStatus} to ${status}`);
 
-    res.json({ success: true, message: 'Ticket status updated' });
+    res.json({ 
+      success: true, 
+      message: 'Ticket status updated successfully',
+      ticketId: ticketId,
+      oldStatus: oldStatus,
+      newStatus: status
+    });
 
   } catch (error) {
     console.error('Error updating ticket:', error);
-    res.status(500).send('Error updating ticket');
+    res.status(500).json({ error: 'Error updating ticket' });
   }
 });
 

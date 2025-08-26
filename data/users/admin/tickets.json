@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "id": "T17561978053316OU",
+      "username": "admin",
+      "category": "billing",
+      "subject": "234234",
+      "priority": "medium",
+      "message": "12412421",
+      "status": "in-progress",
+      "created": "2025-08-26T08:43:25.331Z",
+      "updated": "2025-08-26T08:56:36.085Z"
+    }
+  ]
+}
