@@ -434,23 +434,23 @@
     </div>
   </div>
 
-  <script src="navbar.js"></script>
+  <script src="navbar.js"></script> <!-- Include the navbar script -->
 
   <script>
-    async function loadCart() {
+    async function loadCart() { // Load the cart contents
       const container = document.getElementById('cartContainer');
-      
-      try {
+
+      try { // Fetch cart data
         const res = await fetch('/cart');
-        if (res.status === 401) {
+        if (res.status === 401) { // User not logged in
           alert("You must be logged in to view your cart.");
           window.location.href = 'login.html';
           return;
         }
 
-        const products = await res.json();
-        renderGroupedCart(products);
-        
+        const products = await res.json(); // Parse the JSON response
+        renderGroupedCart(products); // Render the cart contents
+
         // Update cart count in navbar
         if (window.updateCartCount) {
           window.updateCartCount();
@@ -469,15 +469,15 @@
       }
     }
 
-    function goToCheckout() {
+    function goToCheckout() { // Navigate to the checkout page
       window.location.href = 'checkout.html';
     }
 
-    function renderGroupedCart(products) {
+    function renderGroupedCart(products) { // Render the cart contents
       const container = document.getElementById('cartContainer');
       container.innerHTML = '';
 
-      if (products.length === 0) {
+      if (products.length === 0) { // Check if the products array is empty
         container.innerHTML = `
           <div class="empty-cart">
             <div class="empty-cart-icon">🛒</div>
@@ -501,14 +501,17 @@
         }
       }
 
+      // Generate HTML for each product
       let total = 0;
       const itemsContainer = document.createElement('div');
       itemsContainer.className = 'cart-items-container';
 
+      // Create a cart item for each product
       Object.values(grouped).forEach(p => {
         const itemTotal = p.price * p.quantity;
         total += itemTotal;
 
+        // Create a cart item element
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
@@ -539,6 +542,7 @@
         itemsContainer.appendChild(cartItem);
       });
 
+      // Append the items container to the main cart container
       container.appendChild(itemsContainer);
 
       // Cart Summary
@@ -553,11 +557,13 @@
       container.appendChild(summary);
     }
 
+    // Remove all items of a specific product from the cart
     async function removeAllFromCart(productId) {
       if (!confirm('Are you sure you want to remove all of this item from your cart?')) {
         return;
       }
 
+      // Remove all items of the product from the cart
       try {
         const res = await fetch('/remove-all-from-cart', {
           method: 'POST',
@@ -565,9 +571,10 @@
           body: JSON.stringify({ productId })
         });
 
+        // Check if the response is successful
         if (res.ok) {
           loadCart(); // Reload cart
-        } else {
+        } else { // Handle errors
           alert(await res.text());
         }
       } catch (error) {
@@ -576,15 +583,18 @@
       }
     }
 
+    // Remove a specific quantity of a product from the cart
     async function removeQuantityFromCart(productId) {
       const input = document.getElementById(`removeQty-${productId}`);
       const quantity = parseInt(input.value);
 
+      // Validate quantity
       if (!quantity || quantity < 1) {
         alert("Please enter a valid quantity.");
         return;
       }
 
+      // Remove the specified quantity from the cart
       try {
         const res = await fetch('/remove-from-cart', {
           method: 'POST',
@@ -602,7 +612,7 @@
         alert('Error removing item from cart');
       }
     }
-
+    
     // Initialize cart when page loads
     document.addEventListener('DOMContentLoaded', loadCart);
   </script>
