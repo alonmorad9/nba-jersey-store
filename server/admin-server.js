@@ -4,10 +4,10 @@ const fs = require('fs').promises;
 const path = require('path');
 const persist = require('./persist_module');
 
-// קובץ הפעילות
+// activity.json global path
 const ACTIVITY_FILE = path.join(__dirname, '../data/activity.json');
 
-// שלב 1+2: הצגת פעילות עם סינון לפי prefix
+// gets all activities, with optional username prefix filter
 router.get('/admin-activity', async (req, res) => {
   try {
     const prefix = (req.query.prefix || '').toLowerCase();
@@ -24,70 +24,107 @@ router.get('/admin-activity', async (req, res) => {
     res.json(activity);
   } catch (err) {
     console.error('Error reading activity file:', err);
-    res.json([]);
+    res.status(500).json({ error: 'Failed to load activity data' });
   }
 });
 
-// שלב 3a: קבלת כל המוצרים
+// gets all products, with optional name prefix filter
 router.get('/admin-products', async (req, res) => {
-  const products = await persist.readJSON('products.json');
-  res.json(Object.values(products));
+  try {
+    const products = await persist.readJSON('products.json');
+    res.json(Object.values(products));
+  } catch (error) {
+    console.error('Error getting products:', error);
+    res.status(500).json({ error: 'Failed to load products' });
+  }
 });
 
-// שלב 3b: הוספת מוצר
+// adds a new product
 router.post('/admin-add-product', async (req, res) => {
-  const { name, description, price, image } = req.body;
+  try {
+    const { name, description, price, image } = req.body;
 
-  if (!name || !description || !price) {
-    return res.status(400).send('Missing fields');
+    if (!name || !description || !price) {
+      return res.status(400).json({ error: 'Missing required fields: name, description, price' });
+    }
+
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      return res.status(400).json({ error: 'Invalid price' });
+    }
+
+    const products = await persist.readJSON('products.json');
+    const existingIds = Object.keys(products).map(Number).filter(id => !isNaN(id));
+    const newId = (Math.max(0, ...existingIds) + 1).toString();
+
+    products[newId] = {
+      id: newId,
+      name: name.trim(),
+      description: description.trim(),
+      price: parsedPrice,
+      image: image ? image.trim() : ''
+    };
+
+    await persist.writeJSON('products.json', products);
+    res.json({ message: 'Product added successfully', product: products[newId] });
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).json({ error: 'Failed to add product' });
   }
-
-  const products = await persist.readJSON('products.json');
-  const newId = (Math.max(0, ...Object.keys(products).map(Number)) + 1).toString();
-
-  products[newId] = {
-    id: newId,
-    name,
-    description,
-    price: parseFloat(price),
-    image: image || ''
-  };
-
-  await persist.writeJSON('products.json', products);
-  res.send('Product added');
 });
 
-// שלב 3c: מחיקת מוצר
-router.post('/admin-remove-product', async (req, res) => {
-  const { id } = req.body;
-  const products = await persist.readJSON('products.json');
+// removes a product by ID by post
+// router.post('/admin-remove-product', async (req, res) => {
+//   try {
+//     const { id } = req.body;
+    
+//     if (!id) {
+//       return res.status(400).json({ error: 'Product ID is required' });
+//     }
+    
+//     const products = await persist.readJSON('products.json');
 
-  if (!products[id]) {
-    return res.status(404).send('Product not found');
-  }
+//     if (!products[id]) {
+//       return res.status(404).json({ error: 'Product not found' });
+//     }
 
-  delete products[id];
-  await persist.writeJSON('products.json', products);
-  res.send('Product removed');
-});
+//     const deletedProduct = products[id];
+//     delete products[id];
+//     await persist.writeJSON('products.json', products);
+//     res.json({ message: 'Product removed successfully', deletedProduct });
+//   } catch (error) {
+//     console.error('Error removing product:', error);
+//     res.status(500).json({ error: 'Failed to remove product' });
+//   }
+// });
 
-// 🗑️ DELETE /admin-products/:id - מחיקת מוצר עם DELETE method
+// removes a product by ID by delete
 router.delete('/admin-products/:id', async (req, res) => {
-  const { id } = req.params;
-  const products = await persist.readJSON('products.json');
+  try {
+    const { id } = req.params;
+    
+    if (!id) {
+      return res.status(400).json({ error: 'Product ID is required' });
+    }
+    
+    const products = await persist.readJSON('products.json');
 
-  if (!products[id]) {
-    return res.status(404).json({ error: 'Product not found' });
+    if (!products[id]) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const deletedProduct = products[id];
+    delete products[id];
+    await persist.writeJSON('products.json', products);
+    
+    res.json({ 
+      message: 'Product deleted successfully', 
+      deletedProduct: deletedProduct 
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ error: 'Failed to delete product' });
   }
-
-  const deletedProduct = products[id];
-  delete products[id];
-  await persist.writeJSON('products.json', products);
-  
-  res.json({ 
-    message: 'Product deleted successfully', 
-    deletedProduct: deletedProduct 
-  });
 });
 
 module.exports = router;

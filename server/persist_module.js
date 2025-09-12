@@ -16,8 +16,14 @@ async function readJSON(file) {
 
 // Write data to a JSON file
 async function writeJSON(file, data) {
-  const filePath = path.join(dataDir, file); // Construct the full path to the JSON file
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2)); // Write the data object to the file as a formatted JSON string
+  try {
+    const filePath = path.join(dataDir, file); // Construct the full path to the JSON file
+    await fs.mkdir(dataDir, { recursive: true }); // Ensure data directory exists
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2)); // Write the data object to the file as a formatted JSON string
+  } catch (err) {
+    console.error(`Error writing JSON file ${file}:`, err);
+    throw err;
+  }
 }
 
 const ACTIVITY_FILE = path.join(dataDir, 'activity.json');
@@ -60,10 +66,15 @@ async function readUserFile(username, filename) {
 }
 
 async function writeUserFile(username, filename, data) {
-  const userDir = path.join(usersDir, username);
-  await fs.mkdir(userDir, { recursive: true });
-  const filePath = path.join(userDir, filename);
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  try {
+    const userDir = path.join(usersDir, username);
+    await fs.mkdir(userDir, { recursive: true });
+    const filePath = path.join(userDir, filename);
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error(`Error writing user file ${filename} for ${username}:`, err);
+    throw err;
+  }
 }
 
 

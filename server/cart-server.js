@@ -2,67 +2,92 @@ const express = require('express');
 const router = express.Router();
 const persist = require('./persist_module');
 
-// GET /cart – מחזיר מוצרים שבעגלת המשתמש
+// gets the cart for the logged-in user
 router.get('/cart', async (req, res) => {
-  const username = req.cookies.username;
-  if (!username) return res.status(401).send('Not logged in');
+  try {
+    const username = req.cookies.username;
+    if (!username) return res.status(401).send('Not logged in');
 
-  const carts = await persist.readJSON('carts.json');
-  const products = await persist.readJSON('products.json');
+    const carts = await persist.readJSON('carts.json');
+    const products = await persist.readJSON('products.json');
 
-  const cartItems = (carts[username] || []).map(id => products[id]).filter(Boolean);
-  res.json(cartItems);
+    const cartItems = (carts[username] || []).map(id => products[id]).filter(Boolean);
+    res.json(cartItems);
+  } catch (error) {
+    console.error('Error getting cart:', error);
+    res.status(500).send('Internal server error');
+  }
 });
 
-// POST /remove-from-cart – מסיר כמות ספציפית או עותק אחד מהמוצר
+// remove a specific quantity of a product from the cart
 router.post('/remove-from-cart', async (req, res) => {
-  const username = req.cookies.username;
-  if (!username) return res.status(401).send('Not logged in');
+  try {
+    const username = req.cookies.username;
+    if (!username) return res.status(401).send('Not logged in');
 
-  const { productId, quantity } = req.body;
-  const qty = parseInt(quantity) || 1;
+    const { productId, quantity } = req.body;
+    if (!productId) return res.status(400).send('Product ID is required');
+    
+    const qty = parseInt(quantity) || 1;
+    if (qty <= 0) return res.status(400).send('Invalid quantity');
 
-  const carts = await persist.readJSON('carts.json');
+    const carts = await persist.readJSON('carts.json');
 
-  if (!Array.isArray(carts[username])) {
-    return res.status(400).send('Cart not found');
-  }
+    if (!Array.isArray(carts[username])) {
+      return res.status(400).send('Cart not found');
+    }
 
-  let removed = 0;
-  for (let i = 0; i < qty; i++) {
-    const index = carts[username].indexOf(productId);
-    if (index === -1) break;
-    carts[username].splice(index, 1);
-    removed++;
-  }
+    let removed = 0;
+    for (let i = 0; i < qty; i++) {
+      const index = carts[username].indexOf(productId);
+      if (index === -1) break;
+      carts[username].splice(index, 1);
+      removed++;
+    }
 
-  await persist.writeJSON('carts.json', carts);
+    await persist.writeJSON('carts.json', carts);
 
-  if (removed > 0) {
-    res.send(`Removed ${removed} item${removed > 1 ? 's' : ''}`);
-  } else {
-    res.status(404).send('Item not found in cart');
+    if (removed > 0) {
+      res.send(`Removed ${removed} item${removed > 1 ? 's' : ''}`);
+    } else {
+      res.status(404).send('Item not found in cart');
+    }
+  } catch (error) {
+    console.error('Error removing from cart:', error);
+    res.status(500).send('Internal server error');
   }
 });
 
-
-// POST /remove-all-from-cart – מסיר את כל המופעים של מוצר מהעגלה
+// remove all instances of a product from the cart, not just a specific quantity
 router.post('/remove-all-from-cart', async (req, res) => {
-  const username = req.cookies.username;
-  if (!username) return res.status(401).send('Not logged in');
+  // checks
+  try {
+    const username = req.cookies.username;
+    if (!username) return res.status(401).send('Not logged in');
 
-  const productId = String(req.body.productId);
-  const carts = await persist.readJSON('carts.json');
+    const { productId } = req.body;
+    if (!productId) return res.status(400).send('Product ID is required');
+    
+    const productIdStr = String(productId);
+    const carts = await persist.readJSON('carts.json');
 
-  if (!Array.isArray(carts[username])) {
-    return res.status(400).send('Cart not found');
+    if (!Array.isArray(carts[username])) {
+      return res.status(400).send('Cart not found');
+    }
+
+
+    // remove all instances of a product from the cart
+    const originalLength = carts[username].length;
+    carts[username] = carts[username].filter(id => id !== productIdStr);
+    
+    await persist.writeJSON('carts.json', carts);
+    
+    const removedCount = originalLength - carts[username].length;
+    res.send(`Removed ${removedCount} item${removedCount !== 1 ? 's' : ''}`);
+  } catch (error) {
+    console.error('Error removing all from cart:', error);
+    res.status(500).send('Internal server error');
   }
-
-  // הסרת כל המופעים של המוצר
-  carts[username] = carts[username].filter(id => id !== productId);
-  await persist.writeJSON('carts.json', carts);
-
-  res.send('All items removed');
 });
 
 

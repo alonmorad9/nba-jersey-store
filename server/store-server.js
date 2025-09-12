@@ -15,11 +15,27 @@ router.get('/products', async (req, res) => {
 
 // POST /add-to-cart – מוסיף מוצר לעגלה לפי משתמש מזוהה
 router.post('/add-to-cart', async (req, res) => {
-  const username = req.cookies.username;
-  if (!username) return res.status(401).send('You must be logged in');
+  try {
+    const username = req.cookies.username;
+    if (!username) return res.status(401).send('You must be logged in');
 
-  const { productId, quantity } = req.body;
-  const qty = parseInt(quantity) || 1;
+    const { productId, quantity } = req.body;
+    
+    // Input validation
+    if (!productId) {
+      return res.status(400).send('Product ID is required');
+    }
+    
+    const qty = parseInt(quantity) || 1;
+    if (qty <= 0 || qty > 100) {
+      return res.status(400).send('Invalid quantity (must be between 1-100)');
+    }
+
+    // Verify product exists
+    const allProducts = await persist.readJSON('products.json');
+    if (!allProducts[productId]) {
+      return res.status(404).send('Product not found');
+    }
 
   // === הגנת DOS לפי כמות מוצרים שנוספה ===
   const now = Date.now();
@@ -77,7 +93,15 @@ router.post('/add-to-cart', async (req, res) => {
   // === פעילות ===
   await persist.appendActivity({ username, type: 'add-to-cart' });
 
-  res.send(`${qty} item(s) added to cart`);
+  res.json({ 
+    message: `${qty} item(s) added to cart`,
+    product: allProducts[productId],
+    quantity: qty
+  });
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    res.status(500).send('Internal server error');
+  }
 });
 
 module.exports = router;

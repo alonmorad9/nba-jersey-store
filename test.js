@@ -23,11 +23,14 @@ function logSection(title) {
   console.log(`${'='.repeat(50)}`);
 }
 
-async function testRoute(method, endpoint, body = null, expectedStatus = 200) {
+async function testRoute(method, endpoint, body = null, expectedStatus = 200, cookies = '') {
   try {
     const options = {
       method: method.toUpperCase(),
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 
+        'Content-Type': 'application/json',
+        'Cookie': cookies
+      }
     };
     
     if (body) {
@@ -51,7 +54,7 @@ async function testRoute(method, endpoint, body = null, expectedStatus = 200) {
       `Expected: ${expectedStatus}, Got: ${response.status}`
     );
 
-    return { passed, status: response.status, data: responseData };
+    return { passed, status: response.status, data: responseData, cookies: response.headers.get('set-cookie') };
   } catch (error) {
     logTest(`${method.toUpperCase()} ${endpoint}`, false, `Error: ${error.message}`);
     return { passed: false, error: error.message };
@@ -143,6 +146,20 @@ async function runTests() {
   
   // Test admin products endpoint
   await testRoute('GET', '/admin-products', null, 200);
+  
+  // Test admin product management
+  await testRoute('POST', '/admin-add-product', {
+    name: 'Test Jersey',
+    description: 'Test description',
+    price: 99.99,
+    image: 'test-image.jpg'
+  }, 200);
+  
+  await testRoute('POST', '/admin-remove-product', {
+    id: '999'
+  }, 404); // Should fail for non-existent product
+  
+  await testRoute('DELETE', '/admin-products/999', null, 404); // Should fail for non-existent product
 
   // Test 9: Static File Serving
   logSection('Static File Tests');
@@ -158,6 +175,10 @@ async function runTests() {
   await testRoute('GET', '/store-react.html', null, 200);
   await testRoute('GET', '/readme.html', null, 200);
   await testRoute('GET', '/llm.html', null, 200);
+  await testRoute('GET', '/profile.html', null, 200);
+  await testRoute('GET', '/contact.html', null, 200);
+  await testRoute('GET', '/reviews.html', null, 200);
+  await testRoute('GET', '/wishlist.html', null, 200);
 
   // Test 10: CSS and JavaScript Files
   logSection('Asset File Tests');
@@ -255,31 +276,90 @@ async function runTests() {
     logTest('Login Rate Limiting', false, `Error: ${error.message}`);
   }
 
-  // Test 17: Cookie Handling
-  logSection('Cookie and Session Tests');
+  // Test 17: Additional Pages - Wishlist
+  logSection('Wishlist Tests');
   
-  // Test that cookies are set properly
-  try {
-    const response = await fetch(`${BASE_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: 'admin',
-        password: 'admin'
-      })
-    });
-    
-    const cookies = response.headers.get('set-cookie');
-    if (cookies && cookies.includes('username=')) {
-      logTest('Cookie Setting', true, 'Login cookies set correctly');
-    } else {
-      logTest('Cookie Setting', false, 'No username cookie found');
-    }
-  } catch (error) {
-    logTest('Cookie Setting', false, `Error: ${error.message}`);
+  // Login to get cookies for authenticated requests
+  const loginResponse = await testRoute('POST', '/login', {
+    username: 'admin',
+    password: 'admin'
+  }, 200);
+  
+  const authCookie = loginResponse.cookies ? loginResponse.cookies.split(';')[0] : '';
+  
+  if (authCookie) {
+    await testRoute('GET', '/wishlist', null, 200, authCookie);
+    await testRoute('POST', '/wishlist', { productId: '1' }, 200, authCookie);
+    await testRoute('DELETE', '/wishlist', { productId: '1' }, 200, authCookie);
+    await testRoute('POST', '/wishlist/add-all-to-cart', null, 200, authCookie);
+    await testRoute('DELETE', '/wishlist/clear', null, 200, authCookie);
+  } else {
+    logTest('Wishlist Tests', false, 'Could not get auth cookie');
   }
 
-  // Test 18: Activity Logging
+  // Test 18: Reviews System
+  logSection('Reviews Tests');
+  
+  if (authCookie) {
+    await testRoute('GET', '/reviews', null, 200);
+    await testRoute('POST', '/reviews', {
+      productId: '1',
+      rating: 5,
+      comment: 'Great product!'
+    }, 200, authCookie);
+  }
+
+  // Test 19: Contact/Support System
+  logSection('Contact/Support Tests');
+  
+  if (authCookie) {
+    await testRoute('GET', '/contact', null, 200, authCookie);
+    await testRoute('POST', '/contact', {
+      category: 'general',
+      priority: 'medium',
+      subject: 'Test ticket',
+      message: 'This is a test support ticket'
+    }, 200, authCookie);
+    
+    // Admin ticket management
+    await testRoute('GET', '/admin/tickets', null, 200, authCookie);
+  }
+
+  // Test 20: Profile System
+  logSection('Profile Tests');
+  
+  if (authCookie) {
+    await testRoute('GET', '/profile', null, 200, authCookie);
+  }
+
+  // Test 21: Cookie Handling
+  logSection('Cookie and Session Tests');
+  
+  if (loginResponse.cookies && loginResponse.cookies.includes('username=')) {
+    logTest('Cookie Setting', true, 'Login cookies set correctly');
+  } else {
+    logTest('Cookie Setting', false, 'No username cookie found');
+  }
+
+  // Test 22: Remember Me Functionality
+  await testRoute('POST', '/login', {
+    username: 'admin',
+    password: 'admin',
+    remember: true
+  }, 200);
+  
+  await testRoute('POST', '/login', {
+    username: 'admin',
+    password: 'admin',
+    remember: false
+  }, 200);
+
+  // Test 23: Logout
+  if (authCookie) {
+    await testRoute('POST', '/logout', null, 200, authCookie);
+  }
+
+  // Test 24: Activity Logging
   logSection('Activity Logging Tests');
   
   // Test that activities are logged
@@ -292,7 +372,7 @@ async function runTests() {
     }
   }
 
-  // Test 19: Product Data Structure
+  // Test 25: Product Data Structure
   logSection('Data Structure Tests');
   
   const productsResponse = await testRoute('GET', '/products', null, 200);
@@ -304,7 +384,7 @@ async function runTests() {
     }
   }
 
-  // Test 20: User Data Persistence
+  // Test 26: User Data Persistence
   logSection('Data Persistence Tests');
   
   if (registerResult.passed) {

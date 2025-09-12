@@ -4,62 +4,88 @@ const persist = require('./persist_module');
 
 // POST /checkout – מבצע רכישה מדומה
 router.post('/checkout', async (req, res) => {
-  const username = req.cookies.username;
-  if (!username) return res.status(401).send('Not logged in');
+  try {
+    const username = req.cookies.username;
+    if (!username) return res.status(401).send('Not logged in');
 
-  const { items } = req.body;
-  if (!Array.isArray(items) || items.length === 0) {
-    return res.status(400).send('No items provided');
-  }
+    const { items } = req.body;
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).send('No items provided');
+    }
 
-  // קריאה לקובץ מוצרים
-  const allProducts = await persist.readJSON('products.json');
-  const timestamp = new Date().toISOString();
+    // Validate that all items are strings/numbers
+    const validItems = items.filter(id => id !== null && id !== undefined && String(id).trim() !== '');
+    if (validItems.length === 0) {
+      return res.status(400).send('No valid items provided');
+    }
 
-  // 1. קריאה וכתיבה ישנה – carts.json
-  const carts = await persist.readJSON('carts.json');
-  carts[username] = (carts[username] || []).filter(id => !items.includes(id));
-  await persist.writeJSON('carts.json', carts);
+    // Load products to verify items
+    const allProducts = await persist.readJSON('products.json');
+    const timestamp = new Date().toISOString();
 
-  // 2. כתיבה חדשה – users/{username}/cart.json
-  const userCart = await persist.readUserFile(username, 'cart.json');
-  userCart.items = (userCart.items || []).filter(id => !items.includes(id));
-  await persist.writeUserFile(username, 'cart.json', userCart);
+    // Verify that at least some items exist in products
+    const existingItems = validItems.filter(id => allProducts[id]);
+    if (existingItems.length === 0) {
+      return res.status(400).send('No valid products found in cart');
+    }
 
-  // 3. רכישות – ישן
-  const purchases = await persist.readJSON('purchases.json');
-  if (!purchases[username]) purchases[username] = [];
+    // old system: update carts.json and purchases.json
+    const carts = await persist.readJSON('carts.json');
+    carts[username] = (carts[username] || []).filter(id => !validItems.includes(id));
+    await persist.writeJSON('carts.json', carts);
 
-  items.forEach(id => {
-    const product = allProducts[id];
-    if (product) {
-      purchases[username].push({
-        ...product,
-        productId: id,
-        quantity: 1,
+    // new system: update user's cart.json and purchases.json
+    const userCart = await persist.readUserFile(username, 'cart.json');
+    userCart.items = (userCart.items || []).filter(id => !validItems.includes(id));
+    await persist.writeUserFile(username, 'cart.json', userCart);
+
+
+    // old system: purchases.json
+    const purchases = await persist.readJSON('purchases.json');
+    if (!purchases[username]) purchases[username] = [];
+
+    let totalAmount = 0;
+    existingItems.forEach(id => {
+      const product = allProducts[id];
+      if (product) {
+        purchases[username].push({
+          ...product,
+          productId: id,
+          quantity: 1,
+          purchasedAt: timestamp
+        });
+        totalAmount += product.price || 0;
+      }
+    });
+
+    await persist.writeJSON('purchases.json', purchases);
+
+    // new system: purchases.json per user
+    const userPurchases = await persist.readUserFile(username, 'purchases.json');
+    if (!Array.isArray(userPurchases.items)) userPurchases.items = [];
+
+    existingItems.forEach(id => {
+      userPurchases.items.push({
+        id,
         purchasedAt: timestamp
       });
-    }
-  });
-
-  await persist.writeJSON('purchases.json', purchases);
-
-  // 4. רכישות – חדש
-  const userPurchases = await persist.readUserFile(username, 'purchases.json');
-  if (!Array.isArray(userPurchases.items)) userPurchases.items = [];
-
-  items.forEach(id => {
-    userPurchases.items.push({
-      id,
-      purchasedAt: timestamp
     });
-  });
 
-  await persist.writeUserFile(username, 'purchases.json', userPurchases);
+    await persist.writeUserFile(username, 'purchases.json', userPurchases);
 
-  // 5. רישום פעילות (אופציונלי)
 
-  res.send('Payment processed successfully (fake)');
+    // Log activity
+    await persist.appendActivity({ username, type: 'checkout' });
+
+    res.json({
+      message: 'Payment processed successfully (fake)',
+      itemsPurchased: existingItems.length,
+      totalAmount: totalAmount.toFixed(2)
+    });
+  } catch (error) {
+    console.error('Error processing checkout:', error);
+    res.status(500).send('Internal server error during checkout');
+  }
 });
 
 module.exports = router;

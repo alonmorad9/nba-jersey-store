@@ -12,64 +12,86 @@ const {
 
 // POST /login
 router.post('/login', loginLimiter, async (req, res) => {
-  const { username, password, remember } = req.body;
-
-  // Input validation
-  if (!username || !password) {
-    return res.status(400).send('Username and password are required');
-  }
-
-  // Additional validation
-  if (username.trim().length === 0 || password.trim().length === 0) {
-    return res.status(400).send('Username and password cannot be empty');
-  }
-
-  const users = await persist.readJSON('users.json');
-
-  // אם המשתמש לא קיים או הסיסמה לא תואמת
-  if (!users[username] || users[username].password !== password) {
-    recordLoginFailure(username, req.loginRateEntry);
-    return res.status(401).send('Invalid username or password');
-  }
-
-  clearLoginAttempts(username); // אפס את הניסיונות לאחר התחברות מוצלחת
-
-  // זמן תפוגת העוגייה
-  const maxAge = remember
-    ? 1000 * 60 * 60 * 24 * 12     // 12 ימים
-    : 1000 * 60 * 30;              // 30 דקות
-
-  res.cookie('username', username, { maxAge });
-
-  // 1. רישום ל־activity הכללי (כמו קודם)
-  await persist.appendActivity({ username, type: 'login' });
-
-  // 2. יצירת תיקיית משתמש אם אין
-  const userDir = path.join(__dirname, '../data/users', username);
-  await fs.mkdir(userDir, { recursive: true });
-
-  // 3. שמירת user.json למשתמש
-  const userFile = path.join(userDir, 'user.json');
-  await fs.writeFile(userFile, JSON.stringify(users[username], null, 2));
-
-  // 4. עדכון activity.json פר־משתמש
-  const activityFile = path.join(userDir, 'activity.json');
-  let userActivity = [];
   try {
-    const raw = await fs.readFile(activityFile, 'utf-8');
-    userActivity = JSON.parse(raw);
-  } catch (err) {
-    // קובץ עדיין לא קיים – לא בעיה
+    const { username, password, remember } = req.body;
+
+    // Input validation
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username and password are required' });
+    }
+
+    // Type validation
+    if (typeof username !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Username and password must be strings' });
+    }
+
+    // Additional validation
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+    
+    if (trimmedUsername.length === 0 || trimmedPassword.length === 0) {
+      return res.status(400).json({ error: 'Username and password cannot be empty' });
+    }
+
+    if (trimmedUsername.length > 50 || trimmedPassword.length > 100) {
+      return res.status(400).json({ error: 'Username or password too long' });
+    }
+
+    const users = await persist.readJSON('users.json');
+
+    // Check credentials and record failed attempts
+    if (!users[trimmedUsername] || users[trimmedUsername].password !== trimmedPassword) {
+      recordLoginFailure(trimmedUsername, req.loginRateEntry);
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+
+    clearLoginAttempts(trimmedUsername); // Clear failed attempts on successful login
+
+    // Set cookie 
+    const maxAge = remember
+      ? 1000 * 60 * 60 * 24 * 12     // 12 ימים
+      : 1000 * 60 * 30;              // 30 דקות
+
+    res.cookie('username', trimmedUsername, { maxAge });
+
+    // append to activity.json
+    await persist.appendActivity({ username: trimmedUsername, type: 'login' });
+
+    // create user directory if not exists
+    const userDir = path.join(__dirname, '../data/users', trimmedUsername);
+    await fs.mkdir(userDir, { recursive: true });
+
+    // add default user.json if not exists
+    const userFile = path.join(userDir, 'user.json');
+    await fs.writeFile(userFile, JSON.stringify(users[trimmedUsername], null, 2));
+
+    // log activity in user's activity.json
+    const activityFile = path.join(userDir, 'activity.json');
+    let userActivity = [];
+    try {
+      const raw = await fs.readFile(activityFile, 'utf-8');
+      userActivity = JSON.parse(raw);
+    } catch (err) {
+      // file might not exist or be empty, nothing to do
+      }
+
+      // add login activity
+    userActivity.push({ 
+      datetime: new Date().toISOString(),
+      type: 'login'
+    });
+
+    // keep only last 100 activities
+    await fs.writeFile(activityFile, JSON.stringify(userActivity, null, 2));
+
+    // Send success response
+    res.json({ message: 'Login successful', username: trimmedUsername });
+  } catch (error) {
+    // Log and send server error
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal server error during login' });
   }
-
-  userActivity.push({
-    datetime: new Date().toISOString(),
-    type: 'login'
-  });
-
-  await fs.writeFile(activityFile, JSON.stringify(userActivity, null, 2));
-
-  res.send('Login successful');
 });
 
+// export the router
 module.exports = router;
