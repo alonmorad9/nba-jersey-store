@@ -50,7 +50,7 @@ router.post('/add-to-cart', async (req, res) => {
   const totalAdded = addCartTracker[username].reduce((sum, ts) => sum + ts.qty, 0);
 
   if (totalAdded + qty > RATE_LIMIT) {
-    return res.status(429).send(`❌ Too many items added. Limit is ${RATE_LIMIT} per minute.`);
+    return res.status(429).send(`❌ Too many items of the same product added. Limit is ${RATE_LIMIT} per minute.`);
   }
 
   // שמירת פעולה נוכחית
