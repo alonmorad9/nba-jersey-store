@@ -700,7 +700,7 @@
             <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
             <div class="quantity-container">
               <label>Quantity:</label>
-              <input type="number" id="qty-${product.id}" class="quantity-input" value="1" min="1" max="10">
+              <input type="number" id="qty-${product.id}" class="quantity-input" value="1" min="1" max="100" oninput="validateQuantity(this.id)" onblur="validateQuantity(this.id)">
             </div>
             <div class="product-actions">
               <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
@@ -755,10 +755,49 @@
       }
     }
 
+    // Validate quantity input
+    function validateQuantity(inputId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      
+      let value = input.value;
+      
+      // Remove any non-numeric characters except for the minus sign temporarily
+      value = value.replace(/[^0-9-]/g, '');
+      
+      // Convert to integer
+      let numValue = parseInt(value);
+      
+      // Check if it's a valid number and not negative or zero
+      if (isNaN(numValue) || numValue < 1) {
+        numValue = 1;
+      }
+      
+      // Check maximum limit (server enforces 100 items per request)
+      if (numValue > 100) {
+        numValue = 100;
+      }
+      
+      // Update the input value
+      input.value = numValue;
+    }
+
     // Add to cart
     async function addToCart(productId) {
       const qtyInput = document.getElementById(`qty-${productId}`);
+      
+      // Validate quantity before processing
+      validateQuantity(`qty-${productId}`);
+      
       const quantity = parseInt(qtyInput.value) || 1;
+      
+      // Double-check validation - ensure quantity is at least 1
+      if (quantity < 1) {
+        alert('Please enter a valid quantity (minimum 1)');
+        qtyInput.value = 1;
+        return;
+      }
+      
       const button = event.target;
       const originalText = button.innerHTML;
 
@@ -780,6 +819,14 @@
         }
 
         if (response.status === 429) {
+          const errorMessage = await response.text();
+          alert(`🚫 ${errorMessage}`);
+          button.innerHTML = originalText;
+          button.disabled = false;
+          return;
+        }
+
+        if (response.status === 400) {
           const errorMessage = await response.text();
           alert(`🚫 ${errorMessage}`);
           button.innerHTML = originalText;
