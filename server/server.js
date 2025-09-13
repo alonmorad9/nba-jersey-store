@@ -35,14 +35,14 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`); // Log a message indicating that the server is running
 });
 
-/* register.html מציג טופס למשתמש.
+/* register.html displays a form to the user.
 
-נשלחת בקשת POST ל־/register.
+A POST request is sent to /register.
 
-הקוד ב־register-server.js בודק אם המשתמש כבר קיים בקובץ users.json.
+The code in register-server.js checks if the user already exists in users.json.
 
-אם לא – מוסיף אותו בעזרת persist_module.js.
+If not - adds them using persist_module.js.
 
-כל המידע נשמר בדיסק (data/users.json).
+All information is saved to disk (data/users.json).
 
-התגובה חוזרת לדפדפן ומוצגת ב־<p id="result">. */
+The response returns to the browser and is displayed in <p id="result">. */
