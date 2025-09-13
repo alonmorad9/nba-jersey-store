@@ -5,7 +5,12 @@ nav.className = 'nav-bar';
 const username = document.cookie
   .split('; ')
   .find(row => row.startsWith('username='))
-  ?.split('=')[1];
+  ?.split('=')[1]
+  ? decodeURIComponent(document.cookie
+      .split('; ')
+      .find(row => row.startsWith('username='))
+      ?.split('=')[1])
+  : undefined;
 
   // Get current page
 const currentPage = window.location.pathname;

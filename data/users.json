@@ -55,5 +55,8 @@
   },
   "testuser_1757698634811": {
     "password": "testpass123"
+  },
+  "new user": {
+    "password": "newuserpass"
   }
 }

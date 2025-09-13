@@ -695,7 +695,12 @@ body.dark-mode .review-caption {
       const username = document.cookie
         .split('; ')
         .find(row => row.startsWith('username='))
-        ?.split('=')[1];
+        ?.split('=')[1]
+        ? decodeURIComponent(document.cookie
+            .split('; ')
+            .find(row => row.startsWith('username='))
+            ?.split('=')[1])
+        : undefined;
       const myReviews = username ? reviews.filter(r => r.username === username).length : 0;
 
       // Update DOM elements with the statistics

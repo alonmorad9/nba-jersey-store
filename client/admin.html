@@ -905,7 +905,7 @@
       });
     }
 
-    // Remove Product - run when the user clicks the remove button - note: this uses POST method, replaced by DELETE method below
+    // Remove Product - run when the user clicks the remove button - note: this uses POST method, it was replaced by DELETE method below
     async function removeProduct(id) {
       if (!confirm('Are you sure you want to delete this product?')) return;
 
@@ -925,7 +925,7 @@
 
     // Remove Product with DELETE - run when the user clicks the delete button - remove it after confirmation
     async function removeProductWithDelete(id) {
-      if (!confirm('Are you sure you want to delete this product? (Using DELETE method)')) return;
+      if (!confirm('Are you sure you want to delete this product?')) return;
 
       try {
         const res = await fetch(`/admin-products/${id}`, {
@@ -934,7 +934,7 @@
 
         if (res.ok) {
           const result = await res.json();
-          alert(`Product "${result.deletedProduct.name}" deleted successfully using DELETE method!`);
+          alert(`Product "${result.deletedProduct.name}" deleted successfully!`);
           loadProducts();
         } else {
           const error = await res.json();
