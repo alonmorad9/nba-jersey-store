@@ -49,8 +49,8 @@ router.post('/login', loginLimiter, async (req, res) => {
 
     // Set cookie 
     const maxAge = remember
-      ? 1000 * 60 * 60 * 24 * 12     // 12 ימים
-      : 1000 * 60 * 30;              // 30 דקות
+      ? 1000 * 60 * 60 * 24 * 12     // 12 days
+      : 1000 * 60 * 30;              // 30 minutes
 
     res.cookie('username', trimmedUsername, { maxAge });
 

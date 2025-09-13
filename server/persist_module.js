@@ -39,7 +39,7 @@ async function appendActivity({ username, type }) { // Append an activity log en
     });
     await fs.writeFile(ACTIVITY_FILE, JSON.stringify(list, null, 2));
   } catch (err) {
-    // אם הקובץ לא קיים או ריק – מתחיל רשימה חדשה
+    // If file doesn't exist or is empty - start a new list
     const list = [{
       datetime: new Date().toISOString(),
       username,

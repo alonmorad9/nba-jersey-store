@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const persist = require('./persist_module');
 
-// GET /my-items – מחזיר את כל הרכישות של המשתמש המחובר
+// GET /my-items - returns all purchases of the logged-in user
 router.get('/my-items', async (req, res) => {
   const username = req.cookies.username;
   if (!username) return res.status(401).send('Not logged in');
@@ -17,10 +17,11 @@ router.get('/my-items', async (req, res) => {
     for (const p of userPurchases) {
       let productId, purchasedAt;
 
-      // תמיכה גם באובייקטים וגם במחרוזות מזהה פשוטות
+
+      // support both old and new formats
       if (typeof p === 'string') {
         productId = p;
-        purchasedAt = new Date().toISOString(); // אם אין תאריך, נשתמש בתאריך נוכחי
+        purchasedAt = new Date().toISOString(); // if no date is available, use now
       } else {
         productId = p.productId || p.id;
         purchasedAt = p.purchasedAt || new Date().toISOString();
@@ -35,27 +36,27 @@ router.get('/my-items', async (req, res) => {
           quantity: 1,
           purchasedAt: purchasedAt,
           firstPurchaseAt: purchasedAt,
-          purchaseDates: [purchasedAt] // מערך של כל תאריכי הרכישה
+          purchaseDates: [purchasedAt] // Array of all purchase dates
         };
       } else {
         grouped[productId].quantity++;
         grouped[productId].purchaseDates.push(purchasedAt);
         
-        // עדכון תאריך הרכישה האחרונה
+        // Update last purchase date
         if (new Date(purchasedAt) > new Date(grouped[productId].purchasedAt)) {
           grouped[productId].purchasedAt = purchasedAt;
         }
         
-        // שמירת תאריך הרכישה הראשונה
+        // Save first purchase date
         if (new Date(purchasedAt) < new Date(grouped[productId].firstPurchaseAt)) {
           grouped[productId].firstPurchaseAt = purchasedAt;
         }
       }
     }
 
-    // מיון תאריכי הרכישה בתוך כל מוצר
+    // Sort purchase dates within each product
     Object.values(grouped).forEach(item => {
-      item.purchaseDates.sort((a, b) => new Date(b) - new Date(a)); // מיון מהאחרון לראשון
+      item.purchaseDates.sort((a, b) => new Date(b) - new Date(a)); // Sort from latest to earliest
     });
 
     res.json(Object.values(grouped));

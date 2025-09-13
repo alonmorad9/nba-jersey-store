@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const persist = require('./persist_module');
 
-// POST /checkout – מבצע רכישה מדומה
+// creating orders and processing checkout
 router.post('/checkout', async (req, res) => {
   try {
     const username = req.cookies.username;

@@ -1,7 +1,7 @@
-
 // 🔐 Login Protection Middleware – Limit failed login attempts per username
 const loginAttempts = new Map();
 
+// Middleware to check and limit login attempts
 function loginLimiter(req, res, next) {
   const { username } = req.body;
 
@@ -19,22 +19,27 @@ function loginLimiter(req, res, next) {
   next();
 }
 
+// Record a failed login attempt
 function recordLoginFailure(username, entry) {
   entry.count++;
   entry.lastAttempt = Date.now();
 
+  // If 5 failed attempts, block for 1 minute
   if (entry.count >= 5) {
     entry.blockedUntil = Date.now() + 60 * 1000; // Block for 1 minute
     entry.count = 0;
   }
 
+  // Reset count if last attempt was over 10 minutes ago
   loginAttempts.set(username, entry);
 }
 
+// Clear login attempts on successful login
 function clearLoginAttempts(username) {
   loginAttempts.delete(username);
 }
 
+// Export the middleware and functions
 module.exports = {
   loginLimiter,
   recordLoginFailure,

@@ -3,11 +3,11 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs').promises;
 
-// POST /logout – מוחק את ה-cookie ומעדכן activity
+// post /logout - clear the username cookie and log the logout activity
 router.post('/logout', async (req, res) => {
   const username = req.cookies.username;
 
-  // אם לא קיים יוזר מחובר – לא עושים כלום חוץ מלמחוק את העוגייה
+  // delete the cookie on client side
   res.clearCookie('username');
   res.send('Logged out');
 
@@ -22,9 +22,10 @@ router.post('/logout', async (req, res) => {
       const raw = await fs.readFile(activityFile, 'utf-8');
       activity = JSON.parse(raw);
     } catch (e) {
-      // אם הקובץ לא קיים, פשוט מתחילים עם רשימה ריקה
+      // no activity file yet
     }
 
+    // add logout entry
     activity.push({
       datetime: new Date().toISOString(),
       type: 'logout'
