@@ -938,7 +938,15 @@
         button.innerHTML = '❤️ Added!';
         button.style.background = '#28a745';
         button.style.color = 'white';
-        
+
+        // Update wishlist count in navbar
+        if (window.updateWishlistCount) {
+          window.updateWishlistCount();
+        }
+
+        // Trigger wishlist updated event
+        window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+
         // Reset button after 2 seconds
         setTimeout(() => {
           button.innerHTML = originalText;

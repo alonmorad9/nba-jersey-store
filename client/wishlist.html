@@ -423,6 +423,12 @@
           }
           // Reload wishlist to show updated state
           loadWishlist();
+          // Update wishlist count in navbar
+          if (window.updateWishlistCount) {
+            window.updateWishlistCount();
+          }
+          // Trigger wishlist updated event
+          window.dispatchEvent(new CustomEvent('wishlistUpdated'));
         } else {
           const error = await response.text();
           showMessage(error, 'error');
@@ -458,6 +464,12 @@
           }
           // Reload wishlist to show empty state
           loadWishlist();
+          // Update wishlist count in navbar
+          if (window.updateWishlistCount) {
+            window.updateWishlistCount();
+          }
+          // Trigger wishlist updated event
+          window.dispatchEvent(new CustomEvent('wishlistUpdated'));
         } else {
           const error = await response.text();
           showMessage(error, 'error');
@@ -486,6 +498,12 @@
         if (response.ok) {
           showMessage('Wishlist cleared!', 'success');
           loadWishlist(); // Reload wishlist
+          // Update wishlist count in navbar
+          if (window.updateWishlistCount) {
+            window.updateWishlistCount();
+          }
+          // Trigger wishlist updated event
+          window.dispatchEvent(new CustomEvent('wishlistUpdated'));
         } else {
           const error = await response.text();
           showMessage(error, 'error');
@@ -510,6 +528,12 @@
         if (response.ok) {
           showMessage('Item removed from wishlist', 'success');
           loadWishlist(); // Reload wishlist
+          // Update wishlist count in navbar
+          if (window.updateWishlistCount) {
+            window.updateWishlistCount();
+          }
+          // Trigger wishlist updated event
+          window.dispatchEvent(new CustomEvent('wishlistUpdated'));
         } else {
           const error = await response.text();
           showMessage(error, 'error');
